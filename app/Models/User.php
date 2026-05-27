@@ -21,6 +21,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'lastname',
         'email',
         'password',
     ];
@@ -46,5 +47,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Relacion usuario-Artista: un usuario puede tener múltiples perfiles de artista.
+     *
+     * @return void
+     */
+      public function artistas()
+    {
+        return $this->hasMany(Artista::class);
     }
 }
