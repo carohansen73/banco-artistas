@@ -44,8 +44,8 @@ class Artista extends Model
         parent::boot();
 
         static::creating(function ($artista) {
-           // $artista->slug = Str::slug($artista->nombre_artistico) . '-' . uniqid();
-            $artista->slug = Str::slug($artista->nombre_artistico);
+            $artista->slug = Str::slug($artista->nombre_artistico) . '-' . uniqid();
+            // $artista->slug = Str::slug($artista->nombre_artistico);
         });
     }
 
@@ -94,5 +94,11 @@ class Artista extends Model
     public function tieneDisciplina(string $nombre): bool
     {
         return $this->disciplina->nombre === $nombre;
+    }
+
+    // pARA RUTA CON SLUG
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
     }
 }
