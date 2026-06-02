@@ -1,11 +1,21 @@
-<div class="artista-card" onclick="window.location='/artistas/{{ $artista['slug'] }}'">
+<a href="{{ route('artista.show', $artista['slug']) }}" class="artista-card-link">
+<div class="artista-card" >
     <div class="artista-card-img">
         <img src="{{ $artista['img_perfil'] }}" alt="{{ $artista['nombre_artistico'] }}">
-        <div class="artista-card-overlay">
-            <a href="/artistas/{{ $artista['slug'] }}" class="btn btn-red btn-sm rounded-pill">
-                Ver perfil
-            </a>
-        </div>
+
+            {{-- <a href="/artistas/{{ $artista['slug'] }}" class="btn btn-red btn-sm rounded-pill"> --}}
+              <div class="artista-card-overlay">
+                <span class="btn btn-red btn-sm rounded-pill">Ver perfil</span>
+            </div>
+
+            @if($artista['disciplina'])
+                <span class="artista-card-disciplina">
+                    {{ $artista['disciplina'] }}
+                </span>
+            @endif
+
+            {{-- </a> --}}
+
     </div>
     <div class="artista-card-body">
         <h4 class="artista-card-nombre">{{ $artista['nombre_artistico'] }}</h4>
@@ -28,3 +38,4 @@
         @endif
     </div>
 </div>
+</a>

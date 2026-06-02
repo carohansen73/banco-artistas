@@ -6,8 +6,10 @@ export default defineConfig({
         laravel({
             input: ['resources/css/app.css',
                 'resources/css/app-publico.css',
+                 'resources/css/galery.css',
                 'resources/js/app.js',
-                'resources/js/filter-artists.js'],
+                'resources/js/filter-artists.js',
+            'resources/js/galery-lightbox.js'],
             refresh: true,
         }),
     ],

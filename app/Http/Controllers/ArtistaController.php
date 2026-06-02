@@ -107,7 +107,7 @@ class ArtistaController extends Controller
         $request->validate([
             'redes'             => 'nullable|array',
             'redes.*'           => 'nullable|url|max:255',
-            'fotos.*'           => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'fotos.*'           => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
             'tracks.*'          => 'nullable|url|max:255',
             'tracks_titulo.*'   => 'nullable|string|max:255',
             'videos.*'          => 'nullable|url|max:255',
@@ -129,7 +129,12 @@ class ArtistaController extends Controller
         // Fotos
         if ($request->hasFile('fotos')) {
             $orden = $artista->fotos()->max('orden') ?? 0;
-            foreach ($request->file('fotos') as $foto) {
+            $fotos = $request->file('fotos');
+
+            foreach ((array) $fotos as $foto) {
+                if (! $foto) {
+                    continue;
+                }
                 $path = $foto->store('artistas/fotos', 'public');
                 $artista->media()->create([
                     'tipo'  => 'foto',
@@ -178,7 +183,14 @@ class ArtistaController extends Controller
      */
     public function show(Artista $artista)
     {
-        //
+        $artista->load(['disciplina', 'generos', 'redes', 'media']);
+
+        $fotos      = $artista->media->where('tipo', 'foto');
+        $videos     = $artista->media->where('tipo', 'video_link');
+        $audios     = $artista->media->where('tipo', 'audio_link');
+
+
+        return view('public.show', compact('artista', 'fotos', 'videos', 'audios'));
     }
 
     /**

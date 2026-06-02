@@ -178,19 +178,62 @@
 
 @push('scripts')
 <script>
-    // Preview de fotos
-    document.getElementById('fotos').addEventListener('change', function () {
-        const preview = document.getElementById('fotos-preview');
-        preview.innerHTML = '';
-        Array.from(this.files).forEach(file => {
+    const fotosInput = document.getElementById('fotos');
+    const fotosPreview = document.getElementById('fotos-preview');
+    let selectedFotos = new DataTransfer();
+
+    function renderFotosPreview() {
+        fotosPreview.innerHTML = '';
+
+        Array.from(selectedFotos.files).forEach((file, index) => {
             const reader = new FileReader();
             reader.onload = e => {
-                preview.innerHTML += `
+                const wrapper = document.createElement('div');
+                wrapper.style.position = 'relative';
+                wrapper.style.display = 'inline-block';
+                wrapper.style.marginRight = '8px';
+                wrapper.style.marginBottom = '8px';
+
+                wrapper.innerHTML = `
                     <img src="${e.target.result}"
-                        style="height:100px; width:100px; object-fit:cover; border-radius:6px;">`;
+                        style="height:100px; width:100px; object-fit:cover; border-radius:6px;">
+                    <button type="button" class="btn btn-sm btn-danger remove-foto"
+                        data-index="${index}"
+                        style="position:absolute; top:4px; right:4px; padding:0 6px; line-height:1;">
+                        ×
+                    </button>`;
+
+                fotosPreview.appendChild(wrapper);
             };
             reader.readAsDataURL(file);
         });
+    }
+
+    fotosInput.addEventListener('change', function () {
+        Array.from(this.files).forEach(file => {
+            selectedFotos.items.add(file);
+        });
+        fotosInput.files = selectedFotos.files;
+        renderFotosPreview();
+    });
+
+    fotosPreview.addEventListener('click', function (event) {
+        if (!event.target.classList.contains('remove-foto')) {
+            return;
+        }
+
+        const indexToRemove = Number(event.target.dataset.index);
+        const newData = new DataTransfer();
+
+        Array.from(selectedFotos.files).forEach((file, index) => {
+            if (index !== indexToRemove) {
+                newData.items.add(file);
+            }
+        });
+
+        selectedFotos = newData;
+        fotosInput.files = selectedFotos.files;
+        renderFotosPreview();
     });
 
     // Agregar track

@@ -57,8 +57,6 @@
                 @endauth
             </div>
 
-
-
             {{-- FILTROS --}}
             <div class="classic-box p-4 mb-4">
                 <div class="row g-2 align-items-end">
@@ -89,11 +87,9 @@
                 </div>
             </div>
             {{-- end FILTROS --}}
+
             {{-- CONTADOR --}}
-            <p id="contador-resultados" class="text-muted small mb-3"></p>
-
-
-
+            {{-- <p id="contador-resultados" class="text-muted small mb-3"></p> --}}
 
             {{-- GRID --}}
             <div class="row g-4" id="container-artists">
@@ -117,14 +113,6 @@
         </div><!-- End container -->
 </section>
 
-
-
-
-
-
-{{-- <script src="{{ asset('js/filter-artists.js') }}"></script> --}}
 @push('scripts')
 @vite(['resources/js/filter-artists.js'])
 @endpush
-
-

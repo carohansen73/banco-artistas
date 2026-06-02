@@ -35,15 +35,18 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
+
 // RUTAS VISIBLES SIN LOGUEARSE
 Route::get('/', [ArtistaController::class, 'home']);
 Route::get('/artistas', [ArtistaController::class, 'index'])->name('artistas');
+Route::get('/artistas/{artista}', [ArtistaController::class, 'show'])->name('artista.show');
+
 
 
 // (Api) Ruta para obtener géneros por disciplina
 Route::get('/api/generos/{disciplina}', function (App\Models\Disciplina $disciplina) {
-    return $disciplina->generos()->orderBy('nombre')->get(['id', 'nombre']);
-});
+        return $disciplina->generos()->orderBy('nombre')->get(['id', 'nombre']);
+    });
 Route::get('/buscador-de-artistas', [ArtistaController::class, 'searchArtists'])->name('artistas.buscar');
 
 
