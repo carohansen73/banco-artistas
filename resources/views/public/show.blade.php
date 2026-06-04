@@ -29,7 +29,7 @@
                         </div>
                     @endif
 
-                    <div class="section-title pb-0">
+                    <div class="section-title pb-0 ps-0">
                         <p class="title-white">{!! $artista->nombre_artistico !!}</p>
                     </div>
 
@@ -110,7 +110,7 @@
                     <p>{!! $artista->anio_inicio !!}</p>
 
                     <p class="mb-0 mt-2"><span class="subtitle">Información:</span></p>
-                    <p>{!! $artista->descripcion_actividad !!}</p>
+                    <p style="white-space: pre-line;">{!! $artista->descripcion_actividad !!}</p>
 
 
                 </div>

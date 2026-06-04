@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Artista;
 use App\Http\Requests\StoreArtistaRequest;
 use App\Http\Requests\UpdateArtistaRequest;
+use App\Models\ArtistaRedes;
 use App\Models\Disciplina;
 use App\Models\Genero;
+use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -178,6 +180,24 @@ class ArtistaController extends Controller
     }
 
 
+    /* ------------------- DASHBOARD PARA EDICION ---------------------- */
+
+
+    /**
+     * Dashboard del artista — lista sus perfiles.
+     */
+    public function misPerfiles()
+    {
+        $artistas = Artista::where('user_id', Auth::id())
+            ->with('disciplina')
+            ->latest()
+            ->get();
+
+        return view('artista.mis-perfiles', compact('artistas'));
+    }
+
+
+
     /**
      * Display the specified resource.
      */
@@ -205,33 +225,26 @@ class ArtistaController extends Controller
         $generos        = Genero::where('disciplina_id', $artista->disciplina_id)->orderBy('nombre')->get();
         $generosActivos = $artista->generos->pluck('id')->toArray();
 
-        return view('artista.edit', compact('artista', 'disciplinas', 'generos', 'generosActivos'));
+        $fotos          = $artista->media()->where('tipo', 'foto')->orderBy('orden')->get();
+        $videos         = $artista->media()->where('tipo', 'video_link')->orderBy('orden')->get();
+        $tracks         = $artista->media()->where('tipo', 'audio_link')->orderBy('orden')->get();
+        $redes          = $artista->redes->keyBy('plataforma');
+        $redesConfig    = config('redes');
+
+        return view('artista.edit', compact(
+            'artista', 'disciplinas', 'generos', 'generosActivos',
+            'fotos', 'videos', 'tracks', 'redes', 'redesConfig'
+        ));
     }
 
     /**
-     * Actualizar perfil.
+     * Actualizar INFO DE ARTISTA.
      */
     public function update(UpdateArtistaRequest $request, Artista $artista)
     {
         abort_if($artista->user_id !== Auth::id(), 403);
 
-        $data = $request->validate([
-            'nombre_artistico'      => 'required|string|max:255',
-            'localidad'             => 'required|string|max:255',
-            'telefono'              => 'required|string|max:50',
-            'disciplina_id'         => 'required|exists:disciplinas,id',
-            'generos'               => 'nullable|array',
-            'generos.*'             => 'exists:generos,id',
-            'descripcion_actividad' => 'required|string',
-            'integrantes'           => 'nullable|integer|min:2',
-            'tiene_formacion'       => 'required|boolean',
-            'detalle_formacion'     => 'nullable|string',
-            'anio_inicio'           => 'required|integer|min:1900|max:' . date('Y'),
-            'tiene_documentacion'   => 'required|boolean',
-            'acepta_difusion'       => 'required|boolean',
-            'img_perfil'            => 'nullable|image|max:2048',
-            'domicilio'             => 'nullable|string|max:255',
-        ]);
+        $data = $request->validated();
 
         if ($request->hasFile('img_perfil')) {
             // Borra la anterior si existe
@@ -244,8 +257,146 @@ class ArtistaController extends Controller
         $artista->update($data);
         $artista->generos()->sync($request->generos ?? []);
 
-        return redirect()->route('dashboard')->with('success', 'Perfil actualizado correctamente.');
+        return redirect()
+            ->route('artista.edit', $artista->slug)
+            ->with('success', 'Información actualizada.')
+            ->with('tab', 'info');
+        /* AGREGAR TAB ACTIVO PARA Q VUELVA AL TAB QUE ESTABA */
+       /* return back()->with('success', '...')->with('tab', 'multimedia');*/
     }
+
+
+
+
+    /**
+     * Paso 2 — agregar fotos nuevas.
+     */
+    public function storeFotos(Request $request, Artista $artista)
+    {
+        abort_if($artista->user_id !== Auth::id(), 403);
+
+        $request->validate([
+            'fotos'   => 'required|array|max:10',
+            'fotos.*' => 'image|mimes:jpg,jpeg,png|max:5120',
+        ]);
+
+        $orden = $artista->media()->where('tipo', 'foto')->max('orden') ?? 0;
+
+        foreach ($request->file('fotos') as $foto) {
+            $path = $foto->store('artistas/fotos', 'public');
+            $artista->media()->create([
+                'tipo'  => 'foto',
+                'url'   => $path,
+                'orden' => ++$orden,
+            ]);
+        }
+
+        return back()->with('success', 'Fotos agregadas correctamente.');
+    }
+
+    /**
+     * Paso 2 — agregar o actualizar links (videos/tracks).
+     */
+    public function storeLinks(Request $request, Artista $artista)
+    {
+        abort_if($artista->user_id !== Auth::id(), 403);
+
+        $request->validate([
+            'tracks'          => 'nullable|array',
+            'tracks.*'        => 'nullable|url|max:255',
+            'tracks_titulo.*' => 'nullable|string|max:255',
+            'videos'          => 'nullable|array',
+            'videos.*'        => 'nullable|url|max:255',
+            'videos_titulo.*' => 'nullable|string|max:255',
+        ]);
+
+        if ($request->filled('tracks')) {
+            $orden = $artista->media()->where('tipo', 'audio_link')->max('orden') ?? 0;
+            foreach ($request->tracks as $i => $url) {
+                if (empty($url)) continue;
+                $artista->media()->create([
+                    'tipo'   => 'audio_link',
+                    'url'    => $url,
+                    'titulo' => $request->tracks_titulo[$i] ?? null,
+                    'orden'  => ++$orden,
+                ]);
+            }
+        }
+
+        if ($request->filled('videos')) {
+            $orden = $artista->media()->where('tipo', 'video_link')->max('orden') ?? 0;
+            foreach ($request->videos as $i => $url) {
+                if (empty($url)) continue;
+                $artista->media()->create([
+                    'tipo'   => 'video_link',
+                    'url'    => $url,
+                    'titulo' => $request->videos_titulo[$i] ?? null,
+                    'orden'  => ++$orden,
+                ]);
+            }
+        }
+
+        return back()->with('success', 'Links guardados correctamente.');
+    }
+
+    /**
+     * Paso 2 — actualizar redes.
+     */
+    public function updateRedes(Request $request, Artista $artista)
+    {
+        abort_if($artista->user_id !== Auth::id(), 403);
+
+        $request->validate([
+            'redes'   => 'nullable|array',
+            'redes.*' => 'nullable|url|max:255',
+        ]);
+
+        foreach ($request->redes ?? [] as $plataforma => $url) {
+            if (empty($url)) {
+                // Si borra la URL, elimina el registro
+                $artista->redes()->where('plataforma', $plataforma)->delete();
+                continue;
+            }
+            $artista->redes()->updateOrCreate(
+                ['plataforma' => $plataforma],
+                ['url' => $url]
+            );
+        }
+
+        return back()->with('success', 'Redes actualizadas.');
+    }
+
+    /**
+     * Eliminar un item de media.
+     */
+    public function destroyMedia(Artista $artista, Media $media)
+    {
+        abort_if($artista->user_id !== Auth::id(), 403);
+        abort_if($media->artista_id !== $artista->id, 403);
+
+        if ($media->tipo === 'foto') {
+            Storage::disk('public')->delete($media->url);
+        }
+
+        $media->delete();
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Eliminar una red social.
+     */
+    public function destroyRed(Artista $artista, ArtistaRedes $red)
+    {
+        abort_if($artista->user_id !== Auth::id(), 403);
+        abort_if($red->artista_id !== $artista->id, 403);
+
+        $red->delete();
+
+        return response()->json(['success' => true]);
+    }
+
+
 
     /**
      * Remove the specified resource from storage.

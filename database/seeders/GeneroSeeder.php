@@ -17,17 +17,19 @@ class GeneroSeeder extends Seeder
     {
          $generos = [
             'Música' => [
-                'Rock', 'Blues', 'Jazz', 'Tango', 'Folklore', 'Pop',
-                'Cumbia', 'Clásica', 'Metal', 'Electrónica', 'Hip Hop',
-                'Reggae', 'Punk', 'Indie', 'Trap', 'Tropical', 'Ska',
+                'Blues', 'Cumbia', 'Clásica','Electrónica',
+                'Folklore', 'Hip Hop', 'Indie', 'Jazz',
+                'Metal', 'Tango', 'Pop', 'Punk',  'Reggae',
+                'Rock', 'Ska',  'Trap', 'Tropical',
             ],
             'Artes Plásticas' => [
                 'Pintura', 'Escultura', 'Dibujo', 'Grabado',
                 'Arte Digital', 'Muralismo', 'Ilustración',
             ],
             'Danza' => [
-                'Tango', 'Folklore', 'Ballet', 'Contemporánea',
-                'Flamenco', 'Hip Hop', 'Jazz', 'Salsa',
+                'Ballet', 'Contemporánea', 'Danza Árabe',
+                'Flamenco', 'Folklore', 'Hip Hop', 'Salsa',
+                'Tango', 'Urbano', 'Zumba',
             ],
             'Teatro' => [
                 'Drama', 'Comedia', 'Musical', 'Infantil',

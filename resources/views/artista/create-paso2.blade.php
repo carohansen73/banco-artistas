@@ -9,7 +9,7 @@
     </div>
 
     <section class="team pt-0">
-        <div class="container mb-5 p-lg-5 p-4" data-aos="fade-up">
+        <div class="container mb-5 p-lg-5 p-3" data-aos="fade-up">
 
             {{-- ENCABEZADO --}}
             <div class="section-title ps-0 pb-3">
@@ -91,7 +91,7 @@
 
                         {{-- Preview fotos --}}
                         <div class="col-12 p-2">
-                            <div id="fotos-preview" class="d-flex flex-wrap gap-2 mt-2"></div>
+                            <div id="fotos-preview" class="galeria-grid mt-2"></div>
                         </div>
                     </div>
                 </div>
@@ -177,110 +177,8 @@
 </div>
 
 @push('scripts')
-<script>
-    const fotosInput = document.getElementById('fotos');
-    const fotosPreview = document.getElementById('fotos-preview');
-    let selectedFotos = new DataTransfer();
-
-    function renderFotosPreview() {
-        fotosPreview.innerHTML = '';
-
-        Array.from(selectedFotos.files).forEach((file, index) => {
-            const reader = new FileReader();
-            reader.onload = e => {
-                const wrapper = document.createElement('div');
-                wrapper.style.position = 'relative';
-                wrapper.style.display = 'inline-block';
-                wrapper.style.marginRight = '8px';
-                wrapper.style.marginBottom = '8px';
-
-                wrapper.innerHTML = `
-                    <img src="${e.target.result}"
-                        style="height:100px; width:100px; object-fit:cover; border-radius:6px;">
-                    <button type="button" class="btn btn-sm btn-danger remove-foto"
-                        data-index="${index}"
-                        style="position:absolute; top:4px; right:4px; padding:0 6px; line-height:1;">
-                        ×
-                    </button>`;
-
-                fotosPreview.appendChild(wrapper);
-            };
-            reader.readAsDataURL(file);
-        });
-    }
-
-    fotosInput.addEventListener('change', function () {
-        Array.from(this.files).forEach(file => {
-            selectedFotos.items.add(file);
-        });
-        fotosInput.files = selectedFotos.files;
-        renderFotosPreview();
-    });
-
-    fotosPreview.addEventListener('click', function (event) {
-        if (!event.target.classList.contains('remove-foto')) {
-            return;
-        }
-
-        const indexToRemove = Number(event.target.dataset.index);
-        const newData = new DataTransfer();
-
-        Array.from(selectedFotos.files).forEach((file, index) => {
-            if (index !== indexToRemove) {
-                newData.items.add(file);
-            }
-        });
-
-        selectedFotos = newData;
-        fotosInput.files = selectedFotos.files;
-        renderFotosPreview();
-    });
-
-    // Agregar track
-    document.getElementById('add-track').addEventListener('click', function () {
-        const container = document.getElementById('tracks-container');
-        container.insertAdjacentHTML('beforeend', `
-            <div class="row track-row mb-3">
-                <div class="col-sm-6 p-2">
-                    <input type="url" name="tracks[]" class="form-control"
-                        placeholder="https://open.spotify.com/track/...">
-                </div>
-                <div class="col-sm-5 p-2">
-                    <input type="text" name="tracks_titulo[]" class="form-control"
-                        placeholder="Título de la canción (opcional)">
-                </div>
-                <div class="col-sm-1 p-2 d-flex align-items-center">
-                    <button type="button" class="btn btn-sm btn-outline-danger remove-row">✕</button>
-                </div>
-            </div>`);
-    });
-
-    // Agregar video
-    document.getElementById('add-video').addEventListener('click', function () {
-        const container = document.getElementById('videos-container');
-        container.insertAdjacentHTML('beforeend', `
-            <div class="row video-row mb-3">
-                <div class="col-sm-6 p-2">
-                    <input type="url" name="videos[]" class="form-control"
-                        placeholder="https://www.youtube.com/watch?v=...">
-                </div>
-                <div class="col-sm-5 p-2">
-                    <input type="text" name="videos_titulo[]" class="form-control"
-                        placeholder="Título del video (opcional)">
-                </div>
-                <div class="col-sm-1 p-2 d-flex align-items-center">
-                    <button type="button" class="btn btn-sm btn-outline-danger remove-row">✕</button>
-                </div>
-            </div>`);
-    });
-
-    // Eliminar fila
-    document.addEventListener('click', function (e) {
-        if (e.target.classList.contains('remove-row')) {
-            e.target.closest('.track-row, .video-row').remove();
-        }
-    });
-</script>
+@vite(['resources/js/artist-media-manager.js'])
 @endpush
+
 
 @endsection

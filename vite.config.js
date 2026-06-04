@@ -4,16 +4,21 @@ import laravel from 'laravel-vite-plugin';
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css',
+            input: [
+                'resources/css/app.css',
                 'resources/css/app-publico.css',
-                 'resources/css/galery.css',
+                'resources/css/galery.css',
                 'resources/js/app.js',
                 'resources/js/filter-artists.js',
-            'resources/js/galery-lightbox.js'],
+                'resources/js/artist-inscription-form.js',
+                'resources/js/artist-media-manager.js',
+                'resources/js/artist-edit.js',
+                'resources/js/galery-lightbox.js'
+            ],
             refresh: true,
         }),
     ],
-     server: {
+    server: {
         host: '0.0.0.0',        // escucha en todas las interfaces
         cors: true,              // permite cualquier origen
         hmr: {
