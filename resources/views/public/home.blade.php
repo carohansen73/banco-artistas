@@ -4,8 +4,6 @@
 
 @section('content')
 
-{{ asset('css/app-publico.css') }}
-
 {{-- PORTADA --}}
 <div id="home prueba-css">
 

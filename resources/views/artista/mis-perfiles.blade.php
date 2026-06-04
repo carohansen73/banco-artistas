@@ -83,13 +83,13 @@
                                         class="btn btn-red rounded-pill btn-sm px-3 flex-grow-1 text-center">
                                         Editar
                                     </a>
-                                    @if($artista->visible)
-                                        <a {{-- href="{{ route('public.artista.show', $artista->slug) }}"--}}
+                                    {{-- @if($artista->visible)
+                                        <a href="{{ route('public.artista.show', $artista->slug) }}"
                                             class="btn btn-outline-secondary rounded-pill btn-sm px-3"
                                             target="_blank" title="Ver perfil público">
                                             👁
                                         </a>
-                                    @endif
+                                    @endif --}}
                                 </div>
 
                             </div>
