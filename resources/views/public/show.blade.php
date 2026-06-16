@@ -39,14 +39,14 @@
                         </div>
                     @endif
 
-                    @role('admin')
+                    {{-- @role('admin')
                         <p class="mb-1 detail-red"><strong>Informacion personal:</strong></p>
                         <p class="mb-1"><span class="detail-red">Usuario: </span>{!! $artista->user->apellido !!}, {!! $artista->user->nombre !!}</p>
                         <p class="mb-1"><span class="detail-red">Rol: </span>{!! $artista->rol !!}</p>
                         <p class="mb-1"><span class="detail-red">Telefono: </span>{!! $artista->telefono !!}</p>
                         <p><span class="detail-red">Email: </span>{!! $artista->user->email !!}</p>
                         <p><span class="detail-red">Rol en el proyecto: </span>{!! $artista->rol_proyecto !!}</p>
-                    @endrole
+                    @endrole --}}
 
                     @if($artista->redes->isNotEmpty())
                         <div class="social-links mt-3">

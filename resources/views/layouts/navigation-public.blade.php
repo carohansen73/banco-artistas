@@ -47,7 +47,7 @@
                             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark custom-dropdown-width">
                                 @role('admin')
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('admin.artistas.index') }}">Listado Artistas</a>
+                                        <a class="dropdown-item" href="{{ route('admin.dashboard') }}">Panel de administración</a>
                                     </li>
                                 @endrole
                                 @role('user')

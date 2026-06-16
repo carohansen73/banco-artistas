@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Panel admin: sidebar móvil empuja el contenido (sin overlay) */
+@media (max-width: 1023px) {
+    #admin-sidebar.is-open {
+        width: 16rem;
+    }
+}
