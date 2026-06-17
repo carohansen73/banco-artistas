@@ -33,6 +33,7 @@
         @vite(['resources/css/app-publico.css', 'resources/css/galery.css'])
     </head>
     <body>
+        <x-flash-toast />
         <div class="">
             {{-- @include('layouts.navigation') --}}
             @include('layouts.navigation-public')

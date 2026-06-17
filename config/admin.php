@@ -26,16 +26,16 @@ return [
       'active' => 'admin.artistas.*',
       'icon' => 'users',
     ],
+    // [
+    //   'label' => 'Eventos',
+    //   'route' => 'admin.eventos.index',
+    //   'active' => 'admin.eventos.*',
+    //   'icon' => 'calendar',
+    // ],
     [
       'label' => 'Disciplinas',
       'route' => 'admin.disciplinas.index',
       'active' => 'admin.disciplinas.*',
-      'icon' => 'academic',
-    ],
-    [
-      'label' => 'Géneros',
-      'route' => 'admin.generos.index',
-      'active' => 'admin.generos.*',
       'icon' => 'tag',
     ],
     [

@@ -46,7 +46,7 @@
                         'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700/50' => ! $active,
                     ])
                 >
-                    @include('admin.partials.sidebar-icon', ['icon' => $item['icon'] ?? 'link'])
+                    @include('layouts.partials-admin.sidebar-icon', ['icon' => $item['icon'] ?? 'link'])
                     <span>{{ $item['label'] }}</span>
                 </a>
             @endforeach

@@ -46,8 +46,9 @@
                                                     {{ $artista->user->email }}
                                                 </div>
                                             </td>
-                                            <td class="py-4 pe-4 align-middle text-sm text-gray-900 dark:text-gray-100">
-                                                <a href="{{ route('admin.artistas.show', $artista) }}">
+                                            <td class="py-4 pe-4 align-middle text-sm ">
+                                                <a class="text-gray-900 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400 hover:underline transition-colors duration-150"
+                                                    href="{{ route('admin.artistas.show', $artista) }}">
                                                     {{ $artista->nombre_artistico }}
                                                 </a>
 

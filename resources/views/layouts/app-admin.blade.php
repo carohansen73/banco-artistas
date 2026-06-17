@@ -13,8 +13,9 @@
         @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/admin-sidebar.js'])
     </head>
     <body class="font-sans antialiased">
+         <x-flash-toast />
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
+            @include('layouts.partials-admin.navigation')
 
             {{-- Overlay para cuando abro la sidebar en mobile --}}
             <div
@@ -23,11 +24,11 @@
             ></div>
 
             <div id="admin-shell" class="flex min-h-[calc(100vh-4rem)] pt-16">
-                @include('admin.partials.sidebar')
+                @include('layouts.partials-admin.sidebar')
 
                 <div id="admin-main" class="flex min-w-0 flex-1 flex-col lg:ml-64">
                     @isset($header)
-                        @include('admin.partials.topbar')
+                        @include('layouts.partials-admin.topbar')
                     @endisset
 
                     <main class="flex-1">
@@ -36,7 +37,7 @@
                 </div>
             </div>
         </div>
-
+        <x-flash-toast />
         @stack('scripts')
     </body>
 </html>

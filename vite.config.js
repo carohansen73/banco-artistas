@@ -12,6 +12,7 @@ export default defineConfig({
                 'resources/js/admin-sidebar.js',
                 'resources/js/admin-artistas-visibility.js',
                 'resources/js/admin-artista-show.js',
+                'resources/js/admin-usuarios.js',
                 'resources/js/filter-artists.js',
                 'resources/js/artist-inscription-form.js',
                 'resources/js/artist-media-manager.js',
