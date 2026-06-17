@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArtistaController;
+use App\Http\Controllers\EventoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +42,24 @@ Route::middleware(['auth'])->group(function () {
 
     // Dashboard del artista (ver sus perfiles)
     /*falta*/Route::get('/mis-perfiles', [ArtistaController::class, 'misPerfiles'])->name('artista.mis-perfiles');
+});
+
+
+/* RUTAS PARA ABM DE EVENTOS */
+Route::middleware(['auth'])->group(function () {
+
+    // Eventos
+    // TODO:
+    Route::get('/eventos/crear', [EventoController::class, 'create'])->name('evento.create');
+    Route::post('/eventos/crear', [EventoController::class, 'store'])->name('evento.store');
+    Route::get('/eventos/{evento:slug}/editar', [EventoController::class, 'edit'])->name('evento.edit');
+    Route::put('/eventos/{evento:slug}', [EventoController::class, 'update'])->name('evento.update');
+    Route::delete('/eventos/{evento:slug}', [EventoController::class, 'destroy'])->name('evento.destroy');
+
+    // Participación en eventos ajenos
+    Route::post('/eventos/{evento:slug}/unirse', [EventoController::class, 'unirse'])->name('evento.unirse');
+    Route::delete('/eventos/{evento:slug}/salir', [EventoController::class, 'salir'])->name('evento.salir');
+
 });
 
 

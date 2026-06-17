@@ -17,7 +17,8 @@ export default defineConfig({
                 'resources/js/artist-inscription-form.js',
                 'resources/js/artist-media-manager.js',
                 'resources/js/artist-edit.js',
-                'resources/js/galery-lightbox.js'
+                'resources/js/galery-lightbox.js',
+                'resources/js/preview-img.js',
             ],
             refresh: true,
         }),
