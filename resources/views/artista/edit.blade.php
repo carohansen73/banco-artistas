@@ -69,6 +69,14 @@
                     <button class="perfil-tab tab-btn ps-2 pe-2" data-tab="redes">
                         Redes
                     </button>
+
+                    {{-- En el nav, después del botón de redes --}}
+                    <button class="perfil-tab tab-btn ps-2 pe-2" data-tab="eventos">
+                        Eventos
+                        @if(isset($eventos) && $eventos->count())
+                            <span class="badge bg-secondary ms-1 d-none d-md-inline">{{ $eventos->count() }}</span>
+                        @endif
+                    </button>
                 </nav>
             </div>
 
@@ -96,6 +104,11 @@
             {{-- TAB 5 — REDES                   --}}
             {{-- ================================ --}}
             @include('artista.partials.edit-redes')
+
+            {{-- ================================ --}}
+            {{-- TAB 6 — EVENTOS                   --}}
+            {{-- ================================ --}}
+            @include('artista.partials.edit-eventos')
 
         </div>
     </section>

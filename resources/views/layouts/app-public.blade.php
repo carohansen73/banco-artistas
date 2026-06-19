@@ -33,28 +33,26 @@
         @vite(['resources/css/app-publico.css', 'resources/css/galery.css'])
     </head>
     <body>
-        <x-flash-toast />
         <div class="">
             {{-- @include('layouts.navigation') --}}
             @include('layouts.navigation-public')
 
-            @if (session('error'))
-                <div class="container mt-3 pt-5">
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{-- @if (session('error'))
+                <div class="container">
+                    <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
                         {{ session('error') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
                     </div>
                 </div>
             @endif
-
             @if (session('success'))
-                <div class="container mt-3 pt-5">
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <div class="container">
+                    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
                         {{ session('success') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
                     </div>
                 </div>
-            @endif
+            @endif --}}
 
             <!-- Page Content -->
             <div class="">

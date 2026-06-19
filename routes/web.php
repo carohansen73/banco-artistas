@@ -57,8 +57,11 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/eventos/{evento:slug}', [EventoController::class, 'destroy'])->name('evento.destroy');
 
     // Participación en eventos ajenos
-    Route::post('/eventos/{evento:slug}/unirse', [EventoController::class, 'unirse'])->name('evento.unirse');
+    Route::post('/eventos/{evento:slug}/unirse', [EventoController::class, 'unirse'])->name('evento.unirse'); //falta hacer
+    Route::delete('/eventos/{evento:slug}/desvincular/{artista}', [EventoController::class, 'desvincular'])->name('evento.desvincular');
+
     Route::delete('/eventos/{evento:slug}/salir', [EventoController::class, 'salir'])->name('evento.salir');
+
 
 });
 

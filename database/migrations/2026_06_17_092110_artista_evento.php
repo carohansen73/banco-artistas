@@ -16,7 +16,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('artista_id')->constrained('artistas')->cascadeOnDelete();
             $table->foreignId('evento_id')->constrained('eventos')->cascadeOnDelete();
-            $table->text('descripcion_participacion')->nullable();
             $table->unique(['artista_id', 'evento_id']);
             $table->timestamps();
         });

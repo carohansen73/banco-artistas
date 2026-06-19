@@ -74,7 +74,7 @@
                         <div class="form-group col-sm-6 p-2">
                             <label class="ps-1 text-purple"><strong>Fecha y hora de fin</strong></label>
                             <input type="datetime-local" name="fecha_fin" class="form-control @error('fecha_fin') is-invalid @enderror"
-                            value="{{ old('fecha_fin')}}" required>
+                            value="{{ old('fecha_fin')}}">
                             @error('fecha_fin') <small class="text-danger"> {{ $message }}</small> @enderror
                         </div>
 
@@ -113,7 +113,7 @@
                         <div class="form-group col-12 p-2">
                             <label class="ps-1"><strong>Imágen del evento</strong></label>
                             <input type="file" name="imagen_portada" id="imagen_portada" class="form-control @error('imagen_portada') is-invalid @enderror"
-                            accept=".jpg, .jpeg, .png, .jfif"  required>
+                            accept=".jpg, .jpeg, .png, .jfif, .webp"  required>
                             @error('imagen_portada') <small class="text-danger"> {{ $message }}</small> @enderror
 
                             <div id="preview-container" style="display:none; margin-top:12px;">
@@ -157,8 +157,7 @@
 
                                 {{-- Un solo perfil, se preselecciona invisible  --}}
                                 <input type="hidden" name="artistas_ids[]" value="{{ $artistas->first()->id }}">
-                                <div class="d-flex align-items-center gap-3 mt-1 p-3"
-                                style="background: #f8f9fa; border-radius:8px; border: 1px solid #dee2e6;">
+                                <div class="d-flex align-items-center gap-3 p-3 inside-card">
                                     @if($artistas->first()->img_perfil)
                                         <img src="{{ Storage::url($artistas->first()->img_perfil) }}" alt="foto perfil del artista"
                                         style="width:48px; height:48px; border-radius: 50%; object-fit:cover;">
@@ -171,7 +170,7 @@
                                 {{-- Multiples perfiles - checkboxes --}}
                                 <div class="d-flex flex-column gap-2 mt-1">
                                     @foreach ($artistas as $artista)
-                                        <div class="form-check d-flex align-items-center gap-3 p-3" style="background: #f8f9fa; border-radius:8px; border: 1px solid #dee2e6;">
+                                        <div class="d-flex align-items-center gap-3 p-3 inside-card">
                                             <input type="checkbox" name="artistas_ids[]" value="{{ $artista->id }}"
                                             id="artista_{{ $artista->id }}" class="form-check-input mt-0"
                                             {{ is_array(old('artistas_ids')) && in_array($artista->id, old('artistas_ids')) ? 'checked': '' }}>
@@ -185,15 +184,6 @@
                                 </div>
                             @endif
                             @error('artistas_ids') <small class="text-danger d-block mt-1"> {{ $message }}</small> @enderror
-                        </div>
-
-
-                        <div class="form-group col-12 p-2">
-                            <label class="ps-1"><strong>¿Cómo participás?</strong></label>
-                            <textarea rows="2" name="descripcion_participacion" class="form-control @error('descripcion_participacion') is-invalid @enderror"
-                            value="{{ old('descripcion_participacion')}}" placeholder="Breve descripción de tu rol en este evento.">
-                            </textarea>
-                            @error('descripcion_participacion') <small class="text-danger"> {{ $message }}</small> @enderror
                         </div>
                     </div>
 

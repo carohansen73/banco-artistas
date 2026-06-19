@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Evento;
 use App\Http\Requests\StoreEventoRequest;
 use App\Http\Requests\UpdateEventoRequest;
+use App\Models\Artista;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -31,7 +32,7 @@ class EventoController extends Controller
     /**
      * Guarda el nuevo evento y asocia los artistas participantes.
      */
-    public function store(Request $request)
+    public function store(StoreEventoRequest $request)
     {
         $artistas = auth()->user()->artistas()->where('visible', true)->get();
 
@@ -39,21 +40,7 @@ class EventoController extends Controller
             abort(403);
         }
 
-        $data = $request->validate([
-            'nombre'                  => 'required|string|max:255',
-            'descripcion'             => 'nullable|string',
-            'fecha_inicio'            => 'required|date',
-            'fecha_fin'               => 'nullable|date|after_or_equal:fecha_inicio',
-            'lugar'                   => 'required|string|max:255',
-            'direccion'               => 'nullable|string|max:255',
-            'ciudad'                  => 'nullable|string|max:100',
-            'imagen_portada'          => 'nullable|image|max:2048',
-            'link_entradas'           => 'nullable|url|max:255',
-            'link_externo'            => 'nullable|url|max:255',
-            'artistas_ids'            => 'required|array|min:1',
-            'artistas_ids.*'          => 'integer|exists:artistas,id',
-            'descripcion_participacion' => 'nullable|string',
-        ]);
+        $data = $request->validated();
 
         // Verificar que los artistas_ids seleccionados pertenecen al user
         $idsDelUser = $artistas->pluck('id')->toArray();
@@ -84,16 +71,9 @@ class EventoController extends Controller
             'user_id'         => auth()->id(),
         ]);
 
-        // Asociar artistas en la pivot
-        $pivot = [];
-        foreach ($idsSeleccionados as $artistaId) {
-            $pivot[$artistaId] = [
-                'descripcion_participacion' => $data['descripcion_participacion'] ?? null,
-            ];
-        }
-        $evento->artistas()->attach($pivot);
+        $evento->artistas()->attach($data['artistas_ids']);
 
-        return redirect()->route('evento.show', $evento)
+        return redirect()->route('artista.mis-perfiles')
             ->with('success', '¡Evento creado con éxito!');
     }
 
@@ -122,28 +102,14 @@ class EventoController extends Controller
     /**
      * Actualiza el evento.
      */
-    public function update(Request $request, Evento $evento)
+    public function update(StoreEventoRequest $request, Evento $evento)
     {
         $this->autorizarCreador($evento);
 
         $artistas = auth()->user()->artistas()->where('visible', true)->get();
         $idsDelUser = $artistas->pluck('id')->toArray();
 
-        $data = $request->validate([
-            'nombre'                  => 'required|string|max:255',
-            'descripcion'             => 'nullable|string',
-            'fecha_inicio'            => 'required|date',
-            'fecha_fin'               => 'nullable|date|after_or_equal:fecha_inicio',
-            'lugar'                   => 'required|string|max:255',
-            'direccion'               => 'nullable|string|max:255',
-            'ciudad'                  => 'nullable|string|max:100',
-            'imagen_portada'          => 'nullable|image|max:2048',
-            'link_entradas'           => 'nullable|url|max:255',
-            'link_externo'            => 'nullable|url|max:255',
-            'artistas_ids'            => 'required|array|min:1',
-            'artistas_ids.*'          => 'integer|exists:artistas,id',
-            'descripcion_participacion' => 'nullable|string',
-        ]);
+        $data = $request->validated();
 
         if (array_diff($data['artistas_ids'], $idsDelUser)) {
             abort(403, 'Uno o más perfiles seleccionados no te pertenecen.');
@@ -175,15 +141,9 @@ class EventoController extends Controller
         // Primero desvincula los del user, luego re-adjunta los seleccionados
         $evento->artistas()->detach($idsDelUser);
 
-        $pivot = [];
-        foreach ($data['artistas_ids'] as $artistaId) {
-            $pivot[$artistaId] = [
-                'descripcion_participacion' => $data['descripcion_participacion'] ?? null,
-            ];
-        }
-        $evento->artistas()->attach($pivot);
+        $evento->artistas()->attach(($data['artistas_ids']));
 
-        return redirect()->route('evento.show', $evento)
+        return redirect()->route('artista.mis-perfiles')
             ->with('success', 'Evento actualizado correctamente.');
     }
 
@@ -200,7 +160,8 @@ class EventoController extends Controller
 
         $evento->delete();
 
-        return redirect()->back()->with('success', 'Evento eliminado.');
+        return redirect()->route('artista.mis-perfiles')
+            ->with('success', 'Evento eliminado');
     }
 
     /**
@@ -217,7 +178,6 @@ class EventoController extends Controller
         $data = $request->validate([
             'artistas_ids'              => 'required|array|min:1',
             'artistas_ids.*'            => 'integer|exists:artistas,id',
-            'descripcion_participacion' => 'nullable|string',
         ]);
 
         $idsDelUser = $artistas->pluck('id')->toArray();
@@ -230,32 +190,45 @@ class EventoController extends Controller
         $yaAsociados = $evento->artistas()->pluck('artistas.id')->toArray();
         $nuevos = array_diff($data['artistas_ids'], $yaAsociados);
 
-        $pivot = [];
-        foreach ($nuevos as $artistaId) {
-            $pivot[$artistaId] = [
-                'descripcion_participacion' => $data['descripcion_participacion'] ?? null,
-            ];
+        if (!empty($nuevos)) {
+            $evento->artistas()->attach($nuevos);
         }
 
-        if (!empty($pivot)) {
-            $evento->artistas()->attach($pivot);
-        }
-
-        return redirect()->route('evento.show', $evento)
-            ->with('success', '¡Te sumaste al evento!');
+        return back()->with('success', 'Te sumaste al evento!');
     }
 
     /**
      * Un artista se retira de un evento que no creó.
      */
-    public function salir(Evento $evento)
+    public function desvincular(Evento $evento, Artista $artista)
     {
-        $idsDelUser = auth()->user()->artistas()->pluck('id')->toArray();
+        // Verificar que el artista le pertenece al usuario
+        if ($artista->user_id !== auth()->id()) {
+            abort(403);
+        }
 
-        $evento->artistas()->detach($idsDelUser);
+        $evento->artistas()->detach($artista->id);
 
-        return redirect()->route('evento.show', $evento)
-            ->with('success', 'Saliste del evento.');
+       return back()->with('success', 'Saliste del evento correctamente.');
+    }
+
+
+    // Salir del evento
+    public function salir(Request $request, Evento $evento)
+    {
+        $idsDelUser = auth()->user()->artistas->pluck('id')->toArray();
+
+        // Si vienen ids específicos, validarlos; si no, desvincula todos
+        $idsASalir = $request->input('artistas_ids', $idsDelUser);
+
+        // Verificar que los ids pertenecen al user
+        if (array_diff($idsASalir, $idsDelUser)) {
+            abort(403);
+        }
+
+        $evento->artistas()->detach($idsASalir);
+
+        return back()->with('success', 'Saliste del evento.');
     }
 
     // --- Helpers privados ---

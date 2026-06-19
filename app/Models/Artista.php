@@ -75,6 +75,12 @@ class Artista extends Model
         return $this->hasMany(Media::class)->orderBy('orden');
     }
 
+    public function eventos()
+    {
+        return $this->belongsToMany(Evento::class, 'artista_evento')
+                    ->withTimestamps();
+    }
+
     // Helpers útiles
     public function fotos()
     {

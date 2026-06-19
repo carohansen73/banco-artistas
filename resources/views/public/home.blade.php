@@ -5,16 +5,15 @@
 @section('content')
 
 {{-- PORTADA --}}
-<div id="home prueba-css">
+<div id="home">
 
     <div class="hero-carousel" id="home-banner">
 
         <div class="overlay">
-        <div class="col-lg-7 home-title">
-                <h1>¿Listos para
-                    conocer a los
-                    mejores artistas?
+        <div class="col-lg-7 home-title row">
+                <h1>Conectando artistas y comunidad
                 </h1>
+                {{-- <p>Explorá las distintas expresiones artísticas de Tres Arroyos y descubrí a quienes hacen crecer la cultura de nuestra ciudad.</p> --}}
             </div>
         </div>
 
@@ -29,17 +28,14 @@
 {{-- FIN PORTADA --}}
 
 {{-- CARDS --}}
-<section class="options p-3 mt-5 mb-5" id="home">
+<section class="options p-3 mb-5" id="home">
     <div class="container">
         <div class="row">
 
             <div class="col-lg-4 p-2">
                 <div class="border-card" data-aos="fade-up">
-                    <h2>¿Queres conocer a los mejores
-                        artistas locales?
-                    </h2>
-                    <p>Explorá el listado de músicos,
-                        bandas y solistas que forman parte de nuestra escena local.
+                    <h2> Descubrí el talento artístico de nuestra ciudad </h2>
+                    <p> Conocé a los artistas y colectivos que forman parte de la comunidad cultural de Tres Arroyos.
                     </p>
                     <div>
                         <a class="btn btn-light btn-xl rounded-pill" href="{{ url('/artistas') }}">Explorar Artistas</a>
@@ -49,32 +45,51 @@
 
             <div class="col-lg-4 p-2">
                 <div class="border-card" data-aos="fade-up">
-                    <h2>¿Sos musico y querés sumarte a “Artistas Tres Arroyos”?</h2>
+                    <h2>¿Querés formar parte de la comunidad artística?</h2>
 
-                    <p>Creá tu usuario en pocos pasos e inscribite vos o tu banda para mostrar tu proyecto.</p>
+                    <p>Creá tu cuenta y sumate a Artistas Tres Arroyos para dar visibilidad a tu trabajo y conectar con nuevas oportunidades.</p>
 
                     <div>
-                        <a class="btn btn-light btn-xl rounded-pill" href="{{ route('register') }}">Registrate</a>
+                        <a class="btn btn-light btn-xl rounded-pill" href="{{ route('register') }}">Crear cuenta</a>
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-4 p-2">
                 <div class="border-card" data-aos="fade-up">
-                    <h2>¿Ya tenés tu usuario? Comenzá la inscripción</h2>
+                    <h2>Mostrá tu trabajo y compartí tu trayectoria</h2>
 
-                    <p>Completá la información sobre tu proyecto musical y ¡formá parte de esta red artística!</p>
+                    <p>Si ya tenés una cuenta, completá tu perfil y compartí tu trayectoria, obras, actividades y próximos eventos.</p>
 
                     <div class="button">
-                        <a class="btn btn-light btn-xl rounded-pill"  href="{{ route('artista.create') }}">Inscribite</a>
+                        <a class="btn btn-light btn-xl rounded-pill"  href="{{ route('artista.create') }}">Completar perfil</a>
                     </div>
                 </div>
             </div>
 
         </div>
+
+
+        {{-- EVENTOS --}}
+        <section class="eventos-slider-section">
+            <div class="eventos-slider-header">
+                <h2 style="color:white;">Eventos</h2>
+                <div class="eventos-slider-controls">
+                    <button class="eventos-btn-prev" aria-label="Anterior">&#8249;</button>
+                    <button class="eventos-btn-next" aria-label="Siguiente">&#8250;</button>
+                </div>
+            </div>
+            <x-eventos-slider :eventos="$eventos" />
+        </section>
+
+
     </div>
 </section>
 {{-- FIN CARDS --}}
+
+
+
+
 
 
 <script>

@@ -7,6 +7,7 @@ use App\Http\Requests\StoreArtistaRequest;
 use App\Http\Requests\UpdateArtistaRequest;
 use App\Models\ArtistaRedes;
 use App\Models\Disciplina;
+use App\Models\Evento;
 use App\Models\Genero;
 use App\Models\Media;
 use Illuminate\Http\Request;
@@ -20,7 +21,14 @@ class ArtistaController extends Controller
     public function home()
     {
         $artistas = Artista::where('visible', 1)->get();
-        return view('public.home', compact('artistas'));
+        $eventos = Evento::with('artistas')
+            ->activos()
+            ->destacados()
+            ->vigentes()
+            ->orderBy('fecha_inicio')
+            ->take(10)
+            ->get();
+        return view('public.home', compact('artistas', 'eventos'));
     }
 
     /**
@@ -37,6 +45,26 @@ class ArtistaController extends Controller
 
         return view('public.index', compact('artistas', 'disciplinas', 'generos'));
     }
+
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Artista $artista)
+    {
+        $artista->load(['disciplina', 'generos', 'redes', 'media', 'tracks', 'eventos']);
+
+        $fotos      = $artista->media->where('tipo', 'foto');
+        $videos     = $artista->media->where('tipo', 'video_link');
+        $audios     = $artista->media->where('tipo', 'audio_link');
+
+
+        return view('public.show', compact('artista', 'fotos', 'videos', 'audios'));
+    }
+
+
+    /* --------------- ARTISTA LOGUEADO ------------------ */
+
 
     /**
      * Formulario para crear nuevo perfil de artista.
@@ -193,25 +221,16 @@ class ArtistaController extends Controller
             ->latest()
             ->get();
 
-        return view('artista.mis-perfiles', compact('artistas'));
+        $eventos = Evento::where('user_id', auth()->id())
+            ->with('artistas')
+            ->orderBy('fecha_inicio')
+            ->get();
+
+        return view('artista.mis-perfiles', compact('artistas', 'eventos'));
     }
 
 
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Artista $artista)
-    {
-        $artista->load(['disciplina', 'generos', 'redes', 'media', 'tracks']);
-
-        $fotos      = $artista->media->where('tipo', 'foto');
-        $videos     = $artista->media->where('tipo', 'video_link');
-        $audios     = $artista->media->where('tipo', 'audio_link');
-
-
-        return view('public.show', compact('artista', 'fotos', 'videos', 'audios'));
-    }
 
     /**
      * Formulario de edición.
@@ -230,10 +249,11 @@ class ArtistaController extends Controller
         $tracks         = $artista->media()->where('tipo', 'audio_link')->orderBy('orden')->get();
         $redes          = $artista->redes->keyBy('plataforma');
         $redesConfig    = config('redes');
+        $eventos          = $artista->eventos()->orderByDesc('fecha_inicio')->get();
 
         return view('artista.edit', compact(
             'artista', 'disciplinas', 'generos', 'generosActivos',
-            'fotos', 'videos', 'tracks', 'redes', 'redesConfig'
+            'fotos', 'videos', 'tracks', 'redes', 'redesConfig', 'eventos'
         ));
     }
 

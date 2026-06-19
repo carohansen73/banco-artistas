@@ -7,14 +7,20 @@
         <div class="row"><div class="col-12 border-7"></div></div>
     </div>
 
-    <section class="team pt-0">
+    <section class="team pt-0 pb-0">
         <div class="container mb-5 p-lg-5 p-4" data-aos="fade-up">
 
             {{-- ENCABEZADO --}}
-            <div class="section-title ps-0 pb-3 d-flex justify-content-between align-items-end flex-wrap gap-3">
+            <div class="section-title ps-0 pb-3 ">
                 <div>
                     <p>Panel del artista</p>
-                    <h2>Mis perfiles</h2>
+                    <h2>Perfiles y eventos</h2>
+                </div>
+            </div>
+
+            <div class=" ps-0 pb-3 pt-3 d-flex justify-content-between align-items-end flex-wrap gap-3">
+                <div>
+                    <h1>Mis perfiles</h1>
                 </div>
                 <a href="{{ route('artista.create') }}" class="btn btn-red rounded-pill px-4 py-2">
                     + Agregar nuevo perfil
@@ -76,29 +82,37 @@
                                         <span class="badge bg-warning text-dark">Pendiente de revisión</span>
                                     @endif
                                 </div>
-
                                 {{-- ACCIONES --}}
                                 <div class="d-flex gap-2 mt-3">
                                     <a href="{{ route('artista.edit', $artista->slug) }}"
                                         class="btn btn-red rounded-pill btn-sm px-3 flex-grow-1 text-center">
                                         Editar
                                     </a>
-                                    {{-- @if($artista->visible)
-                                        <a href="{{ route('public.artista.show', $artista->slug) }}"
-                                            class="btn btn-outline-secondary rounded-pill btn-sm px-3"
-                                            target="_blank" title="Ver perfil público">
-                                            👁
-                                        </a>
-                                    @endif --}}
                                 </div>
-
                             </div>
                         </div>
                     @endforeach
                 </div>
             @endif
-
         </div>
     </section>
+
+    {{-- EVENTOS --}}
+    <section class="container p-lg-5 p-4">
+        <hr>
+
+        {{-- ENCABEZADO --}}
+        <div class=" ps-0 pb-3 pt-3 d-flex justify-content-between align-items-end flex-wrap gap-3">
+            <div>
+                <h1 class="text-white">Mis eventos</h1>
+            </div>
+            <a href="{{ route('evento.create') }}" class="btn btn-red rounded-pill px-4 py-2">
+                + Agregar nuevo evento
+            </a>
+        </div>
+
+        <x-eventos-slider :eventos="$eventos" modo="panel"/>
+    </section>
+
 </div>
 @endsection

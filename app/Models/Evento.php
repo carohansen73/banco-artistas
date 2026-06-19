@@ -61,7 +61,6 @@ class Evento extends Model
     public function artistas()
     {
         return $this->belongsToMany(Artista::class, 'artista_evento')
-                    ->withPivot('descripcion_participacion')
                     ->withTimestamps();
     }
 
@@ -77,14 +76,21 @@ class Evento extends Model
         return $query->where('destacado', true);
     }
 
-    public function scopeProximos($query)
+    public function scopeVigentes($query)
     {
-        return $query->where('fecha_inicio', '>=', now())->orderBy('fecha_inicio');
-    }
+        return $query->where(function ($q) {
 
-    public function scopePasados($query)
-    {
-        return $query->where('fecha_inicio', '<', now())->orderByDesc('fecha_inicio');
+            // Eventos con fecha_fin
+            $q->whereNotNull('fecha_fin')
+            ->where('fecha_fin', '>=', now());
+
+        })->orWhere(function ($q) {
+
+            // Eventos de un solo día
+            $q->whereNull('fecha_fin')
+            ->where('fecha_inicio', '>=', now());
+
+        });
     }
 
     // --- Helpers ---
