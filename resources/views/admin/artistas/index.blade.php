@@ -37,7 +37,7 @@
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                                     @foreach ($artistas as $artista)
-                                        <tr data-artista-row="{{ $artista->id }}">
+                                        <tr data-toggle-row="{{ $artista->id }}">
                                             <td class="py-4 pe-4 align-middle">
                                                 <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
                                                     {{ trim($artista->user->name.' '.$artista->user->lastname) ?: '—' }}
@@ -90,6 +90,6 @@
     </div>
 
     @push('scripts')
-        @vite('resources/js/admin-artistas-visibility.js')
+        @vite('resources/js/admin-toggle.js')
     @endpush
 </x-admin-layout>

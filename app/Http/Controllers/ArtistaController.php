@@ -52,14 +52,20 @@ class ArtistaController extends Controller
      */
     public function show(Artista $artista)
     {
-        $artista->load(['disciplina', 'generos', 'redes', 'media', 'tracks', 'eventos']);
+        $artista->load(['disciplina', 'generos', 'redes', 'media', 'tracks']);
 
         $fotos      = $artista->media->where('tipo', 'foto');
         $videos     = $artista->media->where('tipo', 'video_link');
         $audios     = $artista->media->where('tipo', 'audio_link');
 
+        $eventos = $artista->eventos()
+            ->activos()
+            ->vigentes()
+            ->orderBy('fecha_inicio')
+            ->get();
 
-        return view('public.show', compact('artista', 'fotos', 'videos', 'audios'));
+
+        return view('public.show', compact('artista', 'fotos', 'videos', 'audios', 'eventos'));
     }
 
 

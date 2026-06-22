@@ -26,12 +26,12 @@ return [
       'active' => 'admin.artistas.*',
       'icon' => 'users',
     ],
-    // [
-    //   'label' => 'Eventos',
-    //   'route' => 'admin.eventos.index',
-    //   'active' => 'admin.eventos.*',
-    //   'icon' => 'calendar',
-    // ],
+    [
+      'label' => 'Eventos',
+      'route' => 'admin.eventos.index',
+      'active' => 'admin.eventos.*',
+      'icon' => 'calendar',
+    ],
     [
       'label' => 'Disciplinas',
       'route' => 'admin.disciplinas.index',

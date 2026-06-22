@@ -155,21 +155,23 @@
         </div>
 
         {{-- EVENTOS --}}
-        <section class="eventos-slider-section p-4">
-            <hr>
+        @if ($eventos->isNotEmpty())
+            <section class="eventos-slider-section p-4">
+                <hr>
 
-            <div class="eventos-slider-header">
-                <span class="eventos-slider-title">
-                    <i class="fas fa-calendar-alt me-2"></i> Próximos eventos
-                </span>
-                <div class="eventos-slider-controls">
-                    <button class="eventos-btn-prev" aria-label="Anterior">&#8249;</button>
-                    <button class="eventos-btn-next" aria-label="Siguiente">&#8250;</button>
+                <div class="eventos-slider-header">
+                    <span class="eventos-slider-title">
+                        <i class="fas fa-calendar-alt me-2"></i> Próximos eventos
+                    </span>
+                    <div class="eventos-slider-controls">
+                        <button class="eventos-btn-prev" aria-label="Anterior">&#8249;</button>
+                        <button class="eventos-btn-next" aria-label="Siguiente">&#8250;</button>
+                    </div>
                 </div>
-            </div>
 
-            <x-eventos-slider :eventos="$artista->eventos" :artista-actual="$artista" />
-        </section>
+                <x-eventos-slider :eventos="$eventos" :artista-actual="$artista" />
+            </section>
+        @endif
 
     </div>
 

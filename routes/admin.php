@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ArtistaController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DisciplinaGeneroController;
+use App\Http\Controllers\Admin\EventoController;
 use App\Http\Controllers\Admin\PlaceholderController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
@@ -44,3 +45,11 @@ Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index'
 // Habilitar/deshabilitar usuario
 Route::patch('usuarios/{user}/toggle-active', [UserController::class, 'toggleActive'])
     ->name('usuarios.toggle-active');
+
+/* EVENTOS */
+Route::get('/eventos', [EventoController::class, 'index'])->name('eventos.index');
+Route::get('/eventos/{evento}', [EventoController::class, 'show'])->name('eventos.show');
+Route::patch('/eventos/{evento}/activo', [EventoController::class, 'updateActivo'])
+    ->name('eventos.activo');
+Route::patch('/eventos/{evento}/destacado', [EventoController::class, 'updateDestacado'])
+    ->name('eventos.destacado');

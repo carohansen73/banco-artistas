@@ -10,7 +10,7 @@ export default defineConfig({
                 'resources/css/galery.css',
                 'resources/js/app.js',
                 'resources/js/admin-sidebar.js',
-                'resources/js/admin-artistas-visibility.js',
+                'resources/js/admin-toggle.js', /* Maneja toggles destacado - visible */
                 'resources/js/admin-artista-show.js',
                 'resources/js/admin-usuarios.js',
                 'resources/js/filter-artists.js',
