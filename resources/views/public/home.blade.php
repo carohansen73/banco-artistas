@@ -73,7 +73,7 @@
         {{-- EVENTOS --}}
         <section class="eventos-slider-section">
             <div class="eventos-slider-header">
-                <h2 style="color:white;">Eventos</h2>
+                <h1 style="color:white;">Eventos</h1>
                 <div class="eventos-slider-controls">
                     <button class="eventos-btn-prev" aria-label="Anterior">&#8249;</button>
                     <button class="eventos-btn-next" aria-label="Siguiente">&#8250;</button>
@@ -81,6 +81,32 @@
             </div>
             <x-eventos-slider :eventos="$eventos" />
         </section>
+
+
+        {{-- ARTISTAS --}}
+        <section >
+            <div class="d-flex justify-content-center mb-2">
+                <h1 style="color:white;">Artistas</h1>
+            </div>
+
+            <div class="row g-4" id="container-artists">
+                @foreach($artistas as $artista)
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        @include('public.partials.card-artista', ['artista' => [
+                            'slug'             => $artista->slug,
+                            'nombre_artistico' => $artista->nombre_artistico,
+                            'localidad'        => $artista->localidad,
+                            'disciplina'       => $artista->disciplina?->nombre,
+                            'generos'          => $artista->generos->pluck('nombre'),
+                            'img_perfil'       => $artista->img_perfil
+                                ? asset('storage/' . $artista->img_perfil)
+                                : asset('img/default.jpg'),
+                        ]])
+                    </div>
+                @endforeach
+            </div>
+        </section>
+        {{-- end ARTISTAS --}}
 
 
     </div>

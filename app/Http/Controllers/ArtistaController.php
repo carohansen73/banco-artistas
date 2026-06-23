@@ -20,7 +20,7 @@ class ArtistaController extends Controller
 
     public function home()
     {
-        $artistas = Artista::where('visible', 1)->get();
+        $artistas = Artista::where('visible', 1)->orderBy('created_at', 'desc')->take(6)->get();
         $eventos = Evento::with('artistas')
             ->activos()
             ->destacados()
@@ -208,8 +208,7 @@ class ArtistaController extends Controller
             }
         }
 
-        return redirect()
-            ->route('dashboard')
+        return redirect()->route('artista.mis-perfiles')
             ->with('success', '¡Perfil completado! Será revisado por el equipo de Cultura.');
     }
 
