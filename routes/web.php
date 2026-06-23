@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArtistaController;
+use App\Http\Controllers\DisciplinaController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -75,9 +76,7 @@ Route::get('/artistas/{artista}', [ArtistaController::class, 'show'])->name('art
 
 
 // (Api) Ruta para obtener géneros por disciplina
-Route::get('/api/generos/{disciplina}', function (App\Models\Disciplina $disciplina) {
-        return $disciplina->generos()->orderBy('nombre')->get(['id', 'nombre']);
-    });
+Route::get('/api/generos/{disciplina}', [DisciplinaController::class, 'generos']);
 Route::get('/buscador-de-artistas', [ArtistaController::class, 'searchArtists'])->name('artistas.buscar');
 
 

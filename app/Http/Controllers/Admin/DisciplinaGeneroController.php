@@ -25,14 +25,33 @@ class DisciplinaGeneroController extends Controller
 
     public function create()
     {
-        return view('admin.disciplinas.create');
+        return view('admin.disciplinas-generos.create');
     }
 
     public function store(Request $request)
     {
-        $request->validate(['nombre' => 'required|string|max:100|unique:disciplinas,nombre']);
-        Disciplina::create(['nombre' => $request->nombre]);
-        return redirect()->route('admin.disciplinas.index')->with('success', 'Disciplina creada.');
+        $request->validate([
+            'nombre' => 'required|string|max:100|unique:disciplinas,nombre',
+            'generos.*' => 'nullable|string|max:100',
+        ]);
+
+        $disciplina = Disciplina::create([
+            'nombre' => $request->nombre,
+        ]);
+
+        foreach ($request->generos ?? [] as $nombreGenero) {
+
+            $nombreGenero = trim($nombreGenero);
+
+            if ($nombreGenero !== '') {
+
+                $disciplina->generos()->create([
+                    'nombre' => $nombreGenero,
+                ]);
+            }
+        }
+
+        return redirect()->route('admin.disciplinas.index')->with('success', 'Disciplina creada correctamente.');
     }
 
     public function edit(Disciplina $disciplina)

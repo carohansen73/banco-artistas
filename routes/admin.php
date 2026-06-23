@@ -32,6 +32,7 @@ Route::get('/disciplinas-generos', [DisciplinaGeneroController::class, 'index'])
 Route::get('/disciplinas-generos/{disciplina}/edit', [DisciplinaGeneroController::class, 'edit'])->name('disciplinas.edit');
 Route::put('/disciplinas-generos/{disciplina}', [DisciplinaGeneroController::class, 'update'])->name('disciplinas.update');
 Route::get('/disciplinas-generos/create', [DisciplinaGeneroController::class, 'create'])->name('disciplinas.create');
+Route::post('disciplinas-generos', [DisciplinaGeneroController::class, 'store'])->name('disciplinas.store');
 Route::delete('/disciplinas-generos/{disciplina}', [DisciplinaGeneroController::class, 'destroy'])->name('disciplinas.destroy');
 
 /* GENEROS */

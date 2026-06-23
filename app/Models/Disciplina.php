@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 
 class Disciplina extends Model
 {
@@ -18,6 +19,15 @@ class Disciplina extends Model
     protected $casts = [
         'pendiente_revision' => 'boolean',
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($disciplina) {
+            if (empty($disciplina->slug)) {
+                $disciplina->slug = Str::slug($disciplina->nombre);
+            }
+        });
+    }
 
     public function generos()
     {
