@@ -38,4 +38,5 @@ class Disciplina extends Model
     {
         return $this->hasMany(Artista::class);
     }
+
 }

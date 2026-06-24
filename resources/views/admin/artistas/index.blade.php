@@ -25,10 +25,13 @@
                                 <thead>
                                     <tr>
                                         <th scope="col" class="py-3 pe-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                                            Usuario
+                                            Proyecto artístico
                                         </th>
                                         <th scope="col" class="py-3 pe-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                                            Proyecto artístico
+                                            Usuario
+                                        </th>
+                                        <th scope="col" class="py-3 px-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                                            Disciplina
                                         </th>
                                         <th scope="col" class="py-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                                             Visible
@@ -37,7 +40,30 @@
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                                     @foreach ($artistas as $artista)
+
+                                       @php
+                                            $colores = [
+                                                'artes-plasticas' => 'bg-emerald-700 text-white',
+                                                'artesanias'      => 'bg-yellow-700 text-white',
+                                                'audiovisual'     => 'bg-violet-700 text-white',
+                                                'danza'           => 'bg-pink-700 text-white',
+                                                'diseno'          => 'bg-lime-700 text-white',
+                                                'literatura'      => 'bg-orange-700 text-white',
+                                                'musica'          => 'bg-red-700 text-white',
+                                                'productorgestor' => 'bg-zinc-700 text-white',
+                                                'teatro'          => 'bg-indigo-700 text-white',
+                                            ];
+
+                                            $colorDisciplina = $colores[$artista->disciplina->slug ?? ''] ?? 'bg-gray-700 text-gray-100';
+                                        @endphp
+
                                         <tr data-toggle-row="{{ $artista->id }}">
+                                            <td class="py-4 pe-4 align-middle text-sm ">
+                                                <a class="text-gray-900 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400 hover:underline transition-colors duration-150"
+                                                    href="{{ route('admin.artistas.show', $artista) }}">
+                                                    {{ $artista->nombre_artistico }}
+                                                </a>
+                                            </td>
                                             <td class="py-4 pe-4 align-middle">
                                                 <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
                                                     {{ trim($artista->user->name.' '.$artista->user->lastname) ?: '—' }}
@@ -46,12 +72,11 @@
                                                     {{ $artista->user->email }}
                                                 </div>
                                             </td>
-                                            <td class="py-4 pe-4 align-middle text-sm ">
-                                                <a class="text-gray-900 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400 hover:underline transition-colors duration-150"
-                                                    href="{{ route('admin.artistas.show', $artista) }}">
-                                                    {{ $artista->nombre_artistico }}
-                                                </a>
-
+                                             <td class="py-3 px-4 align-middle">
+                                                <span class="inline-flex items-center text-xs px-2 py-0.5 rounded
+                                                            {{ $colorDisciplina }}">
+                                                    {{ $artista->disciplina->nombre ?? '—' }}
+                                                </span>
                                             </td>
                                             <td class="py-4 align-middle">
                                                 <div class="flex flex-col items-center gap-1">

@@ -1881,7 +1881,7 @@ section.options{
     font-size: 11px;
     font-weight: 600;
     border-radius: 999px;
-    border: 1px solid rgba(255,255,255,0.15);
+    /* border: 1px solid rgba(255,255,255,0.15); */
     backdrop-filter: blur(8px);
     color: #fff;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
@@ -1897,15 +1897,15 @@ section.options{
 
 /* ── Colores por disciplina ──────────────────── */
 /* Agregá o modificá según los slugs reales de tu DB */
-.disc-artes-plasticas { background: #10b981; }
-.disc-artesanias      { background: #eab308; }
-.disc-audiovisual     { background: #8b5cf6; }
-.disc-danza           { background: #ec4899; }
-.disc-diseno          { background: oklch(76.8% 0.233 130.85); color:#FFF; }
-.disc-literatura      { background: #f97316; }
-.disc-musica          { background: #D04145; }
-.disc-productorgestor { background: #616161; }
-.disc-teatro          { background: #6366f1; }
+.disc-artes-plasticas { background: #047857; }
+.disc-artesanias      { background: #a16207; }
+.disc-audiovisual     { background: #6d28d9; }
+.disc-danza           { background: #be185d; }
+.disc-diseno          { background: #4d7c0f}
+.disc-literatura      { background: #c2410c; }
+.disc-musica          { background: #b91c1c; }
+.disc-productorgestor { background: #3f3f46; }
+.disc-teatro          { background: #4338ca; }
 
 
 
