@@ -50,7 +50,7 @@
                                         <a class="dropdown-item" href="{{ route('admin.dashboard') }}">Panel de administración</a>
                                     </li>
                                 @endrole
-                                @role('user')
+                                @role('artista')
                                     @if (auth()->user()->inscripcion != null)
                                         <li>
                                             <a class="dropdown-item" href="{{ route('artista-inscripcion.edit') }}">Tu inscripción</a>

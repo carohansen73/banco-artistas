@@ -31,6 +31,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app-publico.css', 'resources/css/galery.css'])
+        @stack('styles')
     </head>
     <body>
         <div class="">
