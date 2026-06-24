@@ -1,7 +1,6 @@
 {{-- GALERÍA DE FOTOS --}}
 @if($fotos->isNotEmpty())
 <div class="mt-4">
-
     <div class="galeria-grid">
         @foreach($fotos as $foto)
             <div class="galeria-item" data-src="{{ asset('storage/' . $foto->url) }}"
@@ -13,9 +12,6 @@
     </div>
 </div>
 @endif
-
-
-
 
 <div class="lightbox-backdrop" id="lightbox">
     <button class="lightbox-cerrar" id="lightbox-cerrar">&times;</button>

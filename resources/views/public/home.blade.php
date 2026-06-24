@@ -92,7 +92,7 @@
             <div class="row g-4" id="container-artists">
                 @foreach($artistas as $artista)
                     <div class="col-lg-4 col-md-6 col-sm-12">
-                        @include('public.partials.card-artista', ['artista' => [
+                        @include('public.artistas.partials.card-artista', ['artista' => [
                             'slug'             => $artista->slug,
                             'nombre_artistico' => $artista->nombre_artistico,
                             'localidad'        => $artista->localidad,

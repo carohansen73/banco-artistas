@@ -1896,7 +1896,6 @@ section.options{
 }
 
 /* ── Colores por disciplina ──────────────────── */
-/* Agregá o modificá según los slugs reales de tu DB */
 .disc-artes-plasticas { background: #047857; }
 .disc-artesanias      { background: #a16207; }
 .disc-audiovisual     { background: #6d28d9; }
@@ -1906,8 +1905,6 @@ section.options{
 .disc-musica          { background: #b91c1c; }
 .disc-productorgestor { background: #3f3f46; }
 .disc-teatro          { background: #4338ca; }
-
-
 
 
 /* Fallback para disciplinas no mapeadas */

@@ -43,7 +43,7 @@ class ArtistaController extends Controller
         $disciplinas = Disciplina::orderBy('nombre')->get();
         $generos     = Genero::orderBy('nombre')->get();
 
-        return view('public.index', compact('artistas', 'disciplinas', 'generos'));
+        return view('public.artistas.index', compact('artistas', 'disciplinas', 'generos'));
     }
 
 
@@ -65,7 +65,7 @@ class ArtistaController extends Controller
             ->get();
 
 
-        return view('public.show', compact('artista', 'fotos', 'videos', 'audios', 'eventos'));
+        return view('public.artistas.show', compact('artista', 'fotos', 'videos', 'audios', 'eventos'));
     }
 
 
