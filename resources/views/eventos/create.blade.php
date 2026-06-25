@@ -112,7 +112,7 @@
 
                         <div class="form-group col-12 p-2">
                             <label class="ps-1"><strong>Imágen del evento</strong></label>
-                            <input type="file" name="imagen_portada" id="imagen_portada" class="form-control @error('imagen_portada') is-invalid @enderror"
+                            <input type="file" name="imagen_portada" id="imagen" class="form-control @error('imagen_portada') is-invalid @enderror"
                             accept=".jpg, .jpeg, .png, .jfif, .webp"  required>
                             @error('imagen_portada') <small class="text-danger"> {{ $message }}</small> @enderror
 

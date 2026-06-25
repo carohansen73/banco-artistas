@@ -77,9 +77,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function actualizarContador() {
         if (!contador) return;
         const total = todosLosArtistas.length;
-        contador.textContent = total === 0
-            ? 'Sin resultados'
-            : `${total} artista${total !== 1 ? 's' : ''}`;
+        contador.innerHTML = total === 0
+            ? `<span class="contador-texto">Sin resultados</span>`
+            : `<span class="contador-numero">${total}</span>
+               <span class="contador-texto">
+                    artista${total !== 1 ? 's' : ''}
+                </span>`;
     }
 
 

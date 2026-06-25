@@ -134,7 +134,7 @@
                                 </div>
                             @endif
 
-                            <input type="file" name="imagen_portada" id="imagen_portada"
+                            <input type="file" name="imagen_portada" id="imagen"
                                 class="form-control @error('imagen_portada') is-invalid @enderror"
                                 accept=".jpg,.jpeg,.png,.jfif,.webp">
                             <small class="text-muted">Dejá vacío para mantener la imagen actual.</small>

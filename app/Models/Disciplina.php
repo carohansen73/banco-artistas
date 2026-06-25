@@ -13,6 +13,7 @@ class Disciplina extends Model
       protected $fillable = [
         'nombre',
         'slug',
+        'img',
         'pendiente_revision',
     ];
 

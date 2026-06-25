@@ -8,12 +8,12 @@
 {{-- PORTADA --}}
 <div id="artistas-locales">
 
-    <div id="artistas-locales-portada">
+    {{-- <div id="artistas-locales-portada">
         <div class="portada-foto text-md-left text-sm-center ">
             <div class="background-portada">   </div>
-            {{-- <h1>Artistas Locales</h1> --}}
+            <h1>Artistas Locales</h1>
         </div>
-    </div>
+    </div> --}}
 {{-- FIN PORTADA --}}
 
 @if (session('success'))
@@ -88,17 +88,28 @@
             </div>
 
             {{-- Tags de disciplina (acceso rápido) --}}
-            <div class="d-flex flex-wrap gap-2 mb-3" id="tags-disciplina">
-                <button class="tag-disc active" data-id="">Todos</button>
-                @foreach($disciplinas as $d)
-                    <button class="tag-disc" data-id="{{ $d->id }}">{{ $d->nombre }}</button>
-                @endforeach
+            <div class="tags-scroll-wrap mb-4">
+                <button class="tags-arrow tags-arrow-left" id="tags-arrow-left" aria-label="Anterior">&#8249;</button>
+
+                <div class="tags-scroll" id="tags-disciplina">
+                    <button class="tag-disc active" data-id="" style="background-image: url('{{ asset('img/imagenes/2.jpg') }}')">
+                        <span>Todos</span></button>
+                    @foreach($disciplinas as $d)
+                        <button class="tag-disc" data-id="{{ $d->id }}"
+                            style="background-image:url('{{ asset('storage/'.$d->img) }}')">
+                            {{-- style="background-image: url('{{ asset('img/imagenes/2.jpg') }}')"> --}}
+                            <span>{{ $d->nombre }}</span>
+                        </button>
+                    @endforeach
+                </div>
+
+                <button class="tags-arrow tags-arrow-right" id="tags-arrow-right" aria-label="Siguiente">&#8250;</button>
             </div>
 
             {{-- end FILTROS --}}
 
             {{-- CONTADOR --}}
-            {{-- <p id="contador-resultados" class="text-muted small mb-3"></p> --}}
+            <p id="contador-resultados" class="text-muted small mb-3"></p>
 
             {{-- GRID --}}
             <div class="row g-4" id="container-artists">
@@ -133,5 +144,5 @@
 </section>
 
 @push('scripts')
-@vite(['resources/js/filter-artists.js'])
+@vite(['resources/js/filter-artists.js', 'resources/js/carrusel-tags.js'])
 @endpush

@@ -1779,27 +1779,131 @@ section.options{
 /* ================================
    FILTROS DE ARTISTAS
 ================================ */
-.tag-disc {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 20px;
-    padding: 5px 14px;
-    font-size: 12px;
+
+/* Carrusel de tags */
+.tags-scroll-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tags-scroll {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* firefox */
+    -ms-overflow-style: none;
+    padding: 4px 2px;
+    flex: 1;
+}
+.tags-scroll::-webkit-scrollbar { display: none; }
+
+.tags-arrow {
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
     color: rgba(255,255,255,0.6);
+    font-size: 18px;
+    line-height: 1;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all 0.15s;
+}
+.tags-arrow:hover {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+}
+.tags-arrow:disabled {
+    opacity: 0.25;
+    cursor: default;
+}
+
+/* Tags de disciplinas*/
+.tag-disc {
+    /* background: transparent; */
+    position: relative;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    /* border: 1px solid rgba(255,255,255,0.15); */
+    border: none;
+    border-radius: 8px;
+    padding: 8px 30px;
+
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+/* Overlay */
+.tag-disc::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background: #000000B3;
+
+    transition: all .2s ease;
+}
+
+/* Texto */
+.tag-disc span {
+    position: relative;
+    z-index: 2;
+
+    font-size: 12px;
+    color: #FFF;
+    font-weight: 600;
     letter-spacing: 0.04em;
 }
 
 .tag-disc:hover {
-    border-color: rgba(255,255,255,0.4);
-    color: #fff;
+    transform: translateY(-2px);
+}
+
+.tag-disc:hover::before {
+     background: rgba(0,0,0,.25);
 }
 
 .tag-disc.active {
-    background: rgba(220, 60, 40, 0.2);
-    border-color: #dc3c28;
+    box-shadow: 0 0 0 2px  var(--color-primary);
+}
+
+.tag-disc.active::before {
+    background:  #d0414648;
+}
+
+/* ================================
+   CONTADOR
+================================ */
+#contador-resultados {
+    display: flex;
+    align-items: baseline;
+    gap: .4rem;
+}
+
+.contador-numero {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
     color: #fff;
+}
+
+.contador-texto {
+    font-family: 'Inter', sans-serif;
+    font-size: .95rem;
+    font-weight: 500;
+    color: #9ca3af;
 }
 
 

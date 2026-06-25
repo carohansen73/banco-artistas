@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    document.getElementById('imagen_portada').addEventListener('change', function () {
+    document.getElementById('imagen').addEventListener('change', function () {
         const file = this.files[0];
         if (!file) return;
 

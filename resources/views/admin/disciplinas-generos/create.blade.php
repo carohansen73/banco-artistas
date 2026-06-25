@@ -28,6 +28,49 @@
                     @enderror
                 </div>
 
+                {{-- Imágen --}}
+               <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
+                        Imagen de portada
+                    </label>
+                     <input
+                        type="file"
+                        name="img"
+                        id="imagen"
+                        accept=".jpg,.jpeg,.png,.jfif,.webp"
+                        class="block w-full rounded-md border border-gray-300 dark:border-gray-600
+                            bg-white dark:bg-gray-700
+                            text-sm text-gray-900 dark:text-gray-100
+                            file:mr-4 file:rounded-md file:border-0
+                            file:bg-indigo-600 file:px-4 file:py-2
+                            file:text-sm file:font-medium file:text-white
+                            hover:file:bg-indigo-700"
+                    >
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                        JPG, PNG, WEBP. Máximo 5 MB.
+                    </p>
+
+                    @error('img')
+                        <p class="mt-1 text-xs text-red-500">
+                            {{ $message }}
+                        </p>
+                    @enderror
+
+                     {{-- Vista previa --}}
+                    <div id="preview-container" class="hidden mt-4">
+                        <p class="mb-2 text-xs text-gray-500 dark:text-gray-400">
+                            Vista previa
+                        </p>
+
+                        <img
+                            id="img-preview"
+                            src=""
+                            alt="Vista previa"
+                            class="h-40 w-full rounded-lg border border-gray-200 dark:border-gray-600 object-cover"
+                        >
+                    </div>
+                </div>
+
                 {{-- Géneros --}}
                 <div class="mb-6">
                     <label class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-3">
@@ -115,5 +158,11 @@
             }
         });
     </script>
+
+
+@push('scripts')
+@vite(['resources/js/preview-img.js'])
+@endpush
+
 
 </x-admin-layout>

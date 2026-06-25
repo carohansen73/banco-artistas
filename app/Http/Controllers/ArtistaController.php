@@ -20,7 +20,7 @@ class ArtistaController extends Controller
 
     public function home()
     {
-        // $artistas = Artista::where('visible', 1)->orderBy('created_at', 'desc')->take(6)->get();
+        $artistas = Artista::where('visible', 1)->orderBy('created_at', 'desc')->take(6)->get();
         $eventos = Evento::with('artistas')
             ->activos()
             ->destacados()
@@ -28,7 +28,7 @@ class ArtistaController extends Controller
             ->orderBy('fecha_inicio')
             ->take(10)
             ->get();
-        return view('public.home', compact('eventos'));
+        return view('public.home', compact('eventos', 'artistas'));
     }
 
     /**

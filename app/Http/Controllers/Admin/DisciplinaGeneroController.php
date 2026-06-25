@@ -31,12 +31,20 @@ class DisciplinaGeneroController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|string|max:100|unique:disciplinas,nombre',
+            'nombre'    => 'required|string|max:100|unique:disciplinas,nombre',
+            'img'       => 'nullable|image|max:5120',
             'generos.*' => 'nullable|string|max:100',
         ]);
 
+        // Imagen
+        $img = null;
+        if ($request->hasFile('img')) {
+            $img = $request->file('img')->store('disciplinas', 'public');
+        }
+
         $disciplina = Disciplina::create([
             'nombre' => $request->nombre,
+            'img' => $img,
         ]);
 
         foreach ($request->generos ?? [] as $nombreGenero) {
@@ -62,8 +70,25 @@ class DisciplinaGeneroController extends Controller
 
     public function update(Request $request, Disciplina $disciplina)
     {
-        $request->validate(['nombre' => 'required|string|max:100|unique:disciplinas,nombre,' . $disciplina->id]);
-        $disciplina->update(['nombre' => $request->nombre]);
+        $request->validate(['nombre' => 'required|string|max:100|unique:disciplinas,nombre,' . $disciplina->id,
+                            'img'    => 'nullable|image|max:5120',
+                            ]);
+
+        $data = [
+            'nombre' => $request->nombre,
+        ];
+
+        // IMG
+        if ($request->hasFile('img')) {
+            // eliminar imagen anterior
+            if ($disciplina->img && Storage::disk('public')->exists($disciplina->img)) {
+                Storage::disk('public')->delete($disciplina->img);
+            }
+
+            $data['img'] = $request->file('img')->store('disciplinas', 'public');
+        }
+
+        $disciplina->update($data);
         return back()->with('success', 'Disciplina actualizada.');
     }
 

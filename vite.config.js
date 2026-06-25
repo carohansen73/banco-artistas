@@ -13,7 +13,8 @@ export default defineConfig({
                 'resources/js/admin-toggle.js', /* Maneja toggles destacado - visible */
                 'resources/js/admin-artista-show.js',
                 'resources/js/admin-usuarios.js',
-                'resources/js/filter-artists.js',
+                'resources/js/filter-artists.js', // public.artistas.index
+                'resources/js/carrusel-tags.js', // public.artistas.index
                 'resources/js/artist-inscription-form.js',
                 'resources/js/artist-media-manager.js',
                 'resources/js/artist-edit.js',
