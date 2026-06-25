@@ -140,6 +140,7 @@
 
 @push('scripts')
 @vite(['resources/js/artist-edit.js'])
+@vite(['resources/js/artist-integrantes.js'])
 @endpush
 
 @endsection

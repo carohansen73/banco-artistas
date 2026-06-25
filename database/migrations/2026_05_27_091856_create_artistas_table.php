@@ -28,7 +28,7 @@ return new class extends Migration
 
             // Info artística
             $table->text('descripcion_actividad');
-            $table->unsignedTinyInteger('integrantes')->nullable(); // null = solista
+            $table->json('integrantes')->nullable(); // null = solista
             $table->boolean('tiene_formacion')->default(false);
             $table->text('detalle_formacion')->nullable();
             $table->year('anio_inicio');

@@ -45,9 +45,18 @@
                         @endforeach
                     @endif
 
-                    @if($artista->integrantes)
-                        <p class="mb-0 mt-2"><span class="subtitle">Integrantes:</span></p>
-                        <p>{!! $artista->integrantes !!}</p>
+
+                    @if(!empty($artista->integrantes))
+                        <p class="mb-0 mt-2">
+                            <span class="subtitle">Integrantes:</span>
+                        </p>
+                        <div class="redes-sociales">
+                            @foreach($artista->integrantes as $integrante)
+                                @if(!empty($integrante))
+                                    <p class="mb-0">{{ $integrante }}</p>
+                                @endif
+                            @endforeach
+                        </div>
                     @endif
 
                     <p class="mb-0 mt-2"><span class="subtitle">Inicio:</span></p>

@@ -36,6 +36,7 @@ class Artista extends Model
         'tiene_documentacion'=> 'boolean',
         'acepta_difusion'    => 'boolean',
         'visible'            => 'boolean',
+        'integrantes'        => 'array',
     ];
 
     // Auto-genera el slug desde el nombre artístico

@@ -160,16 +160,30 @@
                         </div>
 
                         {{-- INTEGRANTES --}}
-                        <div class="form-group col-sm-6 p-2">
-                            <label class="ps-1"><strong>¿Cuántos integrantes?</strong></label>
-                            <input type="number" name="integrantes" min="2" max="100"
-                                class="form-control @error('integrantes') is-invalid @enderror"
-                                placeholder="Dejá vacío si es solista"
-                                value="{{ old('integrantes') }}">
-                            <small class="text-muted">Solo para disciplinas grupales.</small>
-                            @error('integrantes') <small class="text-danger">{{ $message }}</small> @enderror
-                        </div>
+                        <div class="form-group col-12 p-2">
+                            <label class="ps-1"><strong>Integrantes</strong></label>
+                            <small class="text-muted d-block mb-2">
+                                Dejá vacío si es solista. Agregá uno por línea.
+                            </small>
 
+                            <div id="integrantes-lista">
+                                @forelse(old('integrantes', []) as $integrante)
+                                    <div class="d-flex align-items-center gap-2 mb-2 integrante-row">
+                                        <input type="text" name="integrantes[]"
+                                            class="form-control"
+                                            placeholder="Nombre del integrante"
+                                            value="{{ $integrante }}">
+                                        <button type="button" class="btn btn-sm btn-outline-danger btn-remove-integrante">&times;</button>
+                                    </div>
+                                @empty
+                                    {{-- vacío por defecto --}}
+                                @endforelse
+                            </div>
+
+                            <button type="button" class="btn btn-sm btn-outline-secondary mt-1" id="btn-add-integrante">
+                                + Agregar integrante
+                            </button>
+                        </div>
                         {{-- AÑO INICIO --}}
                         <div class="form-group col-sm-6 p-2">
                             <label class="ps-1"><strong>¿Desde cuándo se dedica a esta disciplina?</strong> <span class="text-red">*</span></label>
@@ -266,6 +280,7 @@
 
 @push('scripts')
 @vite(['resources/js/artist-inscription-form.js'])
+@vite(['resources/js/artist-integrantes.js'])
 @endpush
 
 @endsection

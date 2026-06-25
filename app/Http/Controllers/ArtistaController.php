@@ -105,6 +105,9 @@ class ArtistaController extends Controller
             $data['img_perfil'] = $request->file('img_perfil')->store('artistas/perfiles', 'public');
         }
 
+       $data['integrantes'] = array_values(
+            array_filter($data['integrantes'] ?? [], fn($v) => trim($v) !== '')
+        ) ?: null;
         $data['user_id'] = Auth::id();
         $data['slug']    = Str::slug($data['nombre_artistico']) . '-' . uniqid();
         $data['visible'] = false;
@@ -278,6 +281,10 @@ class ArtistaController extends Controller
             }
             $data['img_perfil'] = $request->file('img_perfil')->store('artistas/perfiles', 'public');
         }
+
+        $data['integrantes'] = array_values(
+            array_filter($data['integrantes'] ?? [], fn($v) => trim($v) !== '')
+        ) ?: null;
 
         $artista->update($data);
         $artista->generos()->sync($request->generos ?? []);

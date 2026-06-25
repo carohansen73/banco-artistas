@@ -31,6 +31,10 @@ class GeneroSeeder extends Seeder
                 'Flamenco', 'Folklore', 'Hip Hop', 'Salsa',
                 'Tango', 'Urbano', 'Zumba',
             ],
+            'Diseño' => [
+                'Diseño de indumentaria', 'Diseño Gráfico',
+                'Diseño Industrial', 'Diseño Web / UX-UI',
+            ],
             'Teatro' => [
                 'Drama', 'Comedia', 'Musical', 'Infantil',
                 'Impro', 'Clown', 'Títeres', 'Teatro Físico',

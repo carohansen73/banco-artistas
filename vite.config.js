@@ -17,6 +17,7 @@ export default defineConfig({
                 'resources/js/artist-inscription-form.js',
                 'resources/js/artist-media-manager.js',
                 'resources/js/artist-edit.js',
+                'resources/js/artist-integrantes.js',
                 'resources/js/galery-lightbox.js',
                 'resources/js/artist-eventos.js',
                 'resources/js/preview-img.js', //General, para previsualizar img al seleccionarlas en un form

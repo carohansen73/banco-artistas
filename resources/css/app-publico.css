@@ -7,6 +7,7 @@
     /* ========= COLORES DE MARCA ========= */
 
     --color-primary: #D04145;          /* rojo principal */
+           /* prueba */
     --color-primary-light: #E1494E;    /* hover */
     --color-primary-soft: rgba(208, 65, 69, 0.25);
     --color-primary-border: rgba(208, 65, 69, 0.4);
@@ -133,6 +134,11 @@ h4 {
 
 .hide{
     display: none;
+}
+
+.badge {
+    font-weight: 700;
+    font-size: 11px;
 }
 /*--------------------------------------------------------------
 # Back to top button

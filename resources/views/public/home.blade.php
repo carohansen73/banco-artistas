@@ -71,6 +71,7 @@
 
 
         {{-- EVENTOS --}}
+        @if($eventos->isNotEmpty())
         <section class="eventos-slider-section">
             <div class="eventos-slider-header">
                 <h1 style="color:white;">Eventos</h1>
@@ -81,6 +82,7 @@
             </div>
             <x-eventos-slider :eventos="$eventos" />
         </section>
+        @endif
 
 
         {{-- ARTISTAS --}}
@@ -90,7 +92,7 @@
             </div>
 
             <div class="row g-4" id="container-artists">
-                @foreach($artistas as $artista)
+                @forelse($artistas as $artista)
                     <div class="col-lg-4 col-md-6 col-sm-12">
                         @include('public.artistas.partials.card-artista', ['artista' => [
                             'slug'             => $artista->slug,
@@ -103,7 +105,9 @@
                                 : asset('img/default.jpg'),
                         ]])
                     </div>
-                @endforeach
+                @empty
+                   <x-empty-artistas />
+                @endforelse
             </div>
         </section>
         {{-- end ARTISTAS --}}

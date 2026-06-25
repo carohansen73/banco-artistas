@@ -19,6 +19,7 @@ class DisciplinaSeeder extends Seeder
             'Audiovisual',
             'Artesanías',
             'Danza',
+            'Diseño',
             'Literatura',
             'Música',
             'Productor/Gestor',
