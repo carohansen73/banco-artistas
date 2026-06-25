@@ -5,7 +5,6 @@
 
 @section('content')
 
-
 {{-- PORTADA --}}
 <div id="artistas-locales">
 
@@ -47,6 +46,7 @@
                 @endrole --}}
 
 
+                {{-- TODO si dejo el boton poner role artista  --}}
                 @auth
                     @if (auth()->user()->hasRole('user') && auth()->user()->inscripcion === null)
                         <div class="inscription-btn p-2">
@@ -86,6 +86,15 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Tags de disciplina (acceso rápido) --}}
+            <div class="d-flex flex-wrap gap-2 mb-3" id="tags-disciplina">
+                <button class="tag-disc active" data-id="">Todos</button>
+                @foreach($disciplinas as $d)
+                    <button class="tag-disc" data-id="{{ $d->id }}">{{ $d->nombre }}</button>
+                @endforeach
+            </div>
+
             {{-- end FILTROS --}}
 
             {{-- CONTADOR --}}
@@ -111,9 +120,14 @@
                 <x-empty-artistas />
                 @endforelse
             </div>
+
+            {{-- TODO if! --}}
+            <div id="ver-mas-wrap" class="text-center mt-4 mb-5" style="display:none!important;">
+                <button id="btn-ver-mas" class="btn btn-outline-light rounded-pill px-4">
+                    Ver más artistas <span id="ver-mas-restantes"></span>
+                </button>
+            </div>
             {{-- end GRID --}}
-
-
 
         </div><!-- End container -->
 </section>
