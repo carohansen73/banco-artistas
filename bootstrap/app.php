@@ -13,7 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         then: function (): void {
             Route::middleware(['web', 'auth', 'admin'])
-                // ->middleware('verified') // TODO: activar cuando el registro envíe email de verificación
+                ->middleware('verified') // Controla que el admin trnga el email verificado
                 ->prefix('admin')
                 ->name('admin.')
                 ->group(base_path('routes/admin.php'));

@@ -115,4 +115,16 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+     /*
+    |--------------------------------------------------------------------------
+    | Configuración de mail de notificaciones
+    |--------------------------------------------------------------------------
+    |
+    | Las notificaciones de nuevas inscripciones llegarán a un correo
+    | específico para notificaciones. Mail from address pro defecto.
+    |
+    */
+
+    'admin_notificaciones' => env('MAIL_ADMIN_NOTIFICACIONES', env('MAIL_FROM_ADDRESS')),
+
 ];

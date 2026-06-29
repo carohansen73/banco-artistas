@@ -14,9 +14,11 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | Middleware: auth + admin (EnsureUserIsAdmin)
-| Sin middleware 'verified' por el momento (ver bootstrap / grupo).
+| Middleware: 'verified' (bootstrap / grupo).
 |
 */
+
+
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

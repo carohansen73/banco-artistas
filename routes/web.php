@@ -6,23 +6,19 @@ use App\Http\Controllers\EventoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 // PERFIL DE USUARIO
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 /* Registro de artistas */
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     /* CREAR ARTISTA */
     // Paso 1 - perfil de artista
     Route::get('/artista/crear', [ArtistaController::class, 'create'])->name('artista.create');
@@ -47,10 +43,9 @@ Route::middleware(['auth'])->group(function () {
 
 
 /* RUTAS PARA ABM DE EVENTOS */
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
 
     // Eventos
-    // TODO:
     Route::get('/eventos/crear', [EventoController::class, 'create'])->name('evento.create');
     Route::post('/eventos/crear', [EventoController::class, 'store'])->name('evento.store');
     Route::get('/eventos/{evento:slug}/editar', [EventoController::class, 'edit'])->name('evento.edit');
@@ -62,17 +57,13 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/eventos/{evento:slug}/desvincular/{artista}', [EventoController::class, 'desvincular'])->name('evento.desvincular');
 
     Route::delete('/eventos/{evento:slug}/salir', [EventoController::class, 'salir'])->name('evento.salir');
-
-
 });
-
 
 
 // RUTAS VISIBLES SIN LOGUEARSE
 Route::get('/', [ArtistaController::class, 'home']);
 Route::get('/artistas', [ArtistaController::class, 'index'])->name('artistas');
 Route::get('/artistas/{artista}', [ArtistaController::class, 'show'])->name('artista.show');
-
 
 
 // (Api) Ruta para obtener géneros por disciplina
