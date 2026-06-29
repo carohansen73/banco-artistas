@@ -10,7 +10,10 @@
                  loading="lazy">
 
             <div class="artista-card-overlay">
-                <span class="btn btn-red btn-sm rounded-pill">Ver perfil</span>
+                 <span class="artista-card-action">
+                    Ver perfil
+                    <i class="fas fa-arrow-right ms-2"></i>
+                </span>
             </div>
             {{-- Si lo quiero encima de la img dejar este y agregar atributo absolute
             @if($artista['disciplina'])
@@ -21,13 +24,13 @@
         </div>
 
         <div class="artista-card-body">
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between align-items-start mb-2">
                 <h4 class="artista-card-nombre">{{ $artista['nombre_artistico'] }}</h4>
-                 @if($artista['disciplina'])
-                <span class="artista-card-disciplina disc-{{ $slug }}">
-                    {{ $artista['disciplina'] }}
-                </span>
-            @endif
+                @if($artista['disciplina'])
+                    <span class="artista-card-disciplina disc-{{ $slug }}">
+                        {{ $artista['disciplina'] }}
+                    </span>
+                @endif
             </div>
 
             <div class="artista-card-meta">

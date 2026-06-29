@@ -1,6 +1,4 @@
 @extends('layouts.app-public')
-<!-- barra de navegacion -->
-{{-- @include('layouts.navbar') --}}
 
 @section('content')
 
@@ -10,10 +8,13 @@
     <div class="hero-carousel" id="home-banner">
 
         <div class="overlay">
-        <div class="col-lg-7 home-title row">
+        <div class="col-lg-7 home-title">
+            <p class="hero-subtitle"> El mapa cultural de tres arroyos </p>
                 <h1>Conectando artistas y comunidad
                 </h1>
-                {{-- <p>Explorá las distintas expresiones artísticas de Tres Arroyos y descubrí a quienes hacen crecer la cultura de nuestra ciudad.</p> --}}
+                <a href="{{ url('/artistas') }}" class="hero-btn">
+                    Explorar artistas <i class="fas fa-arrow-right ms-2"></i>
+                </a>
             </div>
         </div>
 

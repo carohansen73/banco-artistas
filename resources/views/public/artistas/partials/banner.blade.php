@@ -1,4 +1,9 @@
 {{-- BANNER de la vista artista.show --}}
+@php
+    $slug = Str::slug($artista->disciplina->slug ?? '');
+@endphp
+
+
 <div class="banner-artista"
         style="background-image:
             linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.75)),
@@ -16,9 +21,9 @@
             data-aos="fade-right" data-aos-delay="100">
 
             @if($artista->disciplina)
-                <div class="perfil-subcategoria rounded-pill">
-                    <p class="">{!! $artista->disciplina->nombre !!}</p>
-                </div>
+                <span class="artista-card-disciplina disc-{{ $slug }}">
+                    <p class="">{!! $artista->disciplina->nombre !!} </p>
+                </span>
             @endif
 
             <div class="section-title pb-0 ps-0">

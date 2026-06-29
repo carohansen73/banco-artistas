@@ -77,6 +77,7 @@ body {
 @media (max-width: 991.98px) {
     body {
         font-size: 14px;
+        padding-top: 76px;
     }
 }
 
@@ -371,6 +372,10 @@ section {
     color: var(--color-text-title);
     letter-spacing: -0.04em;
     text-transform: uppercase;
+}
+
+.home-title a i{
+    margin-top: 2px;
 }
 
 @media (max-width: 991.98px) {
@@ -1526,7 +1531,7 @@ form .bento-box label{
 /*HOME*/
 
 #home{
-    letter-spacing: -1px;
+
 }
 
 .container#home-banner{
@@ -1538,24 +1543,26 @@ form .bento-box label{
     height: 100%;
 }
 
-/* #home-banner .home-title{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    height: 100%;
-    padding: 20px;
-} */
-
 #home-banner h1{
     font-size: 80px;
     letter-spacing: -1px;
+     line-height: 1.09;
     display: inline-block;
     position: relative;
-    animation-duration: 2s;
-    animation-timing-function: ease-out;
-    animation-fill-mode: forwards;
+}
+
+#home-banner h1{
     transform: translateX(-200%);
-    animation-name: slide-in-left;
+    animation: slide-in-left 2s ease-out .1s forwards;
+}
+ #home-banner p{
+    transform: translateX(-200%);
+    animation: slide-in-left .8s ease-out forwards;
+}
+
+#home-banner a{
+    transform: translateX(-200%);
+    animation: slide-in-left .7s ease-out 1.5s forwards;
 }
 
 @keyframes slide-in-left {
@@ -1586,6 +1593,7 @@ section.options{
 .border-card h2{
     font-size: 40px;
     padding: 12px;
+    letter-spacing: -1px;
 }
 
 .border-card p{
@@ -1695,27 +1703,69 @@ section.options{
 }
 
 .home-title {
-  color: white;
-  z-index: 4;
+    color: white;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 74px;
+    max-width: 80%;
+}
+
+.hero-subtitle{
+    margin-bottom: .4rem;
+    letter-spacing: normal;
+    text-transform: uppercase;
+    font-weight: bold;
+    opacity: .8;
+}
+
+.hero-btn{
+    margin-top: 1rem;
+    margin-bottom: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: .9rem 2rem;
+    border-radius: 999px;
+
+    background: var(--color-primary);
+    color: #fff;
+    text-decoration: none;
+
+    font-family: 'Raleway', sans-serif;
+    font-size: .95rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+
+    transition: all .3s ease;
+}
+
+.hero-btn:hover{
+    background: #b23639;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(208, 65, 69, .35);
 }
 
 
-@media (min-width: 992px) {
+ @media (min-width: 992px) {
 
     .hero-carousel {
-        height: 90vh;
+        height: calc(100vh - 90px);
         justify-content: flex-end;
     }
 
     .slide{
-        height: 90vh;
+        height: calc(100vh - 90px);
         background-size: auto 600px;
         background-position: right;
         background-repeat: no-repeat;
     }
 
     .slide.active {
-        width: 100%; /* Ocupa parte del ancho */
+        width: 100%;
     }
 
     .overlay {
@@ -1725,11 +1775,8 @@ section.options{
         align-items: end;
     }
 
-    .home-title {
-        max-width: 80%;
-        display: flex;
-        align-items: end;
-        padding-left: 74px;
+    .hero-subtitle{
+        font-size: .95rem;
     }
 }
 
@@ -1737,12 +1784,12 @@ section.options{
 @media (max-width: 991.98px) {
 
     .hero-carousel {
-        min-height: 380px;
+        min-height: 460px;
     }
 
     .slide{
         width: auto;
-        height: 260px;
+
         background-size: 100% auto;
         background-position: center top;
         background-repeat: no-repeat;
@@ -1756,25 +1803,47 @@ section.options{
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 260px;
+
         background:  radial-gradient(ellipse 150% 80% at center bottom, #000000 25%, #00000058 60%, transparent);
         align-items: flex-end;
         justify-content: center;
         text-align: center;
     }
 
+    .slide,
+    .overlay {
+        min-height: 460px;
+        height: auto;
+    }
+
     .home-title {
         max-width: 100%;
         padding: 20px;
-        padding-bottom: 1rem;
+        padding-bottom: 5rem;
         padding-top: 180px;
+        align-items: center;
         text-shadow: 6px 6px 10px rgb(6, 6, 6);
+    }
+
+    .home-title h1 {
+        order: 1;
+    }
+
+    .hero-subtitle {
+        order: 2;
+    }
+
+    .hero-btn{
+        margin-top: 1.2rem;
+        align-self: center;
+        padding: .8rem 1.6rem;
+        font-size: .9rem;
+        order: 3;
     }
 
     section.options{
         margin-top: 10px;
     }
-
 }
 /* ================================
    FILTROS DE ARTISTAS
@@ -1948,6 +2017,7 @@ section.options{
     width: 100%;
     height: 100%;
     object-fit: cover;
+
     transition: transform 0.4s ease;
 }
 
@@ -1959,16 +2029,43 @@ section.options{
 .artista-card-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.5);
+
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
+
+    padding-bottom:24px;
+
+    background:linear-gradient(
+        to top,
+        rgba(0,0,0,.75),
+        rgba(0,0,0,.35) 45%,
+        rgba(0,0,0,.05)
+    );
+
     opacity: 0;
     transition: opacity 0.25s ease;
 }
 
 .artista-card:hover .artista-card-overlay {
     opacity: 1;
+}
+
+/* Ver perfil */
+.artista-card-action{
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: .02em;
+
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all .3s ease;
+}
+
+.artista-card:hover .artista-card-action{
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* Pill de disciplina sobre la imagen */
@@ -1978,14 +2075,17 @@ section.options{
     right: 12px;
     z-index: 2;
     display: inline-block;
-    padding: 4px 14px;
-    font-size: 11px;
-    font-weight: 600;
+     padding:3px 10px;
+    font-size:.80rem;
+    font-weight: 500;
+    letter-spacing: -0.5px;
     border-radius: 999px;
     /* border: 1px solid rgba(255,255,255,0.15); */
     backdrop-filter: blur(8px);
     color: #fff;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+     opacity:.9;
+
 
     /* Animación de entrada */
     animation: fadeSlideIn 0.3s ease both;
@@ -2021,7 +2121,7 @@ section.options{
 
 .artista-card-nombre {
     color: #f0f0f0;
-    font-size: 17px;
+    font-size: 20px;
     font-weight: 600;
     margin-bottom: 2px;
     white-space: nowrap;
@@ -2053,8 +2153,9 @@ section.options{
 
 .card-localidad {
     color: var(--color-text-secondary);
-    font-size: 14px;
+     font-size:.9rem;
     margin-bottom: 8px;
+    letter-spacing: -1px;
 }
 
 .artista-badge.genero {
@@ -2068,7 +2169,6 @@ section.options{
     background-color: rgba(255,255,255,0.09);
     color: #aaa;
 }
-
 
 
 
