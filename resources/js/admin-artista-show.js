@@ -82,7 +82,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     body: JSON.stringify({ visible: this.checked }),
                 });
 
-                if (!response.ok) throw new Error();
+                if (!response.ok) {
+                    let detalle = '';
+                    try {
+                        const errBody = await response.json();
+                        detalle = errBody.message || JSON.stringify(errBody);
+                    } catch {
+                        detalle = await response.text();
+                    }
+                    console.error('Error del servidor:', response.status, detalle);
+                    throw new Error(detalle);
+                }
 
 
                 const data = await response.json();

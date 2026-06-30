@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Artista;
 use App\Http\Requests\StoreArtistaRequest;
 use App\Http\Requests\UpdateArtistaRequest;
+use App\Mail\NuevaInscripcionAdmin;
 use App\Models\ArtistaRedes;
 use App\Models\Disciplina;
 use App\Models\Evento;
@@ -13,6 +14,7 @@ use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class ArtistaController extends Controller
@@ -119,11 +121,13 @@ class ArtistaController extends Controller
             $artista->generos()->sync($request->generos);
         }
 
+        // Notificar a Cultura para que confirmen la inscripción
+        Mail::to(config('mail.from.address'))->send(new NuevaInscripcionAdmin($artista)); // Mailable al mail del .env
+
         // Redirigir al apso 2
         return redirect()
             ->route('artista.create.paso2', $artista->slug)
             ->with('success', '¡Perfil creado! Ahora completá tus redes y contenido.');
-        // return redirect()->route('dashboard')->with('success', '¡Perfil artístico creado! Pronto será revisado por el equipo.');
     }
 
 

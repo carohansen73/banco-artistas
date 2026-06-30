@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ArtistaAprobado;
 use App\Models\Artista;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
 
@@ -28,9 +30,19 @@ class ArtistaController extends Controller
             'visible' => ['required', 'boolean'],
         ]);
 
+        // Para envío de mail
+        $eraVisible = $artista->visible;
+
         $artista->update([
             'visible' => $validated['visible'],
         ]);
+
+        // Mandar mail solo cuando se modifica a visible
+        if (!$eraVisible && $validated['visible']) {
+            $artista->load(['generos', 'disciplina', 'redes']);
+            Mail::to($artista->user->email)
+                ->send(new ArtistaAprobado($artista)); // Mailable
+        }
 
         return response()->json([
             'visible' => $artista->visible,

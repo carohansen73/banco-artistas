@@ -33,14 +33,6 @@ function renderFotosPreview() {
 }
 
 
-
-
-
-
-
-
-
-
 // Agregar más de una foto
 fotosInput.addEventListener('change', function () {
     Array.from(this.files).forEach(file => {

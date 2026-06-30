@@ -1,0 +1,210 @@
+/* Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background-color: var(--color-bg);
+    color: #4a4441;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Wrapper */
+.email-wrapper {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 32px 16px 48px;
+}
+
+/* Header: blanco con detalle rojo, no dark */
+.email-header {
+    background-color: #ffffff;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-bottom: 2px solid #D04145;
+    border-radius: 12px 12px 0 0;
+    padding: 32px 40px 28px;
+    text-align: center;
+}
+.email-header .brand-eyebrow {
+    display: block;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #D04145;
+    margin-bottom: 10px;
+}
+.email-header .brand-name {
+    font-size: 22px;
+    font-weight: normal;
+    color: #1f1c1b;
+    letter-spacing: 0.5px;
+}
+.email-header .brand-sub {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 12px;
+    color: #7a7370;
+    margin-top: 6px;
+    letter-spacing: 1px;
+}
+.header-divider {
+    width: 40px;
+    height: 2px;
+    background-color: #D04145;
+    margin: 16px auto 0;
+}
+
+/* Body card */
+.email-body {
+    background-color: #ffffff;
+    padding: 40px 40px 36px;
+    border-left: 1px solid rgba(0,0,0,0.12);
+    border-right: 1px solid rgba(0,0,0,0.12);
+}
+
+/* Subject line / título del correo */
+.email-subject {
+    font-size: 20px;
+    color: #1f1c1b;
+    font-weight: normal;
+    margin-bottom: 20px;
+    line-height: 1.3;
+}
+.email-subject-label {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #D04145;
+    display: block;
+    margin-bottom: 8px;
+}
+
+/* Texto */
+.email-body p {
+    font-size: 15px;
+    color: #4a4441;
+    margin-bottom: 16px;
+    line-height: 1.7;
+}
+.email-body p.muted {
+    color: #7a7370;
+    font-size: 13px;
+}
+
+/* CTA Button */
+.btn-wrapper {
+    text-align: center;
+    margin: 32px 0;
+}
+.btn-primary {
+    display: inline-block;
+    background-color: #D04145;
+    color: #ffffff !important;
+    text-decoration: none;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 14px 36px;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(208, 65, 69, 0.15);
+}
+.btn-secondary {
+    display: inline-block;
+    background-color: transparent;
+    border: 1px solid rgba(208, 65, 69, 0.35);
+    color: #D04145 !important;
+    text-decoration: none;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 13px 36px;
+    border-radius: 4px;
+}
+
+/* Info card (datos del artista, etc.) */
+.info-card {
+    background-color: #fbf2f2;
+    border-left: 3px solid #D04145;
+    border-radius: 0 6px 6px 0;
+    padding: 20px 24px;
+    margin: 24px 0;
+}
+.info-card .info-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    align-items: baseline;
+}
+.info-card .info-row:last-child { margin-bottom: 0; }
+.info-card .info-label {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #7a7370;
+    min-width: 90px;
+    padding-top: 2px;
+}
+.info-card .info-value {
+    color: #1f1c1b;
+    font-size: 14px;
+}
+
+/* Divider */
+.divider {
+    border: none;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    margin: 28px 0;
+}
+
+/* Footer */
+.email-footer {
+    background-color: var(--color-bg);
+    border: 1px solid rgba(0,0,0,0.12);
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    padding: 24px 40px;
+    text-align: center;
+}
+.email-footer p {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 11px;
+    color: #a39c98;
+    line-height: 1.6;
+    margin-bottom: 6px;
+}
+.email-footer p:last-child { margin-bottom: 0; }
+.email-footer a {
+    color: #D04145;
+    text-decoration: none;
+}
+
+/* Status badge */
+.badge {
+    display: inline-block;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+}
+.badge-pendiente {
+    background-color: #fff8e8;
+    color: #7a5e1a;
+    border: 1px solid #e8d49a;
+}
+.badge-aprobado {
+    background-color: rgba(208, 65, 69, 0.10);
+    color: #D04145;
+    border: 1px solid rgba(208, 65, 69, 0.35);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .email-header, .email-body, .email-footer { padding-left: 24px; padding-right: 24px; }
+    .info-card .info-row { flex-direction: column; gap: 2px; }
+}

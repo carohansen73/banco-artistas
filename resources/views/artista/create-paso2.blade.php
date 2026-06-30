@@ -162,7 +162,7 @@
 
                 {{-- BOTONES --}}
                 <div class="d-flex justify-content-between align-items-center mt-2">
-                    <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4">
+                    <a href="{{ route('artista.mis-perfiles') }}" class="btn btn-outline-secondary rounded-pill px-4">
                         Completar después
                     </a>
                     <button type="submit" class="btn btn-red rounded-pill px-4 py-2">

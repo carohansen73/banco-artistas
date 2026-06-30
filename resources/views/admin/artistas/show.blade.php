@@ -148,11 +148,13 @@
                                     {{ $artista->anio_inicio ?? '—' }}
                                 </dd>
                             </div>
-                            @if ($artista->integrantes)
+                            @if(!empty($artista->integrantes))
                             <div>
                                 <dt class="text-xs text-gray-400 dark:text-gray-500">Integrantes</dt>
                                 <dd class="text-sm text-gray-800 dark:text-gray-200">
-                                    {{ $artista->integrantes }}
+                                    @foreach($artista->integrantes as $integrante)
+                                        {{ $integrante }}
+                                    @endforeach
                                 </dd>
                             </div>
                             @endif
@@ -275,7 +277,7 @@
                                     @foreach ([
                                         ['Año de inicio', $artista->anio_inicio],
                                         ['Localidad', $artista->localidad],
-                                        ['Integrantes', $artista->integrantes ?: 'Solista'],
+                                        ['Integrantes', $artista->integrantes ? count($artista->integrantes) : 'Solista'],
                                         ['Formación', $artista->tiene_formacion ? 'Sí' : 'No'],
                                         ['Documentación', $artista->tiene_documentacion ? 'Sí' : 'No'],
                                         ['Acepta difusión', $artista->acepta_difusion ? 'Sí' : 'No'],
