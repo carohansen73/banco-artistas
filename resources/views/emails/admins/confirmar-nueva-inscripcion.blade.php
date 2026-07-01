@@ -10,12 +10,12 @@
 
     <div class="info-card">
         <div class="info-row">
-            <span class="info-label">Nombre</span>
-            <span class="info-value">{{ $artista->nombre }}</span>
+            <span class="info-label">Usuario</span>
+            <span class="info-value">{{ $artista->user->name }} {{ $artista->user->lastname }}</span>
         </div>
         @if($artista->nombre_artistico)
         <div class="info-row">
-            <span class="info-label">Artístico</span>
+            <span class="info-label">Proyecto artístico</span>
             <span class="info-value">{{ $artista->nombre_artistico }}</span>
         </div>
         @endif

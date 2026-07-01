@@ -1,7 +1,5 @@
 
 @extends('layouts.app-public')
-<!-- barra de navegacion -->
-{{-- @include('layouts.navbar') --}}
 
 @section('content')
 
@@ -14,21 +12,21 @@
             <h1>Artistas Locales</h1>
         </div>
     </div> --}}
-{{-- FIN PORTADA --}}
+    {{-- FIN PORTADA --}}
 
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
-@if (session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-@endif
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 
- <!-- ======= Team Section ======= -->
+    <!-- ======= Team Section ======= -->
     <section  class="team">
         <div class="container mb-5 " data-aos="fade-up">
             <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
@@ -38,23 +36,15 @@
                     <h2>Descubrí tus artistas favoritos</h2>
                 </div>
 
-                {{-- @role('admin')
-                    <p>Este contenido solo lo ven los administradores.</p>
-                @endrole
-                @role('user')
-                    <p>Este contenido solo lo ven los usuarios.</p>
-                @endrole --}}
-
-
                 {{-- TODO si dejo el boton poner role artista  --}}
-                @auth
+                {{-- @auth
                     @if (auth()->user()->hasRole('user') && auth()->user()->inscripcion === null)
                         <div class="inscription-btn p-2">
                             <a class="btn btn-red btn-xl btn-atencion rounded-pill"
                             href="{{ route('artistas-inscripcion.create') }}"> Inscribite acá </a>
                         </div>
                     @endif
-                @endauth
+                @endauth --}}
             </div>
 
             {{-- FILTROS --}}
@@ -96,7 +86,10 @@
                         <span>Todos</span></button>
                     @foreach($disciplinas as $d)
                         <button class="tag-disc" data-id="{{ $d->id }}"
-                            style="background-image:url('{{ asset('storage/'.$d->img) }}')">
+                            @if($d->img)
+                            style="background-image:url('{{ asset('storage/'.$d->img) }}')"
+                            @endif
+                            >
                             {{-- style="background-image: url('{{ asset('img/imagenes/2.jpg') }}')"> --}}
                             <span>{{ $d->nombre }}</span>
                         </button>
@@ -113,7 +106,7 @@
 
             {{-- GRID --}}
             <div class="row g-4" id="container-artists">
-                @forelse($artistas as $artista)
+                @forelse($artistas->take(9) as $artista)
                     <div class="col-lg-4 col-md-6 col-sm-12">
                         @include('public.artistas.partials.card-artista', ['artista' => [
                             'slug'             => $artista->slug,
@@ -142,6 +135,11 @@
 
         </div><!-- End container -->
 </section>
+
+
+<script>
+    window.artistasIniciales = @json($artistasJs);
+</script>
 
 @push('scripts')
 @vite(['resources/js/filter-artists.js', 'resources/js/carrusel-tags.js'])

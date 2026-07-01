@@ -15,27 +15,36 @@
             {{-- ENCABEZADO --}}
             <div class="section-title ps-0 pb-3">
                 <p>Inscripción</p>
-                <h2>Te invitamos a inscribirte y formar parte como artista local.</h2>
+                <h2>Inscribite y formá parte del catálogo Cultural</h2>
             </div>
 
-            <p>
-                Los ítems en <strong><span class="text-purple">color violeta</span></strong>
-                contienen información privada y solo serán visibles para el área de Cultura.
-            </p>
-            <p>
-                El nombre, apellido y correo electrónico se pueden modificar desde tu
-                <a href="{{ route('profile.edit') }}">perfil de usuario</a>.
-            </p>
 
-            {{-- INDICADOR DE PASOS --}}
-            <div class="d-flex align-items-center gap-3 mb-4 mt-3">
-                <span class="badge rounded-pill bg-danger px-3 py-2">Paso 1 — Info general</span>
-                {{-- <a href="{{route ('artista.create.paso2')}}">
-                    <span class="badge rounded-pill bg-secondary px-3 py-2">Paso 2 — Redes y contenido</span>
-                </a> --}}
-                 <span class="badge rounded-pill bg-secondary px-3 py-2">Paso 2 — Contenido</span>
+
+             {{-- INDICADOR DE PASOS --}}
+            <div class="stepper-wrapper">
+                <div class="stepper d-flex align-items-center mb-4 mt-3">
+                    <div class="step active">
+                        <span class="step-circle">1</span>
+                        <span class="step-label">Info general</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step completed">
+                        <span class="step-circle">2</span>
+                        <span class="step-label">Redes y contenido</span>
+                    </div>
+                </div>
             </div>
 
+            <div class="step-note my-4">
+                <p>
+                    Los ítems en <strong><span class="text-purple">color violeta</span></strong>
+                    contienen información privada y solo serán visibles para el área de Cultura.
+                </p>
+                <p>
+                    El nombre, apellido y correo electrónico se pueden modificar desde tu
+                    <a href="{{ route('profile.edit') }}">perfil de usuario</a>.
+                </p>
+            </div>
             {{-- ERRORES --}}
             @if ($errors->any())
                 <div class="alert alert-danger">
@@ -53,9 +62,9 @@
                 {{-- ================================ --}}
                 {{-- BLOQUE 1 — INFO PRIVADA --}}
                 {{-- ================================ --}}
-                <div class="classic-box pt-lg-4 p-lg-5 p-3 mb-4">
-                    <h4 class="fw-bold mb-1">Información privada</h4>
-                    <p class="text-muted small mb-4">(Solo visible desde el área de Cultura)</p>
+                <div class="classic-box py-sm-4 py-3 px-sm-5 mb-4">
+                    <h4 class="fw-bold mb-1 px-2 px-sm-0">Información privada</h4>
+                    <p class="text-muted small mb-4 px-2 px-sm-0">(Solo visible desde el área de Cultura)</p>
 
                     <div class="row">
 
@@ -69,16 +78,16 @@
                             <input type="text" class="form-control" value="{{ Auth::user()->lastname }}" readonly>
                         </div>
 
+                          <div class="form-group col-sm-6 p-2">
+                            <label class="ps-1 text-purple"><strong>Email</strong> <span class="text-red">*</span></label>
+                            <input type="text" class="form-control" value="{{ Auth::user()->email }}" readonly>
+                        </div>
+
                         <div class="form-group col-sm-6 p-2">
                             <label class="ps-1 text-purple"><strong>Teléfono</strong> <span class="text-red">*</span></label>
                             <input type="text" name="telefono" class="form-control @error('telefono') is-invalid @enderror"
                                 placeholder="Ej: 2983 123456" value="{{ old('telefono') }}" required>
                             @error('telefono') <small class="text-danger">{{ $message }}</small> @enderror
-                        </div>
-
-                        <div class="form-group col-sm-6 p-2">
-                            <label class="ps-1 text-purple"><strong>Email</strong> <span class="text-red">*</span></label>
-                            <input type="text" class="form-control" value="{{ Auth::user()->email }}" readonly>
                         </div>
 
                         <div class="form-group col-sm-6 p-2">
@@ -102,8 +111,8 @@
                 {{-- ================================ --}}
                 {{-- BLOQUE 2 — DATOS ARTÍSTICOS --}}
                 {{-- ================================ --}}
-                <div class="classic-box pt-lg-4 p-lg-5 p-3 mb-4">
-                    <h4 class="fw-bold mb-4">Información artística</h4>
+                <div class="classic-box py-sm-4 py-3 px-sm-5 mb-4">
+                    <h4 class="fw-bold mb-4 px-2 px-sm-0">Información artística</h4>
 
                     <div class="row">
 
@@ -162,7 +171,7 @@
                         {{-- INTEGRANTES --}}
                         <div class="form-group col-12 p-2">
                             <label class="ps-1"><strong>Integrantes</strong></label>
-                            <small class="text-muted d-block mb-2">
+                            <small class="text-muted d-block ps-1">
                                 Dejá vacío si es solista. Agregá uno por línea.
                             </small>
 
@@ -244,8 +253,8 @@
                 {{-- ================================ --}}
                 {{-- BLOQUE 3 — FOTO DE PERFIL --}}
                 {{-- ================================ --}}
-                <div class="classic-box pt-lg-4 p-lg-5 p-3 mb-4">
-                    <h4 class="fw-bold mb-4">Foto de perfil</h4>
+                <div class="classic-box py-sm-4 py-3 px-sm-5 mb-4">
+                    <h4 class="fw-bold mb-4 px-2 px-sm-0">Foto de perfil</h4>
 
                     <div class="row">
                         <div class="col-12 p-2">

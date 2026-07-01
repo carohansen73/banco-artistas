@@ -67,16 +67,16 @@ document.getElementById('add-track').addEventListener('click', function () {
     const container = document.getElementById('tracks-container');
     container.insertAdjacentHTML('beforeend', `
         <div class="row track-row mb-3">
-            <div class="col-sm-6 p-2">
+            <div class="col-12  col-sm-6 p-2">
                 <input type="url" name="tracks[]" class="form-control"
                     placeholder="https://open.spotify.com/track/...">
             </div>
-            <div class="col-sm-5 p-2">
+            <div class="col-10 col-sm-5 p-2">
                 <input type="text" name="tracks_titulo[]" class="form-control"
                     placeholder="Título de la canción (opcional)">
             </div>
-            <div class="col-sm-1 p-2 d-flex align-items-center">
-                <button type="button" class="btn btn-sm btn-outline-danger remove-row">✕</button>
+            <div class="col-1 p-2 ps-1 ps-sm-2 d-flex align-items-center">
+                <button type="button" class="btn btn-outline-danger remove-row" style="margin-top:3px;">✕</button>
             </div>
         </div>`);
 });
@@ -86,16 +86,16 @@ document.getElementById('add-video').addEventListener('click', function () {
     const container = document.getElementById('videos-container');
     container.insertAdjacentHTML('beforeend', `
         <div class="row video-row mb-3">
-            <div class="col-sm-6 p-2">
+            <div class="col-12 col-sm-6 p-2">
                 <input type="url" name="videos[]" class="form-control"
                     placeholder="https://www.youtube.com/watch?v=...">
             </div>
-            <div class="col-sm-5 p-2">
+            <div class="col-10 col-sm-5 p-2">
                 <input type="text" name="videos_titulo[]" class="form-control"
                     placeholder="Título del video (opcional)">
             </div>
-            <div class="col-sm-1 p-2 d-flex align-items-center">
-                <button type="button" class="btn btn-sm btn-outline-danger remove-row">✕</button>
+            <div class="col-1 p-2 ps-1 ps-sm-2 d-flex align-items-center">
+                <button type="button" class="btn btn-outline-danger remove-row" style="margin-top:3px;">✕</button>
             </div>
         </div>`);
 });

@@ -13,8 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const verMasRestantes  = document.getElementById('ver-mas-restantes'); // ver más
 
     const POR_PAGINA = 9;       // cuántos mostrar de entrada y en cada "ver más"
-    let todosLosArtistas = [];  // cache del resultado actual
-    let mostradosHasta   = 0;   // índice hasta donde muestra
+
 
     let debounceTimer;
 
@@ -101,13 +100,18 @@ document.addEventListener('DOMContentLoaded', () => {
             .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
             .replace(/\s+/g, '-');
 
+        const imgOrAvatar = (a.img_perfil && !a.img_perfil.includes('default'))
+            ? `<img src="${a.img_perfil}" alt="${a.nombre_artistico}" loading="lazy">`
+            : `<div class="artista-avatar-default">${a.nombre_artistico.charAt(0).toUpperCase()}</div>`;
+
+
         // Crear la card del artista
         const col = document.createElement('div');
         col.className = 'col-lg-4 col-md-6 col-sm-12';
         col.innerHTML = `
             <div class="artista-card" onclick="window.location='/artistas/${a.slug}'">
                 <div class="artista-card-img">
-                    <img src="${a.img_perfil}" alt="${a.nombre_artistico}" loading="lazy">
+                    ${imgOrAvatar}
                     <div class="artista-card-overlay">
                         <a href="/artistas/${a.slug}" class="btn btn-red btn-sm rounded-pill">Ver perfil</a>
                     </div>
@@ -202,5 +206,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // ─── CARGA INICIAL ──────────────────────────────────────────────────────
 
     // La carga inicial ya nos e hace desde el servidor, sino desde acá
-    filtrar();
+    // filtrar();
+        let todosLosArtistas = window.artistasIniciales || [];  // cache del resultado actual
+        let mostradosHasta   = document.querySelectorAll('#container-artists > div').length;   // índice hasta donde muestra
+        actualizarBotonVerMas();
+        actualizarContador();
 });

@@ -5,9 +5,13 @@
 <a href="{{ route('artista.show', $artista['slug']) }}" class="artista-card-link">
     <div class="artista-card">
         <div class="artista-card-img">
-            <img src="{{ $artista['img_perfil'] }}"
-                 alt="{{ $artista['nombre_artistico'] }}"
-                 loading="lazy">
+            @if($artista['img_perfil'] && !str_contains($artista['img_perfil'], 'default'))
+                <img src="{{ $artista['img_perfil'] }}" alt="{{ $artista['nombre_artistico'] }}" loading="lazy">
+            @else
+                <div class="artista-avatar-default">
+                    {{ strtoupper(substr($artista['nombre_artistico'], 0, 1)) }}
+                </div>
+            @endif
 
             <div class="artista-card-overlay">
                  <span class="artista-card-action">

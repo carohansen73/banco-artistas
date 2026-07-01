@@ -69,13 +69,23 @@
             </div>
 
         </div>
+    </div>
+</section>
+
+<section class="p-3">
+    <div class="container mb-5 " data-aos="fade-up">
 
 
         {{-- EVENTOS --}}
         @if($eventos->isNotEmpty())
-        <section class="eventos-slider-section">
+        <section class="eventos-slider-section mb-4 p-2">
             <div class="eventos-slider-header">
-                <h1 style="color:white;">Eventos</h1>
+
+                <div class="section-title p-2 mb-3">
+                     <p style="color:white; font-weight: 600;">Eventos</p>
+                    <h2>Próximos eventos</h2>
+                </div>
+
                 <div class="eventos-slider-controls">
                     <button class="eventos-btn-prev" aria-label="Anterior">&#8249;</button>
                     <button class="eventos-btn-next" aria-label="Siguiente">&#8250;</button>
@@ -84,12 +94,23 @@
             <x-eventos-slider :eventos="$eventos" />
         </section>
         @endif
+    </div>
+
+</section>
+
+
+
 
 
         {{-- ARTISTAS --}}
-        <section >
-            <div class="d-flex justify-content-center mb-2">
-                <h1 style="color:white;">Artistas</h1>
+<section class="p-3">
+    <div class="container mb-5 " data-aos="fade-up">
+
+            <div class="d-flex justify-content-center mb-2 pb-1">
+                 <div class="section-title p-2 mb-3">
+                     <p style="color:white; font-weight: 600;">Artistas</p>
+                    <h2>Nuestros artistas</h2>
+                </div>
             </div>
 
             <div class="row g-4" id="container-artists">
@@ -110,12 +131,15 @@
                    <x-empty-artistas />
                 @endforelse
             </div>
-        </section>
+
+    </div>
+
+</section>
+
         {{-- end ARTISTAS --}}
 
 
-    </div>
-</section>
+
 {{-- FIN CARDS --}}
 
 

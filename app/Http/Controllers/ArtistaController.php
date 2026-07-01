@@ -16,13 +16,14 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
 
 class ArtistaController extends Controller
 {
 
     public function home()
     {
-        $artistas = Artista::where('visible', 1)->orderBy('created_at', 'desc')->take(6)->get();
+        $artistas = Artista::where('visible', 1)->orderBy('created_at', 'desc')->take(12)->get();
         $eventos = Evento::with('artistas')
             ->activos()
             ->destacados()
@@ -41,11 +42,24 @@ class ArtistaController extends Controller
     {
         $artistas = Artista::where('visible', 1)
             ->with('disciplina', 'generos')
+            ->orderBy('nombre_artistico', 'desc')
             ->get();
         $disciplinas = Disciplina::orderBy('nombre')->get();
         $generos     = Genero::orderBy('nombre')->get();
 
-        return view('public.artistas.index', compact('artistas', 'disciplinas', 'generos'));
+        //
+        $artistasJs = $artistas->map(fn ($a) => [
+            'slug'             => $a->slug,
+            'nombre_artistico' => $a->nombre_artistico,
+            'localidad'        => $a->localidad,
+            'disciplina'       => $a->disciplina?->nombre,
+            'generos'          => $a->generos->pluck('nombre'),
+            'img_perfil'       => $a->img_perfil
+                ? asset('storage/' . $a->img_perfil)
+                : asset('img/default.jpg'),
+        ]);
+
+        return view('public.artistas.index', compact('artistas', 'disciplinas', 'generos', 'artistasJs'));
     }
 
 
@@ -104,7 +118,15 @@ class ArtistaController extends Controller
 
         // Imagen de perfil
         if ($request->hasFile('img_perfil')) {
-            $data['img_perfil'] = $request->file('img_perfil')->store('artistas/perfiles', 'public');
+            $file = $request->file('img_perfil');
+            $filename = Str::random(20) . '.webp';
+
+            $image = Image::read($file)
+                ->scaleDown(width: 800) // nunca más ancho que 800px, mantiene proporción
+                ->toWebp(quality: 75);  // convierte a webp, formato mucho más liviano
+
+            Storage::disk('public')->put('artistas/' . $filename, (string) $image);
+            $data['img_perfil'] = 'artistas/' . $filename;
         }
 
        $data['integrantes'] = array_values(
@@ -242,8 +264,6 @@ class ArtistaController extends Controller
     }
 
 
-
-
     /**
      * Formulario de edición.
      */
@@ -283,7 +303,17 @@ class ArtistaController extends Controller
             if ($artista->img_perfil) {
                 Storage::disk('public')->delete($artista->img_perfil);
             }
-            $data['img_perfil'] = $request->file('img_perfil')->store('artistas/perfiles', 'public');
+
+            // Comprime y sube nueva img
+            $file = $request->file('img_perfil');
+            $filename = Str::random(20) . '.webp';
+
+            $image = Image::read($file)
+                ->scaleDown(width: 800) // nunca más ancho que 800px, mantiene proporción
+                ->toWebp(quality: 75);  // convierte a webp, formato mucho más liviano
+
+            Storage::disk('public')->put('artistas/' . $filename, (string) $image);
+            $data['img_perfil'] = 'artistas/' . $filename;
         }
 
         $data['integrantes'] = array_values(
@@ -471,3 +501,30 @@ class ArtistaController extends Controller
         );
     }
 }
+
+
+
+/*
+TODO:
+Guardar 2 versiones de la img, una para cards (pequeña) otra para portada (grande)
+Pero tngo q agregar el cmapo en la db, migrar, etc...
+
+
+if ($request->hasFile('img_perfil')) {
+    $file = $request->file('img_perfil');
+    $filename = Str::random(20);
+
+    // Versión grande (perfil)
+    $full = Image::read($file)->scaleDown(width: 800)->toWebp(quality: 75);
+    Storage::disk('public')->put("artistas/{$filename}.webp", (string) $full);
+
+    // Versión chica (card / listado)
+    $thumb = Image::read($file)->scaleDown(width: 400)->toWebp(quality: 70);
+    Storage::disk('public')->put("artistas/{$filename}-thumb.webp", (string) $thumb);
+
+    $artista->img_perfil = "artistas/{$filename}.webp";
+    $artista->img_perfil_thumb = "artistas/{$filename}-thumb.webp"; // nueva columna
+}
+
+
+*/

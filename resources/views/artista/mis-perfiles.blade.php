@@ -23,7 +23,8 @@
                     <h1>Mis perfiles</h1>
                 </div>
                 <a href="{{ route('artista.create') }}" class="btn btn-red rounded-pill px-4 py-2">
-                    + Agregar nuevo perfil
+                    <span class="d-inline d-md-none">+ Perfil</span>
+                    <span class="d-none d-md-inline">+ Agregar nuevo perfil</span>
                 </a>
             </div>
 
@@ -107,7 +108,8 @@
                 <h1 class="text-white">Mis eventos</h1>
             </div>
             <a href="{{ route('evento.create') }}" class="btn btn-red rounded-pill px-4 py-2">
-                + Agregar nuevo evento
+                <span class="d-inline d-md-none">+ Evento</span>
+                <span class="d-none d-md-inline">+ Agregar nuevo evento</span>
             </a>
         </div>
 

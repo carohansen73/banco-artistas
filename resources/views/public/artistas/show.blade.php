@@ -112,7 +112,7 @@
             <section class="eventos-slider-section p-4">
                 <hr>
 
-                <div class="eventos-slider-header">
+                <div class="eventos-slider-header pb-3">
                     <span class="eventos-slider-title">
                         <i class="fas fa-calendar-alt me-2"></i> Próximos eventos
                     </span>
