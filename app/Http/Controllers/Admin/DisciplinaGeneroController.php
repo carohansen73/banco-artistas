@@ -9,7 +9,9 @@ use App\Models\Genero;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
 
 class DisciplinaGeneroController extends Controller
 {
@@ -39,7 +41,15 @@ class DisciplinaGeneroController extends Controller
         // Imagen
         $img = null;
         if ($request->hasFile('img')) {
-            $img = $request->file('img')->store('disciplinas', 'public');
+            $file = $request->file('img');
+            $filename = Str::random(20) . '.webp';
+
+            $image = Image::read($file)
+                ->scaleDown(width: 400) // nunca más ancho que 800px, mantiene proporción
+                ->toWebp(quality: 75);  // convierte a webp, formato mucho más liviano
+
+            Storage::disk('public')->put('disciplinas/' . $filename, (string) $image);
+            $img = 'disciplinas/' . $filename;
         }
 
         $disciplina = Disciplina::create([
@@ -62,11 +72,13 @@ class DisciplinaGeneroController extends Controller
         return redirect()->route('admin.disciplinas.index')->with('success', 'Disciplina creada correctamente.');
     }
 
+
     public function edit(Disciplina $disciplina)
     {
         $disciplina->load(['generos' => fn($q) => $q->withCount('artistas')]);
         return view('admin.disciplinas-generos.edit', compact('disciplina'));
     }
+
 
     public function update(Request $request, Disciplina $disciplina)
     {
@@ -85,8 +97,31 @@ class DisciplinaGeneroController extends Controller
                 Storage::disk('public')->delete($disciplina->img);
             }
 
-            $data['img'] = $request->file('img')->store('disciplinas', 'public');
+            // Comprime y sube nueva img
+            $file = $request->file('img');
+            $filename = Str::random(20) . '.webp';
+
+            $image = Image::read($file)
+                ->scaleDown(width: 400) // nunca más ancho que 800px, mantiene proporción
+                ->toWebp(quality: 75);  // convierte a webp, formato mucho más liviano
+
+            Storage::disk('public')->put('disciplinas/' . $filename, (string) $image);
+            $data['img'] = 'disciplinas/' . $filename;
         }
+
+
+
+         if ($request->hasFile('img_perfil')) {
+            // Borra la anterior si existe
+            if ($artista->img_perfil) {
+                Storage::disk('public')->delete($artista->img_perfil);
+            }
+
+
+        }
+
+
+
 
         $disciplina->update($data);
         return back()->with('success', 'Disciplina actualizada.');

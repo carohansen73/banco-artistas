@@ -12,9 +12,9 @@ use App\Models\Evento;
 use App\Models\Genero;
 use App\Models\Media;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Laravel\Facades\Image;
 
@@ -129,7 +129,7 @@ class ArtistaController extends Controller
             $data['img_perfil'] = 'artistas/' . $filename;
         }
 
-       $data['integrantes'] = array_values(
+        $data['integrantes'] = array_values(
             array_filter($data['integrantes'] ?? [], fn($v) => trim($v) !== '')
         ) ?: null;
         $data['user_id'] = Auth::id();
@@ -200,10 +200,16 @@ class ArtistaController extends Controller
                 if (! $foto) {
                     continue;
                 }
-                $path = $foto->store('artistas/fotos', 'public');
+
+                $filename = Str::random(20) . '.webp';
+                $image = Image::read($foto)
+                ->scaleDown(width: 800) // nunca más ancho que 800px, mantiene proporción
+                ->toWebp(quality: 75);  // convierte a webp, formato mucho más liviano
+                Storage::disk('public')->put('artistas/fotos' . $filename, (string) $image);
+
                 $artista->media()->create([
                     'tipo'  => 'foto',
-                    'url'   => $path,
+                    'url'   => 'artistas/fotos/' . $filename,
                     'orden' => ++$orden,
                 ]);
             }
@@ -349,10 +355,16 @@ class ArtistaController extends Controller
         $orden = $artista->media()->where('tipo', 'foto')->max('orden') ?? 0;
 
         foreach ($request->file('fotos') as $foto) {
-            $path = $foto->store('artistas/fotos', 'public');
+
+            $filename = Str::random(20) . '.webp';
+            $image = Image::read($foto)
+                ->scaleDown(width: 1200)
+                ->toWebp(quality: 75);
+            Storage::disk('public')->put('artistas/fotos/' . $filename, (string) $image);
+
             $artista->media()->create([
                 'tipo'  => 'foto',
-                'url'   => $path,
+                'url'   => 'artistas/fotos/' . $filename,
                 'orden' => ++$orden,
             ]);
         }

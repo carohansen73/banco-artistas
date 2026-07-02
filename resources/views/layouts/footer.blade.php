@@ -74,7 +74,7 @@
                             {{-- <a href="https://twitter.com/TresArroyosMun" class="twitter"><i class="bx bxl-twitter"></i></a>
                             <a href="https://www.facebook.com/municipalidaddetresarroyos" target="_blank" class="facebook"><i class="bx bxl-facebook"></i></a> --}}
                             <a href="https://www.instagram.com/cultura.tresarroyos/" target="_blank" class="instagram"><i class="fab fa-instagram"></i></a>
-                            {{-- <a href="https://wa.me/5492983509001" target="_blank" class="youtube"><i class="bx bxl-whatsapp"></i></a> --}}
+                            <a href="https://wa.me/5492983445968" target="_blank" class="youtube"><i class="fab fa-whatsapp"></i></a>
                         </div>
                     </div>
                 </div>

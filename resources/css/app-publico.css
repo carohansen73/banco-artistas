@@ -1863,7 +1863,7 @@ section.options{
    FILTROS DE ARTISTAS
 ================================ */
 
-/* Carrusel de tags */
+/* Carrusel de tags de disciplinas */
 .tags-scroll-wrap {
     position: relative;
     display: flex;
@@ -1913,7 +1913,7 @@ section.options{
     /* background: transparent; */
     position: relative;
 
-     background-color: #2a2a2a;
+    background-color: #2a2a2a;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

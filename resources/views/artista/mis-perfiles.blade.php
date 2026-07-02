@@ -105,7 +105,7 @@
         {{-- ENCABEZADO --}}
         <div class=" ps-0 pb-3 pt-3 d-flex justify-content-between align-items-end flex-wrap gap-3">
             <div>
-                <h1 class="text-white">Mis eventos</h1>
+                <h1>Mis eventos</h1>
             </div>
             <a href="{{ route('evento.create') }}" class="btn btn-red rounded-pill px-4 py-2">
                 <span class="d-inline d-md-none">+ Evento</span>
