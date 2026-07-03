@@ -18,8 +18,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 /* ARTISTAS */
@@ -48,6 +46,10 @@ Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index'
 // Habilitar/deshabilitar usuario
 Route::patch('usuarios/{user}/toggle-active', [UserController::class, 'toggleActive'])
     ->name('usuarios.toggle-active');
+// Cambiar rol
+Route::patch('/usuarios/{user}/rol', [UserController::class, 'updateRole'])
+    ->name('usuarios.update-role')
+    ->middleware('role:super-admin');
 
 /* EVENTOS */
 Route::get('/eventos', [EventoController::class, 'index'])->name('eventos.index');

@@ -14,7 +14,7 @@ class EmailVerificationNotificationController extends Controller
     public function store(Request $request): RedirectResponse
     {
         if ($request->user()->hasVerifiedEmail()) {
-            if ($request->user()->hasRole('admin')) {
+            if ($request->user()->hasAnyRole(['admin', 'super-admin'])) {
                 return redirect()->route('admin.dashboard');
             }
             return redirect()->route('artista.mis-perfiles');

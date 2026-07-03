@@ -39,4 +39,33 @@ class UserController extends Controller
             'is_active' => $user->is_active,
         ]);
     }
+
+
+    public function updateRole(Request $request, User $user)
+    {
+        abort_unless(auth()->user()->hasRole('super-admin'), 403);
+
+        if ($user->id === auth()->id()) {
+            return response()->json(['error' => 'No podés cambiar tu propio rol.'], 422);
+        }
+
+        $request->validate([
+            'role' => 'required|in:admin,artista,super-admin',
+        ]);
+
+        // Si es artista y tiene perfiles cargados, no permitir sacarle el rol
+        if ($user->hasRole('artista') && $request->role !== 'artista' && $user->artistas()->exists()) {
+            return response()->json([
+                'error' => 'Este usuario tiene perfiles de artista activos. Pedile que los elimine antes de cambiarle el rol, o hacelo vos desde su perfil.',
+            ], 422);
+        }
+
+        // Sync cambia el rol, assign va acumulando
+        $user->syncRoles([$request->role]);
+
+        return response()->json([
+            'role'  => $request->role,
+            'label' => ucfirst(str_replace('-', ' ', $request->role)),
+        ]);
+    }
 }

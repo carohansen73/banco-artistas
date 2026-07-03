@@ -27,7 +27,7 @@ class VerifyEmailController extends Controller
 
     private function redirectSegunRol($user): RedirectResponse
     {
-        if ($user->hasRole('admin')) {
+        if ($user->hasAnyRole(['admin', 'super-admin'])) {
             return redirect()->route('admin.dashboard');
         }
 

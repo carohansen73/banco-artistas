@@ -31,7 +31,14 @@
                     </li>
                     @auth
                     <li class="nav-item px-lg-2">
-                        <a class="nav-link animation-sub" href="{{ route('artista.mis-perfiles') }}">Mis perfiles</a>
+
+                        @hasanyrole('admin|super-admin')
+                            <a class="nav-link animation-sub" href="{{ route('admin.dashboard') }}">Backoffice</a>
+                        @else
+                            @role('artista')
+                                <a class="nav-link animation-sub" href="{{ route('artista.mis-perfiles') }}">Mis perfiles</a>
+                            @endrole
+                        @endhasanyrole
                     </li>
                     @endauth
 
@@ -44,12 +51,12 @@
                                 aria-expanded="false">
                                 {{ Auth::user()->name }}
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark custom-dropdown-width">
-                                @role('admin')
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark-custom custom-dropdown-width">
+                                @hasanyrole('admin|super-admin')
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('admin.dashboard') }}">Panel de administración</a>
+                                        <a class="dropdown-item" href="{{ route('admin.dashboard') }}">Backoffice</a>
                                     </li>
-                                @endrole
+                                @endhasanyrole
                                 @role('artista')
                                     @if (auth()->user()->inscripcion != null)
                                         <li>

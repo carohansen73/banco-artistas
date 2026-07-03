@@ -41,12 +41,12 @@ class DashboardController extends Controller
 
         // 2. Usuarios
         $totalUsuarios = User::whereDoesntHave('roles', function ($query) {
-                $query->where('name', 'admin');
+                $query->whereIn('name', ['admin', 'super-admin']);
             })
             ->count();
         $usuariosSinPerfil = User::doesntHave('artistas')
             ->whereDoesntHave('roles', function ($query) {
-                $query->where('name', 'admin');
+                $query->whereIn('name', ['admin', 'super-admin']);
             })
             ->count();
 

@@ -13,7 +13,7 @@ class EnsureUserIsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! $request->user()?->hasRole('admin')) {
+        if (! $request->user()?->hasAnyRole(['admin', 'super-admin'])) {
             return redirect('/')->with(
                 'error',
                 'No tenés permiso para acceder al panel de administración.'

@@ -16,7 +16,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        $view = $request->user()->hasRole('admin')
+        $view = $request->user()->hasAnyRole(['admin', 'super-admin'])
             ? 'profile.edit-admin'
             : 'profile.edit-artista';
 

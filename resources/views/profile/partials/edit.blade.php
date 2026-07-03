@@ -6,7 +6,7 @@
             </h2>
 
             @php
-                $backUrl = auth()->user()->hasRole('admin')
+                $backUrl = auth()->user()->hasAnyRole(['admin', 'super-admin'])
                     ? route('admin.dashboard')
                     : url('/');
             @endphp

@@ -46,18 +46,32 @@
                                                     {{ $user->email }}
                                                 </div>
                                             </td>
-                                            <td class="py-4 pe-4 align-middle text-sm ">
+
+                                            {{-- Cambiar rol a usuario --}}
+                                            <td class="py-4 pe-4 align-middle text-sm">
+                                            @if (auth()->user()->hasRole('super-admin') && $user->id !== auth()->id())
+                                                <select
+                                                    class="user-role-select rounded-md border-gray-300 text-xs dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                                    data-url="{{ route('admin.usuarios.update-role', $user) }}" data-user-name="{{ trim($user->name.' '.$user->lastname) }}"
+                                                >
+                                                    <option value="artista" @selected($user->hasRole('artista'))>Artista</option>
+                                                    <option value="admin" @selected($user->hasRole('admin'))>Admin</option>
+                                                    <option value="super-admin" @selected($user->hasRole('super-admin'))>Super Admin</option>
+                                                </select>
+                                            @else
                                                 @forelse ($user->roles as $rol)
                                                     <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium
-                                                        {{ $rol->name === 'admin'   ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300' : '' }}
-                                                        {{ $rol->name === 'artista' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300'   : '' }}
+                                                        {{ $rol->name === 'admin'       ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300' : '' }}
+                                                        {{ $rol->name === 'artista'     ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300'   : '' }}
+                                                        {{ $rol->name === 'super-admin' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300' : '' }}
                                                     ">
                                                         {{ ucfirst($rol->name) }}
                                                     </span>
                                                 @empty
                                                     <span class="text-xs text-gray-400">Sin rol</span>
                                                 @endforelse
-                                            </td>
+                                            @endif
+                                        </td>
                                             <td class="py-4 align-middle">
                                                 <div class="flex flex-col items-center gap-1">
                                                     {{-- BLOQUEAR/DESBLOQUEAR USUARIOS --}}

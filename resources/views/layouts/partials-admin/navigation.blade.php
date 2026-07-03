@@ -63,11 +63,11 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        @role('admin')
+                        @hasanyrole('admin|super-admin')
                             <x-dropdown-link :href="route('admin.dashboard')">
                                 Panel de administración
                             </x-dropdown-link>
-                        @endrole
+                        @endhasanyrole
 
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
@@ -102,11 +102,11 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden lg:hidden">
         <div class="pt-2 pb-3 space-y-1">
 
-            @role('admin')
+            @hasanyrole('admin|super-admin')
                 <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                     Panel de administración
                 </x-responsive-nav-link>
-            @endrole
+            @endhasanyrole
             <x-responsive-nav-link :href="url('/')">
                 Sitio público
             </x-responsive-nav-link>

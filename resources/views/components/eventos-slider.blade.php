@@ -141,7 +141,7 @@
 
                         {{-- Acción: unirse / salir --}}
                         @auth
-                            @if(!auth()->user()->hasRole('admin'))
+                            @if(!auth()->user()->hasAnyRole(['admin', 'super-admin']))
                                 @php
                                     $misIdsEnEvento = $evento->artistas->pluck('id')
                                         ->intersect($misArtistasIds)
