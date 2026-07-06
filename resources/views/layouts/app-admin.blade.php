@@ -37,7 +37,9 @@
                 </div>
             </div>
         </div>
-        <x-flash-toast />
+
+
+
         @stack('scripts')
     </body>
 </html>

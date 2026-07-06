@@ -3,6 +3,7 @@ import {
     successAlert,
     errorAlert
 } from './utils/notifications';
+import { showToast } from './utils/flash-toast';
 
 document.addEventListener('DOMContentLoaded', () => {
     /**
@@ -28,7 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (!res.ok) {
                     const data = await res.json();
-                    alert(data.error ?? 'Error al actualizar.');
+                    await errorAlert(
+                        'No se pudo actualizar',
+                        data.error ?? 'Error al actualizar.'
+                    )
                     this.checked = !prev; // revertir
                     return;
                 }
@@ -36,10 +40,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await res.json();
                 if (label) {
                     label.textContent = data.is_active ? 'Activo' : 'Bloqueado';
+
+                    showToast(
+                        'success',
+                        data.is_active
+                            ? 'Usuario activado correctamente.'
+                            : 'Usuario bloqueado correctamente.'
+                    );
                 }
 
             } catch (e) {
-                alert('Error de red.');
+                  await errorAlert(
+                        'Error de conexión',
+                        data.error ?? 'No fue posible comunicarse con el servidor.'
+                    )
                 this.checked = !prev;
             }
         });

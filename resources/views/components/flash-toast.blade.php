@@ -42,7 +42,7 @@
                 </svg>
 
                 {{-- Texto --}}
-                <p class="flex-1 text-sm leading-snug">{{ $message }}</p>
+                <p class="flex-1 text-sm leading-snug">{{ __($message) }}</p>
 
                 {{-- Botón cerrar --}}
                 <button type="button"

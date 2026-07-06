@@ -1,8 +1,12 @@
 import './bootstrap';
 
 import Alpine from 'alpinejs';
-import '../js/flash-toast.js';
+import { initFlashToasts } from './utils/flash-toast';
 
 window.Alpine = Alpine;
 
 Alpine.start();
+
+document.addEventListener('DOMContentLoaded', () => {
+    initFlashToasts();
+});
