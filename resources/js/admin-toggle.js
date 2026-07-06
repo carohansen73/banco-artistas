@@ -1,3 +1,10 @@
+import {
+    confirmAlert,
+    successAlert,
+    errorAlert
+} from './utils/notifications';
+import { showToast } from './utils/flash-toast';
+
 /**
  * Gestión de toggles (on/off)
  * Maneja 3 toggles distintos:
@@ -17,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * - campo: el cmapo q se envía al servidor para el update (visible o destacado).
      * - labels: etiquetas q s muestran según el estado (on: visible, off: oculto).
      */
-    function makeToggleHandler({ toggleSelector, labelSelector, campo, labels }) {
+    function makeToggleHandler({ toggleSelector, labelSelector, campo, labels, messages }) {
         document.querySelectorAll(toggleSelector).forEach((toggle) => {
             toggle.addEventListener('change', async (event) => {
                 const input = event.currentTarget; // El checkbox q el usuario acaba de clickear
@@ -59,10 +66,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Acualiza el texto debajo del toggle
                     if (label) {
                         label.textContent = data[campo] ? labels.on : labels.off;
+                        showToast(
+                            'success',
+                            data[campo]
+                                ? messages.on
+                                : messages.off
+                        );
                     }
                 } catch {
                     input.checked = previousChecked;
-                    window.alert('No se pudo actualizar. Intentá de nuevo.');
+                    await errorAlert(
+                        'No se pudo actualizar',
+                        'Intentá de nuevo.'
+                    );
                 } finally {
                     // Vuelve a habilitar el checkbox
                     input.disabled = false;
@@ -79,6 +95,10 @@ document.addEventListener('DOMContentLoaded', () => {
         labelSelector: '[data-visibility-label]',
         campo: 'visible',
         labels: { on: 'Visible', off: 'Oculto' },
+        messages: {
+            on: 'Artista publicado correctamente.',
+            off: 'Artista ocultado correctamente.'
+        }
     });
 
     /**
@@ -89,6 +109,10 @@ document.addEventListener('DOMContentLoaded', () => {
         labelSelector: '[data-eventos-activo-label]',
         campo: 'activo',
         labels: { on: 'Activo', off: 'Inactivo' },
+        messages: {
+            on: 'Evento activado correctamente.',
+            off: 'Evento desactivado correctamente.'
+        }
     });
     /**
      * Toggle de destacado (eventos)
@@ -98,6 +122,10 @@ document.addEventListener('DOMContentLoaded', () => {
         labelSelector: '[data-destacado-label]',
         campo: 'destacado',
         labels: { on: 'Destacado', off: 'Normal' },
+        messages: {
+            on: 'Evento marcado como destacado.',
+            off: 'Evento quitado de destacados.'
+        }
     });
 
 });

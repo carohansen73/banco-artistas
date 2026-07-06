@@ -8,15 +8,16 @@ const swal = Swal.mixin({
     color: '#f3f4f6',
 
     confirmButtonColor: '#4f46e5',
-    cancelButtonColor: '#6b7280',
+    cancelButtonColor: '#374151',
 
     reverseButtons: true,
 
     customClass: {
-        popup: 'rounded-xl',
+        popup: 'rounded-xl font-sans',
         title: 'text-lg font-semibold',
-        confirmButton: 'px-4 py-2',
-        cancelButton: 'px-4 py-2',
+        htmlContainer: 'text-sm text-gray-600 dark:text-gray-400',
+        confirmButton: 'text-sm px-4 py-2',
+        cancelButton: 'text-sm px-4 py-2',
     }
 });
 

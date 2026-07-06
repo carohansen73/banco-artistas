@@ -1,15 +1,18 @@
 <x-admin-layout>
     <x-slot name="header">
-        Editar disciplina
+        <div class="flex items-center gap-3 min-w-0">
+            <a href="{{ route('admin.disciplinas.index') }}"
+               class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 shrink-0">
+                ← Disciplinas
+            </a>
+            <span class="text-gray-300 dark:text-gray-600">/</span>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight truncate">
+                 Editar disciplina
+            </h2>
+        </div>
     </x-slot>
 
     <div class="max-w-2xl mx-auto py-8 px-4 sm:px-6">
-
-        @if (session('success'))
-            <div class="mb-6 rounded-md bg-green-50 dark:bg-green-900/30 px-4 py-3 text-sm text-green-800 dark:text-green-300">
-                {{ session('success') }}
-            </div>
-        @endif
 
         {{-- Nombre de la disciplina --}}
         <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-6 mb-6">
@@ -90,12 +93,11 @@
                     >
                 </div>
 
-                <button
-                    type="submit"
-                    class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
-                >
-                    Guardar cambios
-                </button>
+                <div class="flex justify-end">
+                    <button type="submit" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">
+                        Guardar cambios
+                    </button>
+                </div>
             </form>
         </div>
 
@@ -114,11 +116,13 @@
                             <span class="text-sm text-gray-800 dark:text-gray-200">{{ $genero->nombre }}</span>
 
                             @if ($genero->artistas_count === 0)
-                                <form method="POST" action="{{ route('admin.generos.destroy', $genero) }}"
-                                      onsubmit="return confirm('¿Eliminar el género {{ addslashes($genero->nombre) }}?')">
+                                <form method="POST"
+                                    action="{{ route('admin.generos.destroy', $genero) }}"
+                                    class="delete-genero-form"
+                                    data-genero="{{ $genero->nombre }}"
+                                    >
                                     @csrf @method('DELETE')
-                                    <button type="submit"
-                                            class="text-xs text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition">
+                                    <button type="submit" class="text-xs text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition">
                                         <i class="fa-solid fa-trash"></i> Eliminar
                                     </button>
                                 </form>
@@ -162,8 +166,8 @@
     </div>
 
 
-    @push('scripts')
-@vite(['resources/js/preview-img.js'])
+@push('scripts')
+    @vite(['resources/js/preview-img.js', 'resources/js/admin-disciplina.js'])
 @endpush
 
 </x-admin-layout>

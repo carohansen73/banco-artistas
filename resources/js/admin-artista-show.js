@@ -1,3 +1,10 @@
+import {
+    confirmAlert,
+    successAlert,
+    errorAlert
+} from './utils/notifications';
+import { showToast } from './utils/flash-toast';
+
 /**
  * admin-artista-show.js
  * Tabs sin reload + eliminación AJAX de media + visibility toggle
@@ -94,17 +101,27 @@ document.addEventListener('DOMContentLoaded', function () {
                     throw new Error(detalle);
                 }
 
-
                 const data = await response.json();
                 this.checked = Boolean(data.visible);
                 if (label) {
                     label.textContent = data.visible ? 'Visible' : 'Oculto';
                 }
-                mostrarToast(data.visible ? 'Artista publicado.' : 'Artista ocultado.');
+
+                // Toast importado
+                showToast(
+                        'success',
+                        data.visible
+                            ? 'Artista publicado correctamente.'
+                            : 'Artista ocultado correctamente.'
+                    );
+
             } catch {
                 // Revertir si falla
                 this.checked = previousChecked;
-                mostrarToast('Error al cambiar la visibilidad.', 'error');
+                await errorAlert(
+                    'No se pudo actualizar',
+                    'Error al cambiar la visibilidad.'
+                );
             } finally {
                 this.disabled = false;
             }
@@ -113,84 +130,72 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     // =========================================================
-    // MODAL CONFIRMAR ELIMINAR
+    // ELIMINAR MEDIA DE ARTISTAS
+    // eL ADMIN PEUDE ELIMINAR FOTOS, VIDEOS, AUDIOS QUE CONSIDERE QUE NO ESTAN PERMITIDOS
     // =========================================================
-    const modal     = document.getElementById('modal-eliminar');
-    const backdrop  = document.getElementById('modal-backdrop');
-    const btnCancelar  = document.getElementById('modal-cancelar');
-    const btnConfirmar = document.getElementById('modal-confirmar');
 
-    let deleteUrl    = null;
-    let deleteItemEl = null;
+    document.addEventListener('click', async function (e) {
 
-    function abrirModal() { modal.classList.remove('hidden'); }
-    function cerrarModal() {
-        modal.classList.add('hidden');
-        deleteUrl    = null;
-        deleteItemEl = null;
-    }
-
-    // Click en botón eliminar de cualquier media-item
-    document.addEventListener('click', function (e) {
         const btn = e.target.closest('.btn-delete-media');
         if (!btn) return;
-        deleteUrl    = btn.dataset.url;
-        deleteItemEl = btn.closest('.media-item');
-        abrirModal();
-    });
 
-    backdrop.addEventListener('click', cerrarModal);
-    btnCancelar.addEventListener('click', cerrarModal);
+        // debe confirmar anets de eliminar
+        const confirmado = await confirmAlert(
+            'Eliminar elemento',
+            'Esta acción no se puede deshacer.'
+        );
 
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && !modal.classList.contains('hidden')) cerrarModal();
-    });
-
-    btnConfirmar.addEventListener('click', function () {
-        if (!deleteUrl) return;
+        if (!confirmado) {
+            return;
+        }
 
         // Guarda referencias ANTES de cerrar el modal para poder quitarlo de la vista
         // porque sino se pierde al eliminarlo.
-        const url    = deleteUrl;
-        const itemEl = deleteItemEl;
+        const url = btn.dataset.url;
+        const itemEl = btn.closest('.media-item');
 
+        try {
 
-        btnConfirmar.disabled = true;
-        btnConfirmar.textContent = 'Eliminando…';
+            const response = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content,
+                    'Accept': 'application/json',
+                },
+            });
 
-        fetch(url, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content,
-                'Accept': 'application/json',
-            },
-        })
-        .then(r => r.json())
-        .then(data => {
-            cerrarModal();
+            const data = await response.json();
 
-            if (data.success) {
-                if (itemEl) {
-                    itemEl.style.transition = 'opacity 0.25s';
-                    itemEl.style.opacity = '0';
-                    setTimeout(() => {
-                        itemEl.remove();
-                        actualizarBadges();
-                    }, 250);
-                }
-                mostrarToast('Elemento eliminado.');
-            } else {
-                mostrarToast('No se pudo eliminar. Intentá de nuevo.', 'error');
+            if (!response.ok || !data.success) {
+                await errorAlert(
+                    'No se pudo eliminar',
+                    data.message ?? 'Intentá nuevamente.'
+                );
+                return;
             }
-        })
-        .catch(() => {
-            cerrarModal();
-            mostrarToast('Error de conexión.', 'error');
-        })
-        .finally(() => {
-            btnConfirmar.disabled = false;
-            btnConfirmar.textContent = 'Eliminar';
-        });
+
+            itemEl.style.transition = 'opacity 0.25s';
+            itemEl.style.opacity = '0';
+
+            setTimeout(() => {
+                itemEl.remove();
+                actualizarBadges();
+            }, 250);
+
+            showToast(
+                'success',
+                'Elemento eliminado correctamente.'
+            );
+
+        } catch (e) {
+
+            await errorAlert(
+                'Error de conexión',
+                'No fue posible comunicarse con el servidor.'
+            );
+
+        }
+
     });
 
 
@@ -215,41 +220,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const badge = btn.querySelector('.admin-tab-badge');
             if (badge) badge.textContent = count;
         });
-    }
-
-
-    // =========================================================
-    // TOAST
-    // =========================================================
-    function mostrarToast(mensaje, tipo = 'success') {
-        const prev = document.getElementById('admin-show-toast');
-        if (prev) prev.remove();
-
-        const colores = {
-            success: 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900',
-            error:   'bg-red-600 text-white',
-        };
-
-        const toast = document.createElement('div');
-        toast.id = 'admin-show-toast';
-        toast.style.cssText = `
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 9999;
-        `;
-        toast.innerHTML = `
-            <div class="rounded-lg shadow-lg px-5 py-2.5 text-sm font-medium ${colores[tipo] ?? colores.success}">
-                ${mensaje}
-            </div>`;
-        document.body.appendChild(toast);
-
-        setTimeout(() => {
-            toast.style.transition = 'opacity 0.4s';
-            toast.style.opacity = '0';
-            setTimeout(() => toast.remove(), 400);
-        }, 2800);
     }
 
 });

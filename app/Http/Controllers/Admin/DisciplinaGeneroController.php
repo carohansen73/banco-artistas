@@ -22,7 +22,7 @@ class DisciplinaGeneroController extends Controller
         ->orderBy('nombre')
         ->paginate(20);
 
-        return view('admin.disciplinas-generos.index2', compact('disciplinas'));
+        return view('admin.disciplinas-generos.index', compact('disciplinas'));
     }
 
     public function create()

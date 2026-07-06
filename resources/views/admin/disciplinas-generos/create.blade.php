@@ -1,7 +1,18 @@
 <x-admin-layout>
     <x-slot name="header">
-        Nueva disciplina
+        <div class="flex items-center gap-3 min-w-0">
+            <a href="{{ route('admin.disciplinas.index') }}"
+               class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 shrink-0">
+                ← Disciplinas
+            </a>
+            <span class="text-gray-300 dark:text-gray-600">/</span>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight truncate">
+                  Nueva disciplina
+            </h2>
+        </div>
     </x-slot>
+
+
 
     <div class="max-w-2xl mx-auto py-8 px-4 sm:px-6">
         <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-6">
@@ -108,14 +119,11 @@
                 {{-- Acciones --}}
                 <div class="flex justify-end gap-3">
                     <a href="{{ route('admin.disciplinas.index') }}"
-                       class="rounded-md border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm dark:text-gray-100">
+                       class="rounded-md border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm dark:text-gray-100 hover:bg-gray-700">
                         Cancelar
                     </a>
 
-                    <button
-                        type="submit"
-                        class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
-                    >
+                    <button type="submit" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">
                         Crear disciplina
                     </button>
                 </div>

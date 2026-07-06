@@ -13,6 +13,7 @@ export default defineConfig({
                 'resources/js/admin-toggle.js', /* Maneja toggles destacado - visible */
                 'resources/js/admin-artista-show.js',
                 'resources/js/admin-usuarios.js',
+                'resources/js/admin-disciplina.js', // para cartel confirmar al eliminar género
                 'resources/js/filter-artists.js', // public.artistas.index
                 'resources/js/carrusel-tags.js', // public.artistas.index
                 'resources/js/artist-inscription-form.js',
@@ -21,7 +22,7 @@ export default defineConfig({
                 'resources/js/artist-integrantes.js',
                 'resources/js/galery-lightbox.js',
                 'resources/js/artist-eventos.js',
-                'resources/js/preview-img.js', //General, para previsualizar img al seleccionarlas en un form
+                'resources/js/preview-img.js', // General, para previsualizar img al seleccionarlas en un form
             ],
             refresh: true,
         }),
