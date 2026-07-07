@@ -13,16 +13,64 @@ use Illuminate\Support\Facades\Storage;
 
 class ArtistaController extends Controller
 {
-    public function index(): View
+    // public function index(): View
+    // {
+    //     $artistas = Artista::query()
+    //         ->with('user:id,name,lastname,email')
+    //         ->orderBy('nombre_artistico')
+    //         ->paginate(20)
+    //         ->withQueryString();
+
+    //     return view('admin.artistas.index', compact('artistas'));
+    // }
+
+    /**
+     * Listado de artistas con filtros de busqueda y paginación
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function index(Request $request)
     {
+        $search = $request->string('search');
+
         $artistas = Artista::query()
-            ->with('user:id,name,lastname,email')
-            ->orderBy('nombre_artistico')
+            ->with(['user', 'disciplina'])
+            ->when($search, function ($query) use ($search) {
+
+                $query->where('nombre_artistico', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('lastname', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('disciplina', function ($q) use ($search) {
+                        $q->where('nombre', 'like', "%{$search}%");
+                    });
+
+            })
             ->paginate(20)
             ->withQueryString();
 
-        return view('admin.artistas.index', compact('artistas'));
+        if ($request->expectsJson()) {
+        return response()->json([
+                'table' => view('admin.artistas.index-table', compact('artistas'))->render(),
+                'pagination' => $artistas->links()->render(),
+                'total' => $artistas->total(),
+            ]);
+        }
+
+        return view(
+            'admin.artistas.index',
+            compact('artistas', 'search')
+        );
     }
+
+
+
+
+
+
 
     public function updateVisibility(Request $request, Artista $artista): JsonResponse
     {

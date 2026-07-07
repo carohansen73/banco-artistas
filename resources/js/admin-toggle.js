@@ -25,9 +25,16 @@ document.addEventListener('DOMContentLoaded', () => {
      * - labels: etiquetas q s muestran según el estado (on: visible, off: oculto).
      */
     function makeToggleHandler({ toggleSelector, labelSelector, campo, labels, messages }) {
-        document.querySelectorAll(toggleSelector).forEach((toggle) => {
-            toggle.addEventListener('change', async (event) => {
-                const input = event.currentTarget; // El checkbox q el usuario acaba de clickear
+        // document.querySelectorAll(toggleSelector).forEach((toggle) => {
+        //     toggle.addEventListener('change', async (event) => {
+
+        document.addEventListener('change', async (e) => {
+
+        const input = e.target.closest(toggleSelector);
+
+        if (!input) return;
+
+                // const input = event.currentTarget; // El checkbox q el usuario acaba de clickear
                 const url = input.dataset.url; // URL a la q hay q hacer patch
                 const previousChecked = !input.checked; // Estado anterior (como change ya cambió el valor, el anterior es el opuesto al actual)
                 const row = input.closest('[data-toggle-row]');
@@ -68,9 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         label.textContent = data[campo] ? labels.on : labels.off;
                         showToast(
                             'success',
-                            data[campo]
-                                ? messages.on
-                                : messages.off
+                            data[campo] ? messages.on : messages.off
                         );
                     }
                 } catch {
@@ -84,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     input.disabled = false;
                 }
             });
-        });
+        // });
     }
 
     /**

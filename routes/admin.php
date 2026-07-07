@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+Route::get('/artistas/buscar', [ArtistaController::class, 'buscar'])->name('artistas.buscar');
+
 /* ARTISTAS */
 Route::get('/artistas', [ArtistaController::class, 'index'])->name('artistas.index');
 Route::patch('/artistas/{artista:id}/visibility', [ArtistaController::class, 'updateVisibility'])
