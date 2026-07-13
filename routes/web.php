@@ -39,6 +39,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Dashboard del artista (ver sus perfiles)
     /*falta*/Route::get('/mis-perfiles', [ArtistaController::class, 'misPerfiles'])->name('artista.mis-perfiles');
+
+    Route::delete('/artista/{artista:slug}', [ArtistaController::class, 'destroy'])->name('artista.destroy');
 });
 
 

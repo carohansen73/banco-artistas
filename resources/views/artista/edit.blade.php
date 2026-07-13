@@ -16,17 +16,32 @@
                     <p>Editar perfil</p>
                     <h2>{{ $artista->nombre_artistico }}</h2>
                 </div>
-                <a href="{{ route('artista.mis-perfiles') }}" class="btn btn-outline-secondary rounded-pill px-4">
-                    ← Mis perfiles
-                </a>
+                <div class="d-flex gap-2">
+                    <a href="{{ route('artista.mis-perfiles') }}" class="btn btn-outline-secondary rounded-pill px-4">
+                        ← Mis perfiles
+                    </a>
+                    {{-- Eliminar perfil (solo creador) --}}
+                    <form action="{{ route('artista.destroy', $artista->slug) }}" method="POST"
+                        class="confirm-action"
+                        data-title="¿Eliminar perfil?"
+                        data-text="Se eliminará el perfil, su contenido y redes asociadas. Esta acción no puede deshacerse."
+                        data-confirm="Sí, eliminar">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-outline-danger rounded-pill px-4">
+                            Eliminar perfil
+                        </button>
+                    </form>
+                </div>
             </div>
 
             {{-- MENSAJES --}}
+
             @if(session('success'))
-                <div class="alert alert-success" id="alert-success">{{ session('success') }}</div>
+                <div class="flash-success">{{ session('success') }}</div>
             @endif
             @if($errors->any())
-                <div class="alert alert-danger">
+                <div class="flash-error">
                     <ul class="mb-0">
                         @foreach($errors->all() as $error)
                             <li>{{ $error }}</li>

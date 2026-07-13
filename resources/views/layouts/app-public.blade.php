@@ -26,13 +26,16 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 
         <!-- Scripts -->
-        @vite(['resources/css/app-publico.css', 'resources/css/galery.css'])
+        @vite(['resources/css/app-publico.css', 'resources/css/galery.css', 'resources/js/app.js'])
         @stack('styles')
     </head>
     <body>
         <div class="">
             {{-- @include('layouts.navigation') --}}
             @include('layouts.navigation-public')
+
+
+
 
             {{-- @if (session('error'))
                 <div class="container">
@@ -58,6 +61,19 @@
 
         </div>
         @include('layouts.footer')
+
+{{--
+        @if(session('success'))
+            <script>
+                window.flashSuccess = @json(session('success'));
+            </script>
+        @endif
+
+        @if(session('error'))
+            <script>
+                window.flashError = @json(session('error'));
+            </script>
+        @endif --}}
 
          <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>

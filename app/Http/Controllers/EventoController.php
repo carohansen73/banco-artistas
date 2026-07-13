@@ -9,13 +9,30 @@ use App\Models\Artista;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Controlador encargado de la gestión de eventos culturales.
+ *
+ * Administra la creación, edición, visualización y eliminación
+ * de eventos publicados por los artistas.
+ *
+ * Un evento puede estar asociado a uno o varios perfiles
+ * artísticos pertenecientes al usuario creador. Además,
+ * otros artistas pueden incorporarse posteriormente como
+ * participantes sin convertirse en propietarios del evento.
+ */
 class EventoController extends Controller
 {
 
 
-    /**
-     * Muestra el form para crear un evento.
-     * Si el user tiene múltiples artistas, los pasa para que elija con cuáles participa.
+   /**
+     * Muestra el formulario de creación de un evento.
+     *
+     * Obtiene todos los perfiles artísticos visibles del usuario
+     * autenticado para que pueda seleccionar cuáles participarán
+     * del evento. Si el usuario aún no posee perfiles aprobados,
+     * es redirigido al formulario de creación de artistas.
+     *
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
     public function create()
     {
@@ -29,8 +46,16 @@ class EventoController extends Controller
         return view('eventos.create', compact('artistas'));
     }
 
-    /**
-     * Guarda el nuevo evento y asocia los artistas participantes.
+   /**
+     * Crea un nuevo evento.
+     *
+     * Valida la información enviada desde el formulario, verifica
+     * que los perfiles seleccionados pertenezcan al usuario,
+     * almacena la imagen de portada (si fue enviada) y registra
+     * el evento junto con los artistas participantes.
+     *
+     * @param  StoreEventoRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StoreEventoRequest $request)
     {
@@ -78,7 +103,13 @@ class EventoController extends Controller
     }
 
     /**
-     * Vista pública del evento.
+     * Muestra el detalle público de un evento.
+     *
+     * Carga la información del evento junto con los artistas
+     * participantes para ser visualizado por cualquier visitante.
+     *
+     * @param  Evento  $evento
+     * @return \Illuminate\View\View
      */
     public function show(Evento $evento)
     {
@@ -87,7 +118,14 @@ class EventoController extends Controller
     }
 
     /**
-     * Form de edición — solo el creador del evento puede editarlo.
+     * Muestra el formulario de edición de un evento.
+     *
+     * Sólo el creador del evento puede acceder a esta vista.
+     * Carga los perfiles artísticos del usuario y marca aquellos
+     * que actualmente participan del evento.
+     *
+     * @param  Evento  $evento
+     * @return \Illuminate\View\View
      */
     public function edit(Evento $evento)
     {
@@ -100,9 +138,20 @@ class EventoController extends Controller
     }
 
     /**
-     * Actualiza el evento.
+     * Actualiza la información de un evento existente.
+     *
+     * Verifica que el usuario sea el creador del evento, valida
+     * los datos enviados, reemplaza la imagen de portada cuando
+     * corresponde y sincroniza únicamente los perfiles artísticos
+     * pertenecientes al usuario autenticado.
+     *
+     * Los artistas asociados por otros usuarios no son modificados.
+     *
+     * @param  UpdateEventoRequest  $request
+     * @param  Evento  $evento
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(StoreEventoRequest $request, Evento $evento)
+    public function update(UpdateEventoRequest $request, Evento $evento)
     {
         $this->autorizarCreador($evento);
 
@@ -148,7 +197,14 @@ class EventoController extends Controller
     }
 
     /**
-     * Elimina el evento — solo el creador.
+     * Elimina un evento.
+     *
+     * Sólo el creador del evento puede realizar esta acción.
+     * Si el evento posee una imagen de portada almacenada,
+     * también elimina el archivo físico del servidor.
+     *
+     * @param  Evento  $evento
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Evento $evento)
     {
@@ -165,7 +221,16 @@ class EventoController extends Controller
     }
 
     /**
-     * Un artista se une a un evento que no creó.
+     * Permite al usuario sumar uno o más de sus perfiles
+     * artísticos como participantes de un evento existente.
+     *
+     * Se valida que los perfiles seleccionados pertenezcan
+     * al usuario autenticado y sólo se agregan aquellos que
+     * todavía no estén asociados al evento.
+     *
+     * @param  Request  $request
+     * @param  Evento   $evento
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function unirse(Request $request, Evento $evento)
     {
@@ -198,7 +263,14 @@ class EventoController extends Controller
     }
 
     /**
-     * Un artista se retira de un evento que no creó.
+     * Desvincula un perfil artístico de un evento.
+     *
+     * Verifica que el perfil pertenezca al usuario autenticado
+     * antes de eliminar su participación del evento.
+     *
+     * @param  Evento   $evento
+     * @param  Artista  $artista
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function desvincular(Evento $evento, Artista $artista)
     {
@@ -213,7 +285,17 @@ class EventoController extends Controller
     }
 
 
-    // Salir del evento
+    /**
+     * Permite abandonar un evento.
+     *
+     * Si se indican perfiles específicos, sólo se desvinculan
+     * esos artistas. En caso contrario, se eliminan del evento
+     * todos los perfiles artísticos pertenecientes al usuario.
+     *
+     * @param  Request  $request
+     * @param  Evento   $evento
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function salir(Request $request, Evento $evento)
     {
         $idsDelUser = auth()->user()->artistas->pluck('id')->toArray();
@@ -231,10 +313,16 @@ class EventoController extends Controller
         return back()->with('success', 'Saliste del evento.');
     }
 
-    // --- Helpers privados ---
+    // --- Helper privado ---
 
     /**
-     * Autoriza solo al creador del evento.
+     * Verifica que el usuario autenticado sea el creador del evento.
+     *
+     * Si el evento pertenece a otro usuario, se aborta la petición
+     * devolviendo un error HTTP 403 (Forbidden).
+     *
+     * @param  Evento  $evento
+     * @return void
      */
     private function autorizarCreador(Evento $evento): void
     {

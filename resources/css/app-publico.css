@@ -2676,3 +2676,21 @@ section.options{
     background: rgba(255, 255, 255, 0.06);
     border-radius:8px; border: 1px solid #4a4a4a;
 }
+
+
+/* notificaciones*/
+.flash-success{
+    background:#13261d;
+    border:1px solid #2f8f5b;
+    color:#d8f5e3;
+    border-radius:12px;
+    padding:16px 20px;
+}
+
+.flash-error{
+    background: #13261d;
+    border: 1px solid var(--color-primary-light);
+    color: #d8f5e3;
+    border-radius: 12px;
+    padding: 16px 20px;
+}

@@ -23,10 +23,10 @@
 
             {{-- MENSAJES --}}
             @if(session('success'))
-                <div class="alert alert-success" id="alert-success">{{ session('success') }}</div>
+                <div class="flash-success">{{ session('success') }}</div>
             @endif
             @if($errors->any())
-                <div class="alert alert-danger">
+                <div class="flash-error">
                     <ul class="mb-0">
                         @foreach($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -192,9 +192,9 @@
 
 
                 {{-- submit --}}
-                <div class="text-end">
-                    <a href="{{ route('artista.mis-perfiles') }}" class="btn btn-secondary runded-pill px-4 me-2"> Cancelar </a>
-                    <button type="submit" class="btn btn-red runded-pill px-4 py-2"> Publicar evento </button>
+                <div class="d-flex justify-content-end align-items-center flex-wrap gap-2">
+                    <a href="{{ route('artista.mis-perfiles') }}" class="btn btn-secondary rounded-pill px-4"> Cancelar </a>
+                    <button type="submit" class="btn btn-red rounded-pill px-4 py-2"> Publicar evento </button>
                 </div>
 
             </form>

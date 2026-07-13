@@ -13,14 +13,43 @@ use App\Models\Genero;
 use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Laravel\Facades\Image;
 
+/**
+ * Controlador encargado de la gestión de perfiles artísticos.
+ *
+ * Administra tanto las vistas públicas del catálogo de artistas
+ * como el proceso de inscripción, edición y administración de
+ * perfiles por parte de los usuarios autenticados.
+ *
+ * El proceso de inscripción se realiza en dos pasos:
+ *  - Paso 1: creación del perfil con la información general.
+ *  - Paso 2: carga de redes sociales y contenido multimedia.
+ *
+ * La edición del perfil se encuentra desacoplada en distintos
+ * métodos para permitir la actualización independiente de la
+ * información general, las fotografías, los enlaces multimedia
+ * y las redes sociales.
+ */
+
 class ArtistaController extends Controller
 {
+    /* --------------------------------------------------------------------------
+    |  PÁGINAS PÚBLICAS
+    * -------------------------------------------------------------------------- */
 
+    /**
+     *  Muestra la página principal del sitio.
+     *
+     * Carga los últimos artistas visibles y los eventos
+     * destacados que se encuentran vigentes.
+     *
+     * @return \Illuminate\View\View
+     */
     public function home()
     {
         $artistas = Artista::where('visible', 1)->orderBy('created_at', 'desc')->take(12)->get();
@@ -35,9 +64,15 @@ class ArtistaController extends Controller
     }
 
     /**
-     * Listado de artistas
-     * Vista publica!
-     */
+    * Muestra el catálogo público de artistas.
+    *
+    * Obtiene todos los perfiles visibles junto con las disciplinas
+    * y géneros disponibles para construir los filtros de búsqueda.
+    * Además prepara una versión simplificada de los datos para
+    * ser utilizada por JavaScript.
+    *
+    * @return \Illuminate\View\View
+    */
     public function index()
     {
         $artistas = Artista::where('visible', 1)
@@ -64,7 +99,14 @@ class ArtistaController extends Controller
 
 
     /**
-     * Display the specified resource.
+     * Muestra el perfil público de un artista.
+     *
+     * Carga toda la información asociada al perfil, incluyendo
+     * disciplina, géneros, redes sociales, contenido multimedia
+     * y los eventos vigentes en los que participa.
+     *
+     * @param  Artista  $artista
+     * @return \Illuminate\View\View
      */
     public function show(Artista $artista)
     {
@@ -85,11 +127,18 @@ class ArtistaController extends Controller
     }
 
 
-    /* --------------- ARTISTA LOGUEADO ------------------ */
-
+    /* --------------------------------------------------------------------------
+    |  REGISTRO DE ARTISTAS
+    * -------------------------------------------------------------------------- */
 
     /**
-     * Formulario para crear nuevo perfil de artista.
+     * Muestra el primer paso del formulario de inscripción
+     * de un nuevo perfil artístico.
+     *
+     * Carga las disciplinas habilitadas para que el usuario
+     * complete la información general del proyecto.
+     *
+     * @return \Illuminate\View\View
      */
     public function create()
     {
@@ -99,13 +148,22 @@ class ArtistaController extends Controller
     }
 
     /**
-     * Guardar nuevo perfil de artista.
+     * Guarda un nuevo perfil artístico (Procesa el primer paso).
+     *
+     * Valida los datos enviados por el formulario, procesa la
+     * imagen de perfil, crea el registro inicial del artista
+     * y lo deja pendiente de aprobación. Envía
+     * una notificación al equipo de Cultura para su revisión
+     * y redirige al segundo paso de la inscripción.
+     *
+     * @param  StoreArtistaRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StoreArtistaRequest $request)
     {
         $data = $request->validated();
 
-        // Chequear que un usuario no inscriba 2 veces su proyecto artistico.
+        // Evita que un mismo usuario registre más de un perfil con el mismo nombre artístico.
         $existe = Artista::where('user_id', Auth::id())
             ->whereRaw('LOWER(nombre_artistico) = ?', [strtolower($data['nombre_artistico'])])
             ->exists();
@@ -116,7 +174,8 @@ class ArtistaController extends Controller
                 ->withErrors(['nombre_artistico' => 'Ya tenés una banda registrada con ese nombre.']);
         }
 
-        // Imagen de perfil
+        // Convierte la imagen a WebP y la redimensiona para reducir
+        // el peso de almacenamiento sin perder calidad visual.
         if ($request->hasFile('img_perfil')) {
             $file = $request->file('img_perfil');
             $filename = Str::random(20) . '.webp';
@@ -129,11 +188,15 @@ class ArtistaController extends Controller
             $data['img_perfil'] = 'artistas/' . $filename;
         }
 
+        // Elimina integrantes vacíos enviados por el formulario
+        // y normaliza el arreglo antes de guardar.
         $data['integrantes'] = array_values(
             array_filter($data['integrantes'] ?? [], fn($v) => trim($v) !== '')
         ) ?: null;
         $data['user_id'] = Auth::id();
         $data['slug']    = Str::slug($data['nombre_artistico']) . '-' . uniqid();
+        // Los nuevos perfiles quedan ocultos hasta ser aprobados
+        // por un administrador del área de Cultura.
         $data['visible'] = false;
 
         $artista = Artista::create($data);
@@ -143,7 +206,8 @@ class ArtistaController extends Controller
             $artista->generos()->sync($request->generos);
         }
 
-        // Notificar a Cultura para que confirmen la inscripción
+        // Notifica al equipo de Cultura para que revise
+        // y apruebe el nuevo perfil artístico.
         Mail::to(config('mail.from.address'))->send(new NuevaInscripcionAdmin($artista)); // Mailable al mail del .env
 
         // Redirigir al apso 2
@@ -153,9 +217,21 @@ class ArtistaController extends Controller
     }
 
 
-    // Mostrar paso 2
+    /**
+     * Muestra el segundo paso de la inscripción.
+     *
+     * Permite completar la información complementaria del perfil,
+     * incluyendo redes sociales, fotografías, videos y audios.
+     *
+     * Sólo el propietario del perfil puede acceder a esta sección.
+     *
+     * @param  Artista  $artista
+     * @return \Illuminate\View\View
+     */
     public function createPaso2(Artista $artista)
     {
+        // Impide que un usuario acceda al paso 2
+        // de un perfil que no le pertenece.
         abort_if($artista->user_id !== Auth::id(), 403);
 
         $redes = $artista->redes->keyBy('plataforma');
@@ -164,7 +240,18 @@ class ArtistaController extends Controller
         return view('artista.create-paso2', compact('artista', 'redes', 'redesConfig'));
     }
 
-    // Guardar paso 2
+
+    /**
+     * Procesa el segundo paso de la inscripción.
+     *
+     * Guarda las redes sociales y el contenido multimedia asociado
+     * al perfil artístico. Una vez completado el proceso, el perfil
+     * queda listo para ser revisado por el equipo de Cultura.
+     *
+     * @param  Request  $request
+     * @param  Artista  $artista
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function storePaso2(Request $request, Artista $artista)
     {
         abort_if($artista->user_id !== Auth::id(), 403);
@@ -179,7 +266,7 @@ class ArtistaController extends Controller
             'videos_titulo.*'   => 'nullable|string|max:255',
         ]);
 
-        // Redes sociales
+        // Guarda o actualiza las redes sociales del artista.
         if ($request->filled('redes')) {
             foreach ($request->redes as $plataforma => $url) {
                 if (empty($url)) continue;
@@ -191,7 +278,10 @@ class ArtistaController extends Controller
             }
         }
 
-        // Fotos
+        // Optimiza imagenes antes de almacenarlas:
+        // - limita el ancho máximo a 800 px
+        // - convierte el archivo a WebP
+        // - reduce el tamaño para mejorar el rendimiento del sitio
         if ($request->hasFile('fotos')) {
             $orden = $artista->fotos()->max('orden') ?? 0;
             $fotos = $request->file('fotos');
@@ -215,7 +305,8 @@ class ArtistaController extends Controller
             }
         }
 
-        // Tracks de Spotify
+        // Registra los enlaces de Spotify respetando
+        // el orden definido por el usuario.
         if ($request->filled('tracks')) {
             $orden = $artista->tracks()->max('orden') ?? 0;
             foreach ($request->tracks as $i => $url) {
@@ -229,7 +320,8 @@ class ArtistaController extends Controller
             }
         }
 
-        // Videos de YouTube
+        // Registra los enlaces de YouTube respetando
+        // el orden definido por el usuario.
         if ($request->filled('videos')) {
             $orden = $artista->videos()->max('orden') ?? 0;
             foreach ($request->videos as $i => $url) {
@@ -248,11 +340,18 @@ class ArtistaController extends Controller
     }
 
 
-    /* ------------------- DASHBOARD PARA EDICION ---------------------- */
+    /* --------------------------------------------------------------------------
+    |  DASHBOARD DEL ARTISTA
+    * -------------------------------------------------------------------------- */
 
 
     /**
-     * Dashboard del artista — lista sus perfiles.
+     * Muestra el panel principal del artista.
+     *
+     * Lista todos los perfiles artísticos pertenecientes al usuario
+     * autenticado junto con los eventos asociados.
+     *
+     * @return \Illuminate\View\View
      */
     public function misPerfiles()
     {
@@ -271,11 +370,20 @@ class ArtistaController extends Controller
 
 
     /**
-     * Formulario de edición.
+     * Muestra el formulario de edición de un perfil artístico.
+     *
+     * Carga toda la información necesaria para modificar los datos
+     * generales, géneros, redes sociales, contenido multimedia
+     * y eventos asociados al perfil.
+     *
+     * Sólo el propietario del perfil puede acceder a esta sección.
+     *
+     * @param  Artista  $artista
+     * @return \Illuminate\View\View
      */
     public function edit(Artista $artista)
     {
-        // Solo el dueño puede editar
+        // Solo el propietario del perfil puede editar
         abort_if($artista->user_id !== Auth::id(), 403);
 
         $disciplinas    = Disciplina::where('pendiente_revision', false)->orderBy('nombre')->get();
@@ -296,7 +404,14 @@ class ArtistaController extends Controller
     }
 
     /**
-     * Actualizar INFO DE ARTISTA.
+     * Actualiza la información general de un perfil artístico.
+     *
+     * También reemplaza la imagen de perfil si se envía una nueva
+     * y sincroniza los géneros seleccionados.
+     *
+     * @param  UpdateArtistaRequest  $request
+     * @param  Artista  $artista
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateArtistaRequest $request, Artista $artista)
     {
@@ -305,12 +420,13 @@ class ArtistaController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('img_perfil')) {
-            // Borra la anterior si existe
+            //  Elimina la imagen anterior
             if ($artista->img_perfil) {
                 Storage::disk('public')->delete($artista->img_perfil);
             }
 
-            // Comprime y sube nueva img
+            // Procesa la nueva imagen antes de almacenarla
+            // para mantener un tamaño uniforme en el sitio.
             $file = $request->file('img_perfil');
             $filename = Str::random(20) . '.webp';
 
@@ -337,11 +453,20 @@ class ArtistaController extends Controller
        /* return back()->with('success', '...')->with('tab', 'multimedia');*/
     }
 
-
-
+    /* --------------------------------------------------------------------------
+    |  GESTIÓN DE MULTIMEDIA
+    * -------------------------------------------------------------------------- */
 
     /**
-     * Paso 2 — agregar fotos nuevas.
+     * Agrega nuevas fotografías al perfil artístico.
+     *
+     * Procesa las imágenes recibidas, las optimiza en formato WebP
+     * y las incorpora a la galería existente respetando el orden
+     * de visualización.
+     *
+     * @param  Request  $request
+     * @param  Artista  $artista
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function storeFotos(Request $request, Artista $artista)
     {
@@ -373,7 +498,16 @@ class ArtistaController extends Controller
     }
 
     /**
-     * Paso 2 — agregar o actualizar links (videos/tracks).
+     * Agrega contenido multimedia basado en enlaces externos.
+     *
+     * Permite incorporar nuevos videos de YouTube y audios
+     * (por ejemplo Spotify) manteniendo el orden de visualización.
+     *
+     * Este método únicamente agrega nuevos registros.
+     *
+     * @param  Request  $request
+     * @param  Artista  $artista
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function storeLinks(Request $request, Artista $artista)
     {
@@ -418,7 +552,15 @@ class ArtistaController extends Controller
     }
 
     /**
-     * Paso 2 — actualizar redes.
+     * Actualiza las redes sociales del perfil artístico.
+     *
+     * Crea, modifica o elimina las redes sociales enviadas desde
+     * el formulario manteniendo sincronizada la información
+     * almacenada en la base de datos.
+     *
+     * @param  Request  $request
+     * @param  Artista  $artista
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function updateRedes(Request $request, Artista $artista)
     {
@@ -445,13 +587,22 @@ class ArtistaController extends Controller
     }
 
     /**
-     * Eliminar un item de media.
+     * Elimina un elemento multimedia del perfil artístico.
+     *
+     * Si el recurso corresponde a una fotografía, también elimina
+     * el archivo físico almacenado en el servidor.
+     *
+     * @param  Artista  $artista
+     * @param  Media    $media
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroyMedia(Artista $artista, Media $media)
     {
         abort_if($artista->user_id !== Auth::id(), 403);
         abort_if($media->artista_id !== $artista->id, 403);
 
+        // Si el recurso corresponde a una imagen,
+        // elimina también el archivo físico del disco.
         if ($media->tipo === 'foto') {
             Storage::disk('public')->delete($media->url);
         }
@@ -462,7 +613,14 @@ class ArtistaController extends Controller
     }
 
     /**
-     * Eliminar una red social.
+     * Elimina una red social del perfil artístico.
+     *
+     * Sólo el propietario del perfil puede eliminar
+     * las redes asociadas.
+     *
+     * @param  Artista        $artista
+     * @param  ArtistaRedes   $red
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroyRed(Artista $artista, ArtistaRedes $red)
     {
@@ -477,18 +635,73 @@ class ArtistaController extends Controller
 
 
     /**
-     * Remove the specified resource from storage.
+     * Elimina un perfil artístico.
+     *
+     * Sólo el propietario del perfil puede realizar esta acción.
+     *
+     * Además elimina todo el contenido asociado al perfil, incluyendo:
+     * - Imagen de perfil.
+     * - Fotografías y archivos multimedia.
+     * - Redes sociales.
+     * - Relaciones con géneros.
+     * - Relaciones con eventos.
+     *
+     * @param  Artista  $artista
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Artista $artista)
     {
-        //
+        // Sólo el dueño puede eliminar el perfil
+        abort_if($artista->user_id !== Auth::id(), 403);
+
+        DB::transaction(function () use ($artista) {
+            // Eliminar imagen de perfil
+            if ($artista->img_perfil) {
+                Storage::disk('public')->delete($artista->img_perfil);
+            }
+
+            // Eliminar fotos almacenadas
+            foreach ($artista->media()->where('tipo', 'foto')->get() as $foto) {
+                Storage::disk('public')->delete($foto->url);
+            }
+
+            // Eliminar multimedia
+            $artista->media()->delete();
+            // Eliminar redes sociales
+            $artista->redes()->delete();
+            // Eliminar relaciones con géneros
+            $artista->generos()->detach();
+            // Eliminar relaciones con eventos
+            $artista->eventos()->detach();
+            // Finalmente eliminar el perfil
+            $artista->delete();
+        });
+
+        return redirect()
+            ->route('artista.mis-perfiles')
+            ->with('success', 'El perfil artístico fue eliminado correctamente.');
     }
 
+    /* --------------------------------------------------------------------------
+    |  BÚSQUEDAS Y FILTROS
+    * -------------------------------------------------------------------------- */
 
+    /**
+     * Busca artistas aplicando filtros dinámicos.
+     *
+     * Permite filtrar el catálogo público por nombre artístico,
+     * disciplina y género, devolviendo únicamente la información
+     * necesaria para actualizar el listado mediante AJAX.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function searchArtists(Request $request){
 
         $query = Artista::where('visible', 1)->with(['disciplina', 'generos']);
 
+        // Construye dinámicamente la consulta aplicando
+        // únicamente los filtros enviados por el usuario.
         if ($request->filled('busqueda')) {
             $query->where('nombre_artistico', 'like', '%' . $request->busqueda . '%');
         }
@@ -501,6 +714,8 @@ class ArtistaController extends Controller
             $query->whereHas('generos', fn($q) => $q->where('generos.id', $request->genero));
         }
 
+        // Devuelve únicamente los datos necesarios
+        // para el listado público en formato JSON.
         return response()->json(
             $query->orderBy('nombre_artistico', 'desc')->get()->map(fn($a) => [
                 'slug'             => $a->slug,

@@ -21,7 +21,10 @@
                     </a>
                     {{-- Eliminar evento (solo creador) --}}
                     <form action="{{ route('evento.destroy', $evento->slug) }}" method="POST"
-                        onsubmit="return confirm('¿Eliminar este evento? Esta acción no se puede deshacer.')">
+                        class="confirm-action"
+                        data-title="¿Eliminar evento?"
+                        data-text="Se eliminará el evento, su imagen y toda la información asociada. Esta acción no puede deshacerse."
+                        data-confirm="Sí, eliminar">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-outline-danger rounded-pill px-4">
@@ -32,10 +35,10 @@
             </div>
 
             @if(session('success'))
-                <div class="alert alert-success" id="alert-success">{{ session('success') }}</div>
+                <div class="flash-success" id="alert-success">{{ session('success') }}</div>
             @endif
             @if($errors->any())
-                <div class="alert alert-danger">
+                <div class="flash-error">
                     <ul class="mb-0">
                         @foreach($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -218,16 +221,16 @@
                 </div>
 
                 {{-- SUBMIT --}}
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                    <div class="d-flex gap-2">
-                        <a href="{{ route('artista.mis-perfiles') }}"
-                            class="btn btn-secondary rounded-pill px-4">
-                            Cancelar
-                        </a>
-                        <button type="submit" class="btn btn-red rounded-pill px-4 py-2">
-                            Guardar cambios
-                        </button>
-                    </div>
+                <div class="d-flex justify-content-end align-items-center flex-wrap gap-2">
+
+                    <a href="{{ route('artista.mis-perfiles') }}"
+                        class="btn btn-secondary rounded-pill px-4">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-red rounded-pill px-4 py-2">
+                        Guardar cambios
+                    </button>
+
                 </div>
             </form>
         </div>

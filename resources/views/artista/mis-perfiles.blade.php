@@ -29,7 +29,16 @@
             </div>
 
             @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
+                <div class="flash-success">{{ session('success') }}</div>
+            @endif
+            @if($errors->any())
+                <div class="flash-error">
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
             @endif
 
             @if($artistas->isEmpty())

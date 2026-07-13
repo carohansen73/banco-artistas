@@ -46,10 +46,13 @@
                 </p>
             </div>
             {{-- ERRORES --}}
-            @if ($errors->any())
-                <div class="alert alert-danger">
+            @if(session('success'))
+                <div class="flash-success">{{ session('success') }}</div>
+            @endif
+            @if($errors->any())
+                <div class="flash-error">
                     <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
+                        @foreach($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
                     </ul>
