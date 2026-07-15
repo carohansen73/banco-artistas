@@ -144,3 +144,5 @@
 @push('scripts')
 @vite(['resources/js/filter-artists.js', 'resources/js/carrusel-tags.js'])
 @endpush
+
+@endsection
