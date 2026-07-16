@@ -27,10 +27,10 @@ class Media extends Model
     {
         if ($this->tipo === 'audio_link') {
             // https://open.spotify.com/track/ID → embed
-            preg_match('/spotify\.com\/(track|album|playlist)\/([a-zA-Z0-9]+)/', $this->url, $m);
-            return isset($m[2])
-                ? "https://open.spotify.com/embed/{$m[1]}/{$m[2]}"
-                : $this->url;
+            if (preg_match('/spotify\.com\/(track|album|playlist|artist)\/([a-zA-Z0-9]+)/', $this->url, $m)){
+                return "https://open.spotify.com/embed/{$m[1]}/{$m[2]}";
+            };
+            return $this->url;
         }
 
         if ($this->tipo === 'video_link') {

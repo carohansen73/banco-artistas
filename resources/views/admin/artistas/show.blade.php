@@ -412,15 +412,15 @@
                                                     </svg>
                                                 </button>
                                             </div>
-                                            @if ($spotifyId && $spotifyTipo)
+                                            @if ($track->embed_url)
                                                 <iframe
-                                                    src="https://open.spotify.com/embed/{{ $spotifyTipo }}/{{ $spotifyId }}"
+                                                    src="{{ $track->embed_url }}"
                                                     width="100%"
                                                     height="{{ $spotifyTipo === 'playlist' ? '352' : '80' }}"
                                                     frameborder="0"
                                                     allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                                                     loading="lazy"
-                                                    class="block">
+                                                  class="block">
                                                 </iframe>
                                             @endif
                                         </div>
