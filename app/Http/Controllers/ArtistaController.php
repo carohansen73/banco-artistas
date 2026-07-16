@@ -295,7 +295,7 @@ class ArtistaController extends Controller
                 $image = Image::read($foto)
                 ->scaleDown(width: 800) // nunca más ancho que 800px, mantiene proporción
                 ->toWebp(quality: 75);  // convierte a webp, formato mucho más liviano
-                Storage::disk('public')->put('artistas/fotos' . $filename, (string) $image);
+                Storage::disk('public')->put('artistas/fotos/' . $filename, (string) $image);
 
                 $artista->media()->create([
                     'tipo'  => 'foto',
