@@ -18,11 +18,11 @@
             </div>
         </div>
 
-        <div class="slide active" style="background-image: url('/storage/backgrounds/bg-hero-1.png');">
+        <div class="slide active" style="background-image: url('{{ asset('img/backgrounds/bg-hero-1.png') }}');">
         </div>
-        <div class="slide" style="background-image: url('/storage/backgrounds/bg-hero-2.png');">
+        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-2.png') }}');">
         </div>
-        <div class="slide" style="background-image: url('/storage/backgrounds/bg-hero-3.png');">
+        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-3.png') }}');">
         </div>
 
     </div>
