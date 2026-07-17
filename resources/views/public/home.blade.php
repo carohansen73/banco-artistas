@@ -81,9 +81,11 @@
         <section class="eventos-slider-section mb-4 p-2">
             <div class="eventos-slider-header">
 
-                <div class="section-title p-2 mb-3">
-                     <p style="color:white; font-weight: 600;">Eventos</p>
-                    <h2>Próximos eventos</h2>
+                <div class="d-flex justify-content-start justify-content-md-center mb-2 pb-1">
+                    <div class="section-title p-2 mb-3">
+                        <p class="fw-semibold text-white mb-1">Eventos</p>
+                        <h2>Próximos eventos</h2>
+                    </div>
                 </div>
 
                 <div class="eventos-slider-controls">
@@ -106,9 +108,9 @@
 <section class="p-3">
     <div class="container mb-5 " data-aos="fade-up">
 
-            <div class="d-flex justify-content-center mb-2 pb-1">
-                 <div class="section-title p-2 mb-3">
-                     <p style="color:white; font-weight: 600;">Artistas</p>
+            <div class="d-flex justify-content-start justify-content-md-center mb-2 pb-1">
+                <div class="section-title p-2 mb-3">
+                    <p class="fw-semibold text-white mb-1">Artistas</p>
                     <h2>Nuestros artistas</h2>
                 </div>
             </div>
