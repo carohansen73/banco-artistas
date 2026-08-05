@@ -18,11 +18,28 @@
             </div>
         </div>
 
-        <div class="slide active" style="background-image: url('{{ asset('img/backgrounds/bg-hero-1.png') }}');">
+        <div class="slide active" style="background-image: url('{{ asset('img/backgrounds/bg-hero-4.jpeg') }}');">
         </div>
-        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-2.png') }}');">
+        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-5.jpeg') }}');">
         </div>
-        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-3.png') }}');">
+        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-6.jpeg') }}');">
+        </div>
+
+        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-7.jpeg') }}');">
+        </div>
+        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-8.jpeg') }}');">
+        </div>
+        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-9.jpeg') }}');">
+        </div>
+          <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-10.jpeg') }}');">
+        </div>
+        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-11.jpeg') }}');">
+        </div>
+        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-12.jpeg') }}');">
+        </div>
+            <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-13.jpeg') }}');">
+        </div>
+        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-14.jpeg') }}');">
         </div>
 
     </div>
