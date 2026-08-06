@@ -18,29 +18,17 @@
             </div>
         </div>
 
-        <div class="slide active" style="background-image: url('{{ asset('img/backgrounds/bg-hero-4.jpeg') }}');">
-        </div>
-        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-5.jpeg') }}');">
-        </div>
-        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-6.jpeg') }}');">
-        </div>
-
-        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-7.jpeg') }}');">
-        </div>
-        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-8.jpeg') }}');">
-        </div>
-        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-9.jpeg') }}');">
-        </div>
-          <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-10.jpeg') }}');">
-        </div>
-        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-11.jpeg') }}');">
-        </div>
-        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-12.jpeg') }}');">
-        </div>
-            <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-13.jpeg') }}');">
-        </div>
-        <div class="slide" style="background-image: url('{{ asset('img/backgrounds/bg-hero-14.jpeg') }}');">
-        </div>
+        <img class="slide active" src="{{ asset('img/backgrounds/bg-hero-4.jpeg') }}" alt="">
+        <img class="slide" src="{{ asset('img/backgrounds/bg-hero-5.jpeg') }}" alt="">
+        <img class="slide" src="{{ asset('img/backgrounds/bg-hero-6.jpeg') }}" alt="">
+        <img class="slide" src="{{ asset('img/backgrounds/bg-hero-7.jpeg') }}" alt="">
+        <img class="slide" src="{{ asset('img/backgrounds/bg-hero-8.jpeg') }}" alt="">
+        <img class="slide" src="{{ asset('img/backgrounds/bg-hero-9.jpeg') }}" alt="">
+        <img class="slide" src="{{ asset('img/backgrounds/bg-hero-10.jpeg') }}" alt="">
+        <img class="slide" src="{{ asset('img/backgrounds/bg-hero-11.jpeg') }}" alt="">
+        <img class="slide" src="{{ asset('img/backgrounds/bg-hero-12.jpeg') }}" alt="">
+        <img class="slide" src="{{ asset('img/backgrounds/bg-hero-13.jpeg') }}" alt="">
+        <img class="slide" src="{{ asset('img/backgrounds/bg-hero-14.jpeg') }}" alt="">
 
     </div>
 {{-- FIN PORTADA --}}
