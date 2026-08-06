@@ -1,0 +1,152 @@
+{
+  "_flash-toast-D5amwhgc.js": {
+    "file": "assets/flash-toast-D5amwhgc.js",
+    "name": "flash-toast"
+  },
+  "_notifications-D-B7x-Gu.js": {
+    "file": "assets/notifications-D-B7x-Gu.js",
+    "name": "notifications"
+  },
+  "resources/css/app-publico.css": {
+    "file": "assets/app-publico-DWpXDtmt.css",
+    "src": "resources/css/app-publico.css",
+    "isEntry": true,
+    "name": "app-publico",
+    "names": [
+      "app-publico.css"
+    ]
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-B-Yx09md.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/css/galery.css": {
+    "file": "assets/galery-CnhG8vlY.css",
+    "src": "resources/css/galery.css",
+    "isEntry": true,
+    "name": "galery",
+    "names": [
+      "galery.css"
+    ]
+  },
+  "resources/js/admin-artista-show.js": {
+    "file": "assets/admin-artista-show-_OkIN9iP.js",
+    "name": "admin-artista-show",
+    "src": "resources/js/admin-artista-show.js",
+    "isEntry": true,
+    "imports": [
+      "_notifications-D-B7x-Gu.js",
+      "_flash-toast-D5amwhgc.js"
+    ]
+  },
+  "resources/js/admin-disciplina.js": {
+    "file": "assets/admin-disciplina-3MH0ZZku.js",
+    "name": "admin-disciplina",
+    "src": "resources/js/admin-disciplina.js",
+    "isEntry": true,
+    "imports": [
+      "_notifications-D-B7x-Gu.js"
+    ]
+  },
+  "resources/js/admin-search-form.js": {
+    "file": "assets/admin-search-form-Dht-mE6H.js",
+    "name": "admin-search-form",
+    "src": "resources/js/admin-search-form.js",
+    "isEntry": true
+  },
+  "resources/js/admin-sidebar.js": {
+    "file": "assets/admin-sidebar-Douy3DHa.js",
+    "name": "admin-sidebar",
+    "src": "resources/js/admin-sidebar.js",
+    "isEntry": true
+  },
+  "resources/js/admin-toggle.js": {
+    "file": "assets/admin-toggle-CzyfCX1Z.js",
+    "name": "admin-toggle",
+    "src": "resources/js/admin-toggle.js",
+    "isEntry": true,
+    "imports": [
+      "_notifications-D-B7x-Gu.js",
+      "_flash-toast-D5amwhgc.js"
+    ]
+  },
+  "resources/js/admin-usuarios.js": {
+    "file": "assets/admin-usuarios-CDZ2nJ23.js",
+    "name": "admin-usuarios",
+    "src": "resources/js/admin-usuarios.js",
+    "isEntry": true,
+    "imports": [
+      "_notifications-D-B7x-Gu.js",
+      "_flash-toast-D5amwhgc.js"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-B7oZYf26.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_flash-toast-D5amwhgc.js",
+      "_notifications-D-B7x-Gu.js"
+    ]
+  },
+  "resources/js/artist-edit.js": {
+    "file": "assets/artist-edit-7tKobXAk.js",
+    "name": "artist-edit",
+    "src": "resources/js/artist-edit.js",
+    "isEntry": true
+  },
+  "resources/js/artist-eventos.js": {
+    "file": "assets/artist-eventos-g2KEMrQI.js",
+    "name": "artist-eventos",
+    "src": "resources/js/artist-eventos.js",
+    "isEntry": true
+  },
+  "resources/js/artist-inscription-form.js": {
+    "file": "assets/artist-inscription-form-BXPCjqCs.js",
+    "name": "artist-inscription-form",
+    "src": "resources/js/artist-inscription-form.js",
+    "isEntry": true
+  },
+  "resources/js/artist-integrantes.js": {
+    "file": "assets/artist-integrantes-BsLc0Kbk.js",
+    "name": "artist-integrantes",
+    "src": "resources/js/artist-integrantes.js",
+    "isEntry": true
+  },
+  "resources/js/artist-media-manager.js": {
+    "file": "assets/artist-media-manager-eDvR2gZE.js",
+    "name": "artist-media-manager",
+    "src": "resources/js/artist-media-manager.js",
+    "isEntry": true
+  },
+  "resources/js/carrusel-tags.js": {
+    "file": "assets/carrusel-tags-DCYKbp8H.js",
+    "name": "carrusel-tags",
+    "src": "resources/js/carrusel-tags.js",
+    "isEntry": true
+  },
+  "resources/js/filter-artists.js": {
+    "file": "assets/filter-artists-BO9diCrD.js",
+    "name": "filter-artists",
+    "src": "resources/js/filter-artists.js",
+    "isEntry": true
+  },
+  "resources/js/galery-lightbox.js": {
+    "file": "assets/galery-lightbox-D8fDq7_Y.js",
+    "name": "galery-lightbox",
+    "src": "resources/js/galery-lightbox.js",
+    "isEntry": true
+  },
+  "resources/js/preview-img.js": {
+    "file": "assets/preview-img-C2rIwQcC.js",
+    "name": "preview-img",
+    "src": "resources/js/preview-img.js",
+    "isEntry": true
+  }
+}

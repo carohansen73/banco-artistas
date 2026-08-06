@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",()=>{document.getElementById("imagen").addEventListener("change",function(){const e=this.files[0];if(!e)return;const t=new FileReader;t.onload=n=>{document.getElementById("img-preview").src=n.target.result,document.getElementById("preview-container").style.display="block"},t.readAsDataURL(e)})});
