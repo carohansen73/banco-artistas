@@ -1701,6 +1701,7 @@ section.options{
 .hero-carousel {
     position: relative;
     width: 100%;
+    overflow: hidden;
 
     display: flex;
 }
@@ -1808,6 +1809,9 @@ section.options{
     .overlay {
         background:
         linear-gradient(to top right,rgb(0, 0, 0) 30%, rgba(0, 0, 0, 0.345) 50%, transparent 100%);
+        background-size: 100% 600px;
+        background-position: right center;
+        background-repeat: no-repeat;
         height: 100%;
         display: flex;
 
