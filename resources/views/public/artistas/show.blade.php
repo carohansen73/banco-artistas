@@ -144,7 +144,13 @@
     const mediaCol = document.querySelector('.perfil-media-col');
     const contents = document.querySelectorAll('.perfil-tab-content');
 
+    // Recuerda la pestaña activa para no perderla en un resize
+    // (por ej. al entrar/salir de pantalla completa en un video).
+    let activeTab = 'galeria';
+
     function activateTab(tabName) {
+        activeTab = tabName;
+
         // Actualizar botones
         tabs.forEach(btn => {
             const isActive = btn.dataset.tab === tabName;
@@ -180,23 +186,26 @@
         btn.addEventListener('click', () => activateTab(btn.dataset.tab));
     });
 
-    // Estado inicial
+    // Estado inicial: arranca en galería
     function init() {
-        if (isMobile()) {
-            // En mobile, por defecto mostrar galería
-            activateTab('galeria');
-        } else {
-            // En desktop, info siempre visible, por defecto galería activa
-            infoCol.style.display = '';
-            activateTab('galeria');
-        }
+        activateTab(activeTab);
     }
 
-    // Re-evaluar al cambiar tamaño de ventana (ej: rotar el cel)
+    // Re-evaluar al cambiar tamaño de ventana (ej: rotar el cel, o entrar/salir
+    // de pantalla completa en un video, que también dispara "resize").
+    // Reaplica la pestaña que ya estaba activa: no la resetea a "galería".
     let resizeTimer;
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(init, 150);
+        resizeTimer = setTimeout(() => {
+            // "informacion" es un tab exclusivo de mobile; si veníamos de mobile
+            // con ese tab activo y pasamos a desktop, no existe contenido
+            // "tab-informacion" en el panel de media, así que volvemos a galería.
+            if (!isMobile() && activeTab === 'informacion') {
+                activeTab = 'galeria';
+            }
+            activateTab(activeTab);
+        }, 150);
     });
 
     init();

@@ -2470,6 +2470,13 @@ section.options{
     }
 }
 
+/* ─── Estado vacío de las pestañas de media (galería/videos/audios) ─── */
+.perfil-empty-state {
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 2.5rem 1rem;
+}
+
 
 .rounded-full{
     border-radius: 9999px;

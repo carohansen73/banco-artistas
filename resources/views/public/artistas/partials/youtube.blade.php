@@ -20,4 +20,9 @@
         @endforeach
     </div>
 </div>
+@else
+<div class="perfil-empty-state text-center text-muted mt-4">
+    <i class="fab fa-youtube fa-2x mb-3 d-block"></i>
+    <p class="mb-0">Todavía no hay videos cargados.</p>
+</div>
 @endif

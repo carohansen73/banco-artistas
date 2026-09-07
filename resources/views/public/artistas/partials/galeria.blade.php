@@ -11,6 +11,11 @@
         @endforeach
     </div>
 </div>
+@else
+<div class="perfil-empty-state text-center text-muted mt-4">
+    <i class="fas fa-images fa-2x mb-3 d-block"></i>
+    <p class="mb-0">Todavía no hay fotos cargadas en la galería.</p>
+</div>
 @endif
 
 <div class="lightbox-backdrop" id="lightbox">
