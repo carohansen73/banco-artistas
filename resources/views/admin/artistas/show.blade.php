@@ -252,7 +252,7 @@
                                     Descripción de actividad
                                 </h5>
                                 <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
-                                    {!! $artista->descripcion_actividad ?: '—' !!}
+                                    {{ $artista->descripcion_actividad ?: '—' }}
                                 </p>
                             </div>
 
@@ -263,7 +263,7 @@
                                     Detalle de formación
                                 </h5>
                                 <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
-                                    {!! $artista->detalle_formacion !!}
+                                    {{ $artista->detalle_formacion }}
                                 </p>
                             </div>
                             @endif

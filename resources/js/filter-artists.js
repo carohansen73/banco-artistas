@@ -86,12 +86,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ─── RENDER DE UNA CARD ─────────────────────────────────────────────────
+    // Escapa HTML para evitar que datos cargados por artistas (nombre, localidad,
+    // disciplina, géneros) se interpreten como markup/script al insertarlos con innerHTML.
+    function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+        }[char]));
+    }
+
     function appendCard(a) {
         const container = document.getElementById('container-artists');
 
+        const nombreArtistico = escapeHtml(a.nombre_artistico);
+        const localidad       = escapeHtml(a.localidad);
+        const disciplina      = escapeHtml(a.disciplina);
+        const slug            = encodeURIComponent(a.slug);
+        const imgPerfil       = encodeURI(a.img_perfil || '');
+
         // Renderizar géneros en la card
         const generosBadges = (a.generos || [])
-            .map(g => `<span class="artista-badge genero">${g}</span>`)
+            .map(g => `<span class="artista-badge genero">${escapeHtml(g)}</span>`)
             .join('');
 
         // Sacar tildes
@@ -101,30 +119,30 @@ document.addEventListener('DOMContentLoaded', () => {
             .replace(/\s+/g, '-');
 
         const imgOrAvatar = (a.img_perfil && !a.img_perfil.includes('default'))
-            ? `<img src="${a.img_perfil}" alt="${a.nombre_artistico}" loading="lazy">`
-            : `<div class="artista-avatar-default">${a.nombre_artistico.charAt(0).toUpperCase()}</div>`;
+            ? `<img src="${imgPerfil}" alt="${nombreArtistico}" loading="lazy">`
+            : `<div class="artista-avatar-default">${escapeHtml(a.nombre_artistico.charAt(0).toUpperCase())}</div>`;
 
 
         // Crear la card del artista
         const col = document.createElement('div');
         col.className = 'col-lg-4 col-md-6 col-sm-12';
         col.innerHTML = `
-            <div class="artista-card" onclick="window.location='/artistas/${a.slug}'">
+            <div class="artista-card" onclick="window.location='/artistas/${slug}'">
                 <div class="artista-card-img">
                     ${imgOrAvatar}
                     <div class="artista-card-overlay">
-                        <a href="/artistas/${a.slug}" class="btn btn-red btn-sm rounded-pill">Ver perfil</a>
+                        <a href="/artistas/${slug}" class="btn btn-red btn-sm rounded-pill">Ver perfil</a>
                     </div>
                 </div>
                 <div class="artista-card-body">
                     <div class="d-flex justify-content-between">
-                        <h4 class="artista-card-nombre">${a.nombre_artistico}</h4>
+                        <h4 class="artista-card-nombre">${nombreArtistico}</h4>
                         ${a.disciplina
-                            ? `<span class="artista-card-disciplina disc-${discSlug}">${a.disciplina}</span>`
+                            ? `<span class="artista-card-disciplina disc-${discSlug}">${disciplina}</span>`
                             : ''}
                     </div>
                     <div class="artista-card-meta">
-                        ${a.localidad ? `<span class="card-localidad"><i class="fas fa-map-marker-alt me-1"></i> ${a.localidad}</span>` : ''}
+                        ${a.localidad ? `<span class="card-localidad"><i class="fas fa-map-marker-alt me-1"></i> ${localidad}</span>` : ''}
                     </div>
                     ${generosBadges ? `<div class="artista-card-generos">${generosBadges}</div>` : ''}
                 </div>

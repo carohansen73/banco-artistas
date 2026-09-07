@@ -40,7 +40,7 @@
                      @if($artista->generos)
                         @foreach ( $artista->generos as $genero)
                             <div class="perfil-genero rounded-pill">
-                                <p class="mb-0">{!! $genero->nombre !!}</p>
+                                <p class="mb-0">{{ $genero->nombre }}</p>
                             </div>
                         @endforeach
                     @endif
@@ -60,10 +60,10 @@
                     @endif
 
                     <p class="mb-0 mt-2"><span class="subtitle">Inicio:</span></p>
-                    <p>{!! $artista->anio_inicio !!}</p>
+                    <p>{{ $artista->anio_inicio }}</p>
 
                     <p class="mb-0 mt-2"><span class="subtitle">Información:</span></p>
-                    <p style="white-space: pre-line;">{!! $artista->descripcion_actividad !!}</p>
+                    <p style="white-space: pre-line;">{{ $artista->descripcion_actividad }}</p>
 
 
                 </div>
