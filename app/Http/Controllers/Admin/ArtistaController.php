@@ -138,8 +138,8 @@ class ArtistaController extends Controller
             ->findOrFail($id);
 
         // Si es foto, borrar el archivo físico
-        if ($tipo === 'foto' && $media->path) {
-            Storage::disk('public')->delete($media->path);
+        if ($tipo === 'foto' && $media->url) {
+            Storage::disk('public')->delete($media->url);
         }
 
         $media->delete();
