@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const data = await res.json();
                     await errorAlert(
                         'No se pudo actualizar',
-                        data.error ?? 'Error al actualizar.'
+                        data.error ?? data.message ?? 'Error al actualizar.'
                     )
                     this.checked = !prev; // revertir
                     return;
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!res.ok) {
                     await errorAlert(
                         'No se pudo actualizar',
-                        data.error ?? 'Error al actualizar el rol.'
+                        data.error ?? data.message ?? 'Error al actualizar el rol.'
                     );
                     this.value = prevValue;
                     return;

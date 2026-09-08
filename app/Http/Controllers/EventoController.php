@@ -129,7 +129,7 @@ class EventoController extends Controller
      */
     public function edit(Evento $evento)
     {
-        $this->autorizarCreador($evento);
+        $this->authorize('update', $evento);
 
         $artistas = auth()->user()->artistas()->where('visible', true)->get();
         $artistasSeleccionados = $evento->artistas->pluck('id')->toArray();
@@ -153,7 +153,7 @@ class EventoController extends Controller
      */
     public function update(UpdateEventoRequest $request, Evento $evento)
     {
-        $this->autorizarCreador($evento);
+        $this->authorize('update', $evento);
 
         $artistas = auth()->user()->artistas()->where('visible', true)->get();
         $idsDelUser = $artistas->pluck('id')->toArray();
@@ -208,7 +208,7 @@ class EventoController extends Controller
      */
     public function destroy(Evento $evento)
     {
-        $this->autorizarCreador($evento);
+        $this->authorize('delete', $evento);
 
         if ($evento->imagen_portada) {
             Storage::disk('public')->delete($evento->imagen_portada);
@@ -312,25 +312,6 @@ class EventoController extends Controller
 
         return back()->with('success', 'Saliste del evento.');
     }
-
-    // --- Helper privado ---
-
-    /**
-     * Verifica que el usuario autenticado sea el creador del evento.
-     *
-     * Si el evento pertenece a otro usuario, se aborta la petición
-     * devolviendo un error HTTP 403 (Forbidden).
-     *
-     * @param  Evento  $evento
-     * @return void
-     */
-    private function autorizarCreador(Evento $evento): void
-    {
-        if ($evento->user_id !== auth()->id()) {
-            abort(403, 'No tenés permiso para modificar este evento.');
-        }
-    }
-
 
 
 

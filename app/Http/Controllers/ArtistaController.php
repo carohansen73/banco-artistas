@@ -232,7 +232,7 @@ class ArtistaController extends Controller
     {
         // Impide que un usuario acceda al paso 2
         // de un perfil que no le pertenece.
-        abort_if($artista->user_id !== Auth::id(), 403);
+        $this->authorize('update', $artista);
 
         $redes = $artista->redes->keyBy('plataforma');
         $redesConfig = config('redes');
@@ -254,7 +254,7 @@ class ArtistaController extends Controller
      */
     public function storePaso2(Request $request, Artista $artista)
     {
-        abort_if($artista->user_id !== Auth::id(), 403);
+        $this->authorize('update', $artista);
 
         $request->validate([
             'redes'             => 'nullable|array',
@@ -384,7 +384,7 @@ class ArtistaController extends Controller
     public function edit(Artista $artista)
     {
         // Solo el propietario del perfil puede editar
-        abort_if($artista->user_id !== Auth::id(), 403);
+        $this->authorize('update', $artista);
 
         $disciplinas    = Disciplina::where('pendiente_revision', false)->orderBy('nombre')->get();
         $generos        = Genero::where('disciplina_id', $artista->disciplina_id)->orderBy('nombre')->get();
@@ -415,7 +415,7 @@ class ArtistaController extends Controller
      */
     public function update(UpdateArtistaRequest $request, Artista $artista)
     {
-        abort_if($artista->user_id !== Auth::id(), 403);
+        $this->authorize('update', $artista);
 
         $data = $request->validated();
 
@@ -470,7 +470,7 @@ class ArtistaController extends Controller
      */
     public function storeFotos(Request $request, Artista $artista)
     {
-        abort_if($artista->user_id !== Auth::id(), 403);
+        $this->authorize('update', $artista);
 
         $request->validate([
             'fotos'   => 'required|array|max:10',
@@ -511,7 +511,7 @@ class ArtistaController extends Controller
      */
     public function storeLinks(Request $request, Artista $artista)
     {
-        abort_if($artista->user_id !== Auth::id(), 403);
+        $this->authorize('update', $artista);
 
         $request->validate([
             'tracks'          => 'nullable|array',
@@ -564,7 +564,7 @@ class ArtistaController extends Controller
      */
     public function updateRedes(Request $request, Artista $artista)
     {
-        abort_if($artista->user_id !== Auth::id(), 403);
+        $this->authorize('update', $artista);
 
         $request->validate([
             'redes'   => 'nullable|array',
@@ -598,7 +598,7 @@ class ArtistaController extends Controller
      */
     public function destroyMedia(Artista $artista, Media $media)
     {
-        abort_if($artista->user_id !== Auth::id(), 403);
+        $this->authorize('update', $artista);
         abort_if($media->artista_id !== $artista->id, 403);
 
         // Si el recurso corresponde a una imagen,
@@ -624,7 +624,7 @@ class ArtistaController extends Controller
      */
     public function destroyRed(Artista $artista, ArtistaRedes $red)
     {
-        abort_if($artista->user_id !== Auth::id(), 403);
+        $this->authorize('update', $artista);
         abort_if($red->artista_id !== $artista->id, 403);
 
         $red->delete();
@@ -651,8 +651,7 @@ class ArtistaController extends Controller
      */
     public function destroy(Artista $artista)
     {
-        // Sólo el dueño puede eliminar el perfil
-        abort_if($artista->user_id !== Auth::id(), 403);
+        $this->authorize('delete', $artista);
 
         DB::transaction(function () use ($artista) {
             // Eliminar imagen de perfil
