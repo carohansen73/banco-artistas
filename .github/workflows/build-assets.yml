@@ -1,0 +1,37 @@
+name: build frontend assets
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'resources/js/**'
+      - 'resources/css/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vite.config.js'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions: 
+      contents: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Commit and push actions
+        run: |
+           git config user.name "Carolina Hansen (GitHub Actions)"
+           git config user.email "carohansen73@gmail.com"
+           git add public/build
+           git diff --staged --quiet || git commit -m "chore: recompilar assets del frontend [skip ci]"
+           git push
+        
+        
+    
