@@ -731,26 +731,9 @@ class ArtistaController extends Controller
 
 
 /*
+
 TODO:
-Guardar 2 versiones de la img, una para cards (pequeña) otra para portada (grande)
-Pero tngo q agregar el cmapo en la db, migrar, etc...
-
-
-if ($request->hasFile('img_perfil')) {
-    $file = $request->file('img_perfil');
-    $filename = Str::random(20);
-
-    // Versión grande (perfil)
-    $full = Image::read($file)->scaleDown(width: 800)->toWebp(quality: 75);
-    Storage::disk('public')->put("artistas/{$filename}.webp", (string) $full);
-
-    // Versión chica (card / listado)
-    $thumb = Image::read($file)->scaleDown(width: 400)->toWebp(quality: 70);
-    Storage::disk('public')->put("artistas/{$filename}-thumb.webp", (string) $thumb);
-
-    $artista->img_perfil = "artistas/{$filename}.webp";
-    $artista->img_perfil_thumb = "artistas/{$filename}-thumb.webp"; // nueva columna
-}
-
+Si voy a guardar una foto perfil, otra de portada, no hace falta guardar 2 tamaños,
+pero sí se puede achicar la de perfil a 400 y 800 o mas la de portada.
 
 */

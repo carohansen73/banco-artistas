@@ -13,16 +13,6 @@ use Illuminate\Support\Facades\Storage;
 
 class ArtistaController extends Controller
 {
-    // public function index(): View
-    // {
-    //     $artistas = Artista::query()
-    //         ->with('user:id,name,lastname,email')
-    //         ->orderBy('nombre_artistico')
-    //         ->paginate(20)
-    //         ->withQueryString();
-
-    //     return view('admin.artistas.index', compact('artistas'));
-    // }
 
     /**
      * Listado de artistas con filtros de busqueda y paginación
@@ -65,11 +55,6 @@ class ArtistaController extends Controller
             compact('artistas', 'search')
         );
     }
-
-
-
-
-
 
 
     public function updateVisibility(Request $request, Artista $artista): JsonResponse
