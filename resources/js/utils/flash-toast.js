@@ -1,6 +1,3 @@
-
-console.log('entro al toast!');
-
 /**
  * Inicializa los toasts que vienen renderizados por Blade
  */

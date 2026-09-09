@@ -15,7 +15,7 @@ import { confirmAlert } from './notifications';
  * - data-cancel (opcional)
  */
 export function initConfirmActions() {
-     console.log('initConfirmActions');
+
     document.querySelectorAll('.confirm-action').forEach(form => {
 
         form.addEventListener('submit', async function (e) {
