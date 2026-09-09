@@ -2,6 +2,8 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+     console.log('prueba de GitHub Actions');
+
     const inputNombre     = document.getElementById('filter-nombre');
     const selectDisciplina = document.getElementById('filter-disciplina');
     const selectGenero    = document.getElementById('filter-genero');
