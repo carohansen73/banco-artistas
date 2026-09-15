@@ -101,7 +101,7 @@
                             <input type="file" name="fotos[]" id="fotos"
                                 class="form-control @error('fotos.*') is-invalid @enderror"
                                 accept=".jpg,.jpeg,.png" multiple>
-                            <small class="text-muted">Podés seleccionar varias fotos a la vez. Máximo 2MB por foto.</small>
+                            <small class="text-muted">Podés seleccionar varias fotos a la vez. Máximo 10 fotos, hasta 5MB cada una.</small>
                         </div>
 
                         {{-- Preview fotos --}}

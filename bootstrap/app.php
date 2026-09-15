@@ -31,5 +31,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [EnsureUserIsActive::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (\Illuminate\Http\Exceptions\PostTooLargeException $e, $request) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Los archivos que intentaste subir superan el tamaño máximo permitido. '
+                        . 'Probá subir menos fotos a la vez o de menor tamaño.',
+                ], 413);
+            }
+        });
     })->create();

@@ -259,6 +259,7 @@ class ArtistaController extends Controller
         $request->validate([
             'redes'             => 'nullable|array',
             'redes.*'           => 'nullable|url|max:255',
+            'fotos'             => 'nullable|array|max:10',
             'fotos.*'           => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
             'tracks.*'          => 'nullable|url|max:255',
             'tracks_titulo.*'   => 'nullable|string|max:255',
