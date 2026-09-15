@@ -1,6 +1,6 @@
 {
-  "_flash-toast-D5amwhgc.js": {
-    "file": "assets/flash-toast-D5amwhgc.js",
+  "_flash-toast-CQnXPJg4.js": {
+    "file": "assets/flash-toast-CQnXPJg4.js",
     "name": "flash-toast"
   },
   "_notifications-D-B7x-Gu.js": {
@@ -35,13 +35,13 @@
     ]
   },
   "resources/js/admin-artista-show.js": {
-    "file": "assets/admin-artista-show-_OkIN9iP.js",
+    "file": "assets/admin-artista-show-BKKv0W7m.js",
     "name": "admin-artista-show",
     "src": "resources/js/admin-artista-show.js",
     "isEntry": true,
     "imports": [
       "_notifications-D-B7x-Gu.js",
-      "_flash-toast-D5amwhgc.js"
+      "_flash-toast-CQnXPJg4.js"
     ]
   },
   "resources/js/admin-disciplina.js": {
@@ -66,32 +66,32 @@
     "isEntry": true
   },
   "resources/js/admin-toggle.js": {
-    "file": "assets/admin-toggle-CzyfCX1Z.js",
+    "file": "assets/admin-toggle-D36QVxAD.js",
     "name": "admin-toggle",
     "src": "resources/js/admin-toggle.js",
     "isEntry": true,
     "imports": [
       "_notifications-D-B7x-Gu.js",
-      "_flash-toast-D5amwhgc.js"
+      "_flash-toast-CQnXPJg4.js"
     ]
   },
   "resources/js/admin-usuarios.js": {
-    "file": "assets/admin-usuarios-CCLXhR12.js",
+    "file": "assets/admin-usuarios-CJGNscep.js",
     "name": "admin-usuarios",
     "src": "resources/js/admin-usuarios.js",
     "isEntry": true,
     "imports": [
       "_notifications-D-B7x-Gu.js",
-      "_flash-toast-D5amwhgc.js"
+      "_flash-toast-CQnXPJg4.js"
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-B7oZYf26.js",
+    "file": "assets/app-DsvimvSI.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
-      "_flash-toast-D5amwhgc.js",
+      "_flash-toast-CQnXPJg4.js",
       "_notifications-D-B7x-Gu.js"
     ]
   },
@@ -132,7 +132,7 @@
     "isEntry": true
   },
   "resources/js/filter-artists.js": {
-    "file": "assets/filter-artists-BiSgHSqJ.js",
+    "file": "assets/filter-artists-S2tIhqQk.js",
     "name": "filter-artists",
     "src": "resources/js/filter-artists.js",
     "isEntry": true
