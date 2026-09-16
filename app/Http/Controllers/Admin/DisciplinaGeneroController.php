@@ -8,13 +8,16 @@ use App\Models\Disciplina;
 use App\Models\Genero;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Intervention\Image\Laravel\Facades\Image;
 
 class DisciplinaGeneroController extends Controller
 {
+
     public function index(): View
     {
        $disciplinas = Disciplina::withCount('artistas')
@@ -41,12 +44,8 @@ class DisciplinaGeneroController extends Controller
         // Imagen
         $img = null;
         if ($request->hasFile('img')) {
-            $file = $request->file('img');
+            $image = $this->convertirAWebp($request->file('img'), 400, 'img');
             $filename = Str::random(20) . '.webp';
-
-            $image = Image::read($file)
-                ->scaleDown(width: 400) // nunca más ancho que 800px, mantiene proporción
-                ->toWebp(quality: 75);  // convierte a webp, formato mucho más liviano
 
             Storage::disk('public')->put('disciplinas/' . $filename, (string) $image);
             $img = 'disciplinas/' . $filename;
@@ -98,12 +97,8 @@ class DisciplinaGeneroController extends Controller
             }
 
             // Comprime y sube nueva img
-            $file = $request->file('img');
+            $image = $this->convertirAWebp($request->file('img'), 400, 'img');
             $filename = Str::random(20) . '.webp';
-
-            $image = Image::read($file)
-                ->scaleDown(width: 400) // nunca más ancho que 800px, mantiene proporción
-                ->toWebp(quality: 75);  // convierte a webp, formato mucho más liviano
 
             Storage::disk('public')->put('disciplinas/' . $filename, (string) $image);
             $data['img'] = 'disciplinas/' . $filename;
@@ -161,4 +156,26 @@ class DisciplinaGeneroController extends Controller
         $genero->delete();
         return back()->with('success', 'Género eliminado.');
     }
+
+
+     /**
+     * Redimensiona y convierte a WebP una imagen subida por el usuario.
+     *
+     * Si el archivo no puede decodificarse (imagen corrupta, formato no
+     * soportado por el servidor, etc.) lanza un error de validación en
+     * lugar de romper la petición.
+     */
+    private function convertirAWebp(UploadedFile $file, int $width, string $campo)
+    {
+        try {
+            return Image::read($file)
+                ->scaleDown(width: $width)
+                ->toWebp(quality: 75);
+        } catch (\Throwable $e) {
+            throw ValidationException::withMessages([
+                $campo => 'No pudimos procesar la imagen. Verificá que el archivo no esté dañado e intentá con otra.',
+            ]);
+        }
+    }
+
 }

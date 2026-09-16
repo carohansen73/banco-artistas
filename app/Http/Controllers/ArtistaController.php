@@ -12,11 +12,13 @@ use App\Models\Evento;
 use App\Models\Genero;
 use App\Models\Media;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Intervention\Image\Laravel\Facades\Image;
 
 /**
@@ -38,6 +40,7 @@ use Intervention\Image\Laravel\Facades\Image;
 
 class ArtistaController extends Controller
 {
+
     /* --------------------------------------------------------------------------
     |  PÁGINAS PÚBLICAS
     * -------------------------------------------------------------------------- */
@@ -177,12 +180,8 @@ class ArtistaController extends Controller
         // Convierte la imagen a WebP y la redimensiona para reducir
         // el peso de almacenamiento sin perder calidad visual.
         if ($request->hasFile('img_perfil')) {
-            $file = $request->file('img_perfil');
+            $image = $this->convertirAWebp($request->file('img_perfil'), 800, 'img_perfil');
             $filename = Str::random(20) . '.webp';
-
-            $image = Image::read($file)
-                ->scaleDown(width: 800) // nunca más ancho que 800px, mantiene proporción
-                ->toWebp(quality: 75);  // convierte a webp, formato mucho más liviano
 
             Storage::disk('public')->put('artistas/' . $filename, (string) $image);
             $data['img_perfil'] = 'artistas/' . $filename;
@@ -293,9 +292,7 @@ class ArtistaController extends Controller
                 }
 
                 $filename = Str::random(20) . '.webp';
-                $image = Image::read($foto)
-                ->scaleDown(width: 800) // nunca más ancho que 800px, mantiene proporción
-                ->toWebp(quality: 75);  // convierte a webp, formato mucho más liviano
+                $image = $this->convertirAWebp($foto, 800, 'fotos');
                 Storage::disk('public')->put('artistas/fotos/' . $filename, (string) $image);
 
                 $artista->media()->create([
@@ -428,12 +425,8 @@ class ArtistaController extends Controller
 
             // Procesa la nueva imagen antes de almacenarla
             // para mantener un tamaño uniforme en el sitio.
-            $file = $request->file('img_perfil');
+            $image = $this->convertirAWebp($request->file('img_perfil'), 800, 'img_perfil');
             $filename = Str::random(20) . '.webp';
-
-            $image = Image::read($file)
-                ->scaleDown(width: 800) // nunca más ancho que 800px, mantiene proporción
-                ->toWebp(quality: 75);  // convierte a webp, formato mucho más liviano
 
             Storage::disk('public')->put('artistas/' . $filename, (string) $image);
             $data['img_perfil'] = 'artistas/' . $filename;
@@ -483,9 +476,7 @@ class ArtistaController extends Controller
         foreach ($request->file('fotos') as $foto) {
 
             $filename = Str::random(20) . '.webp';
-            $image = Image::read($foto)
-                ->scaleDown(width: 1200)
-                ->toWebp(quality: 75);
+            $image = $this->convertirAWebp($foto, 1200, 'fotos');
             Storage::disk('public')->put('artistas/fotos/' . $filename, (string) $image);
 
             $artista->media()->create([
@@ -726,6 +717,36 @@ class ArtistaController extends Controller
                 'img_perfil'       => $a->img_perfil ? asset('storage/' . $a->img_perfil) : asset('img/default.jpg'),
             ])
         );
+    }
+
+
+    /* --------------------------------------------------------------------------
+    |  MÉTODOS AUXILIARES
+    * -------------------------------------------------------------------------- */
+
+     /**
+     * Redimensiona y convierte a WebP una imagen subida por el usuario.
+     *
+     * Si el archivo no puede decodificarse (imagen corrupta, formato no
+     * soportado por el servidor, etc.) lanza un error de validación en
+     * lugar de romper la petición, para que el usuario pueda reintentar.
+     *
+     * @param  UploadedFile  $file
+     * @param  int  $width
+     * @param  string  $campo  Campo del formulario al que se asocia el error
+     * @return \Intervention\Image\Interfaces\EncodedImageInterface
+     */
+    private function convertirAWebp(UploadedFile $file, int $width, string $campo)
+    {
+        try {
+            return Image::read($file)
+                ->scaleDown(width: $width)
+                ->toWebp(quality: 75);
+        } catch (\Throwable $e) {
+            throw ValidationException::withMessages([
+                $campo => 'No pudimos procesar una de las imágenes. Verificá que el archivo no esté dañado e intentá con otra foto.',
+            ]);
+        }
     }
 }
 
