@@ -7,6 +7,7 @@ use App\Mail\ArtistaAprobado;
 use App\Models\Artista;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
@@ -70,18 +71,36 @@ class ArtistaController extends Controller
             'visible' => $validated['visible'],
         ]);
 
-        // Mandar mail solo cuando se modifica a visible
+        // Mandar mail solo cuando se modifica a visible. El perfil ya
+        // quedó actualizado en este punto, así que un fallo de mail
+        // (SMTP caído, timeout, etc.) no debe romper la respuesta al
+        // admin ni dejarlo creyendo que la aprobación no se aplicó.
+        $mailFallo = false;
         if (!$eraVisible && $validated['visible']) {
             $artista->load(['generos', 'disciplina', 'redes']);
-            Mail::to($artista->user->email)
-                ->send(new ArtistaAprobado($artista)); // Mailable
+            try {
+                Mail::to($artista->user->email)
+                    ->send(new ArtistaAprobado($artista));
+            } catch (\Throwable $e) {
+                $mailFallo = true;
+                Log::error('No se pudo enviar el mail de aprobación al artista.', [
+                    'artista_id' => $artista->id,
+                    'error'      => $e->getMessage(),
+                ]);
+            }
+        }
+
+        $mensaje = $artista->visible
+            ? 'El perfil ahora es visible al público.'
+            : 'El perfil ya no es visible al público.';
+
+        if ($mailFallo) {
+            $mensaje .= ' No pudimos enviarle el mail de aviso al artista, avisale por otro medio.';
         }
 
         return response()->json([
             'visible' => $artista->visible,
-            'message' => $artista->visible
-                ? 'El perfil ahora es visible al público.'
-                : 'El perfil ya no es visible al público.',
+            'message' => $mensaje,
         ]);
     }
 

@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -206,8 +207,17 @@ class ArtistaController extends Controller
         }
 
         // Notifica al equipo de Cultura para que revise
-        // y apruebe el nuevo perfil artístico.
-        Mail::to(config('mail.from.address'))->send(new NuevaInscripcionAdmin($artista)); // Mailable al mail del .env
+        // y apruebe el nuevo perfil artístico. El perfil ya quedó
+        // guardado en este punto, así que un fallo de mail (SMTP caído,
+        // timeout, etc.) no debe romper la respuesta al usuario.
+        try {
+            Mail::to(config('mail.from.address'))->send(new NuevaInscripcionAdmin($artista));
+        } catch (\Throwable $e) {
+            Log::error('No se pudo enviar el mail de nueva inscripción a Cultura.', [
+                'artista_id' => $artista->id,
+                'error'      => $e->getMessage(),
+            ]);
+        }
 
         // Redirigir al apso 2
         return redirect()
